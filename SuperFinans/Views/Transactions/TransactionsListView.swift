@@ -2,7 +2,8 @@
 //  TransactionsListView.swift
 //  SuperFinans
 //
-//  Main view for the Transactions tab with date-grouped list.
+//  Main view for the Transactions tab with date-grouped list,
+//  running balance, and recurring rules access.
 //
 
 import SwiftUI
@@ -30,10 +31,15 @@ struct TransactionsListView: View {
             .navigationTitle("Transactions")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        viewModel.showAddTransaction = true
-                    } label: {
-                        Image(systemName: "plus")
+                    HStack(spacing: 12) {
+                        NavigationLink(destination: RecurringRulesView()) {
+                            Image(systemName: "repeat.circle")
+                        }
+                        Button {
+                            viewModel.showAddTransaction = true
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }
@@ -94,7 +100,10 @@ struct TransactionsListView: View {
             ForEach(viewModel.groupedTransactions, id: \.date) { group in
                 Section {
                     ForEach(group.transactions, id: \.id) { transaction in
-                        TransactionRow(transaction: transaction)
+                        TransactionRow(
+                            transaction: transaction,
+                            runningBalance: viewModel.runningBalances[transaction.id ?? UUID()]
+                        )
                     }
                     .onDelete { offsets in
                         viewModel.deleteTransaction(at: offsets, in: group.transactions)
@@ -113,6 +122,7 @@ struct TransactionsListView: View {
 
 struct TransactionRow: View {
     let transaction: TransactionEntity
+    var runningBalance: Money?
 
     var body: some View {
         HStack(spacing: 12) {
@@ -145,10 +155,18 @@ struct TransactionRow: View {
 
             Spacer()
 
-            // Amount
-            Text(transaction.amount.formatted)
-                .font(.subheadline.bold())
-                .foregroundColor(transaction.isIncome ? .incomeGreen : .expenseRed)
+            // Amount + Running Balance
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(transaction.amount.formatted)
+                    .font(.subheadline.bold())
+                    .foregroundColor(transaction.isIncome ? .incomeGreen : .expenseRed)
+
+                if let balance = runningBalance {
+                    Text(balance.formatted)
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
         }
     }
 }

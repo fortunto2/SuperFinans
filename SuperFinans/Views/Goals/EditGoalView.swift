@@ -1,26 +1,27 @@
 //
-//  CreateGoalView.swift
+//  EditGoalView.swift
 //  SuperFinans
 //
-//  Sheet for creating a new financial goal.
+//  Sheet for editing an existing financial goal.
 //
 
 import SwiftUI
 
-struct CreateGoalView: View {
+struct EditGoalView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @State private var name = ""
-    @State private var targetAmount = ""
-    @State private var targetDate = Date().addingTimeInterval(365 * 24 * 3600)
-    @State private var hasTargetDate = true
-    @State private var monthlyContribution = ""
-    @State private var annualInterestRate = ""
-    @State private var selectedIcon = "star.fill"
-    @State private var selectedColorHex = "4ECDC4"
-    @State private var showAdvanced = false
-    @State private var currencyCode = "USD"
+    let goal: GoalEntity
+
+    @State private var name: String
+    @State private var targetAmount: String
+    @State private var targetDate: Date
+    @State private var hasTargetDate: Bool
+    @State private var monthlyContribution: String
+    @State private var annualInterestRate: String
+    @State private var selectedIcon: String
+    @State private var selectedColorHex: String
+    @State private var currencyCode: String
     @State private var selectedAccount: AccountEntity?
 
     private let goalService = GoalService.shared
@@ -33,6 +34,23 @@ struct CreateGoalView: View {
         "dollarsign.circle.fill", "beach.umbrella.fill", "figure.and.child.holdinghands",
         "laptopcomputer", "stethoscope", "paintbrush.fill", "music.note"
     ]
+
+    init(goal: GoalEntity) {
+        self.goal = goal
+        _name = State(initialValue: goal.displayName)
+        let targetMajor = Double(goal.targetAmountMinorUnits) / 100.0
+        _targetAmount = State(initialValue: targetMajor > 0 ? String(format: "%.2f", targetMajor) : "")
+        _targetDate = State(initialValue: goal.targetDate ?? Date().addingTimeInterval(365 * 24 * 3600))
+        _hasTargetDate = State(initialValue: goal.targetDate != nil)
+        let monthlyMajor = Double(goal.monthlyContributionMinorUnits) / 100.0
+        _monthlyContribution = State(initialValue: monthlyMajor > 0 ? String(format: "%.2f", monthlyMajor) : "")
+        let rate = goal.interestRate * 100
+        _annualInterestRate = State(initialValue: rate > 0 ? "\(rate)" : "")
+        _selectedIcon = State(initialValue: goal.iconName ?? "star.fill")
+        _selectedColorHex = State(initialValue: goal.colorHex ?? "4ECDC4")
+        _currencyCode = State(initialValue: goal.currency)
+        _selectedAccount = State(initialValue: goal.account)
+    }
 
     var isValid: Bool {
         !name.isEmpty && !targetAmount.isEmpty
@@ -63,7 +81,7 @@ struct CreateGoalView: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "percent")
                                     .foregroundColor(.goalMint)
-                                Text("Rate auto-filled from \(account.displayName): \(account.rateDescription ?? "")")
+                                Text("Rate from \(account.displayName): \(account.rateDescription ?? "")")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -84,7 +102,6 @@ struct CreateGoalView: View {
 
                 // Icon & color picker
                 Section("Appearance") {
-                    // Icon picker
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 12) {
                         ForEach(iconOptions, id: \.self) { icon in
                             Button {
@@ -105,7 +122,6 @@ struct CreateGoalView: View {
                     }
                     .padding(.vertical, 4)
 
-                    // Color picker
                     HStack(spacing: 12) {
                         ForEach(Array(zip(Color.goalColorOptions, Color.goalColorHexOptions)), id: \.1) { color, hex in
                             Circle()
@@ -128,7 +144,7 @@ struct CreateGoalView: View {
 
                 // Advanced (compound interest)
                 Section {
-                    DisclosureGroup("Compound Interest", isExpanded: $showAdvanced) {
+                    DisclosureGroup("Compound Interest") {
                         MoneyTextField(label: "Monthly Contribution", value: $monthlyContribution, currencyCode: currencyCode)
                         HStack {
                             Text("Annual Interest Rate")
@@ -142,52 +158,26 @@ struct CreateGoalView: View {
                         }
                     }
                 }
-
-                // Calculator hint
-                if isValid && hasTargetDate {
-                    Section {
-                        let target = parseAmount(targetAmount)
-                        let months = targetDate.monthsFromNow()
-                        let rate = parseRate(annualInterestRate)
-                        let required = calculator.requiredMonthlyContribution(
-                            targetAmount: target,
-                            currentAmount: 0,
-                            annualRate: rate,
-                            months: months
-                        )
-                        let money = Money(minorUnits: required, currencyCode: currencyCode)
-
-                        HStack {
-                            Image(systemName: "lightbulb.fill")
-                                .foregroundColor(.warningAmber)
-                            Text("Save \(money.formatted)/mo to reach your goal")
-                                .font(.subheadline)
-                        }
-                    }
-                }
             }
-            .navigationTitle("New Goal")
+            .navigationTitle("Edit Goal")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Create") { createGoal() }
+                    Button("Save") { saveGoal() }
                         .disabled(!isValid)
                         .bold()
                 }
             }
             .onChange(of: selectedAccount) { account in
                 if let account {
-                    // Auto-fill rate from account
                     let rate = account.effectiveAnnualRate
                     if rate > 0 {
                         let pct = rate * 100
                         annualInterestRate = "\(pct)"
-                        showAdvanced = true
                     }
-                    // Sync currency
                     currencyCode = account.currency
                 }
             }
@@ -196,28 +186,17 @@ struct CreateGoalView: View {
 
     // MARK: - Actions
 
-    private func createGoal() {
-        let target = parseAmount(targetAmount)
-        let monthly = parseAmount(monthlyContribution)
-        let rate = parseRate(annualInterestRate)
+    private func saveGoal() {
+        goal.name = name
+        goal.targetAmountMinorUnits = parseAmount(targetAmount)
+        goal.targetDate = hasTargetDate ? targetDate : nil
+        goal.monthlyContributionMinorUnits = parseAmount(monthlyContribution)
+        goal.annualInterestRate = NSDecimalNumber(decimal: parseRate(annualInterestRate))
+        goal.iconName = selectedIcon
+        goal.colorHex = selectedColorHex
+        goal.account = selectedAccount
 
-        let goal = goalService.createGoal(
-            name: name,
-            targetAmount: target,
-            currencyCode: currencyCode,
-            targetDate: hasTargetDate ? targetDate : nil,
-            annualInterestRate: rate,
-            monthlyContribution: monthly,
-            iconName: selectedIcon,
-            colorHex: selectedColorHex
-        )
-
-        // Link to account
-        if let account = selectedAccount {
-            goal.account = account
-            goalService.updateGoal(goal)
-        }
-
+        goalService.updateGoal(goal)
         dismiss()
     }
 
@@ -234,8 +213,4 @@ struct CreateGoalView: View {
         guard let rate = Double(cleaned), rate > 0 else { return 0 }
         return Decimal(rate) / Decimal(100)
     }
-}
-
-#Preview {
-    CreateGoalView()
 }

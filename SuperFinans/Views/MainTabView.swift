@@ -2,7 +2,7 @@
 //  MainTabView.swift
 //  SuperFinans
 //
-//  5-tab navigation: Goals, Transactions, Insights, Guide, Settings.
+//  4-tab navigation: Goals, Transactions, Insights, Settings.
 //
 
 import SwiftUI
@@ -10,12 +10,12 @@ import SwiftUI
 struct MainTabView: View {
 
     @State private var selectedTab: Tab = .goals
+    @Binding var deepLinkGoalId: UUID?
 
     enum Tab: String, CaseIterable {
         case goals
         case transactions
         case insights
-        case guide
         case settings
 
         var title: String {
@@ -23,7 +23,6 @@ struct MainTabView: View {
             case .goals: return "Goals"
             case .transactions: return "Transactions"
             case .insights: return "Insights"
-            case .guide: return "Guide"
             case .settings: return "Settings"
             }
         }
@@ -33,7 +32,6 @@ struct MainTabView: View {
             case .goals: return "star.fill"
             case .transactions: return "list.bullet.rectangle.portrait"
             case .insights: return "chart.bar.fill"
-            case .guide: return "book.fill"
             case .settings: return "gearshape.fill"
             }
         }
@@ -41,7 +39,7 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            GoalsListView()
+            GoalsListView(deepLinkGoalId: $deepLinkGoalId)
                 .tabItem {
                     Label(Tab.goals.title, systemImage: Tab.goals.icon)
                 }
@@ -59,14 +57,6 @@ struct MainTabView: View {
                 }
                 .tag(Tab.insights)
 
-            NavigationStack {
-                GuideView()
-            }
-            .tabItem {
-                Label(Tab.guide.title, systemImage: Tab.guide.icon)
-            }
-            .tag(Tab.guide)
-
             SettingsView()
                 .tabItem {
                     Label(Tab.settings.title, systemImage: Tab.settings.icon)
@@ -74,10 +64,15 @@ struct MainTabView: View {
                 .tag(Tab.settings)
         }
         .tint(.goalMint)
+        .onChange(of: deepLinkGoalId) { _ in
+            if deepLinkGoalId != nil {
+                selectedTab = .goals
+            }
+        }
     }
 }
 
 #Preview {
-    MainTabView()
+    MainTabView(deepLinkGoalId: .constant(nil))
         .environment(\.managedObjectContext, PersistenceController.preview.viewContext)
 }

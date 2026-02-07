@@ -69,6 +69,12 @@
 		ECB6145A0F532D46B784B1B9 /* AccountService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C5954F265AEBEC629EBAF0 /* AccountService.swift */; };
 		EFCC536D9D1E96BF22F455AA /* transactions_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 9AB0FB10F55D70BF5055434E /* transactions_guide.md */; };
 		F97A9CA3FE613BD205F7B411 /* SuperFinansPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E386B5F16D483A6BDB605BFE /* SuperFinansPaywallView.swift */; };
+		34C5845035EB51A9334B5E63 /* CreateRecurringRuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B250862F0D88BE87519FA2E /* CreateRecurringRuleView.swift */; };
+		DFDFCDC6622E6A8D39CEEC0F /* EditGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACC88B5EE6BD1EC572AD6DA /* EditGoalView.swift */; };
+		7662929DF4EAC26E9388B2DE /* GoalProjectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E93A57BCBB7250FDC969B0E /* GoalProjectionsView.swift */; };
+		1D0DBEB1505722CE80ECE48C /* HintBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73C2028E2A568BD7A459197 /* HintBannerView.swift */; };
+		DC8BB736A06213DF350CE8CE /* RecurringRuleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2299A69E922F3191E59616 /* RecurringRuleService.swift */; };
+		33014EE778676CB0215FE576 /* RecurringRulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974E3D08226C6399CDD0A805 /* RecurringRulesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -136,6 +142,12 @@
 		F6CCDD069FC707D59E0C5C17 /* GoalEntity+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GoalEntity+CoreData.swift"; sourceTree = "<group>"; };
 		F791EA0D63DE585E171055B3 /* GuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideView.swift; sourceTree = "<group>"; };
 		FFEA0C6E210B332345B1BFDE /* ru_about.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ru_about.md; sourceTree = "<group>"; };
+		2B250862F0D88BE87519FA2E /* CreateRecurringRuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecurringRuleView.swift; sourceTree = "<group>"; };
+		8ACC88B5EE6BD1EC572AD6DA /* EditGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGoalView.swift; sourceTree = "<group>"; };
+		2E93A57BCBB7250FDC969B0E /* GoalProjectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalProjectionsView.swift; sourceTree = "<group>"; };
+		F73C2028E2A568BD7A459197 /* HintBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintBannerView.swift; sourceTree = "<group>"; };
+		ED2299A69E922F3191E59616 /* RecurringRuleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringRuleService.swift; sourceTree = "<group>"; };
+		974E3D08226C6399CDD0A805 /* RecurringRulesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringRulesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,7 +183,9 @@
 			children = (
 				1AF3DC66DD05E7CFEFFE3340 /* AddTransactionView.swift */,
 				BBF71E08A00ADF8B0DF11536 /* CategoryPickerView.swift */,
+				2B250862F0D88BE87519FA2E /* CreateRecurringRuleView.swift */,
 				9226DDCFB7D99C600DAC3C9A /* NumpadView.swift */,
+				974E3D08226C6399CDD0A805 /* RecurringRulesView.swift */,
 				1E4D24105D48BB4935894ADD /* TransactionsListView.swift */,
 			);
 			path = Transactions;
@@ -181,8 +195,10 @@
 			isa = PBXGroup;
 			children = (
 				7E53665CB12B2C7887B7101D /* CreateGoalView.swift */,
+				8ACC88B5EE6BD1EC572AD6DA /* EditGoalView.swift */,
 				565A44CCDDEBA64009AF0041 /* GoalCardView.swift */,
 				F4ED64F4E86883DB98A7E53C /* GoalDetailView.swift */,
+				2E93A57BCBB7250FDC969B0E /* GoalProjectionsView.swift */,
 				7C75EB57921DD6AAAE30B9E4 /* GoalsListView.swift */,
 			);
 			path = Goals;
@@ -253,6 +269,7 @@
 				887C20AC783941264CE861AF /* MarkdownService.swift */,
 				ED3D06217219AB2EBDEFFD4E /* NotificationService.swift */,
 				7CE6175B4FC4637C30A84A6F /* PremiumManager.swift */,
+				ED2299A69E922F3191E59616 /* RecurringRuleService.swift */,
 				A0DB6298A29B8E2204C3DE0C /* TransactionService.swift */,
 			);
 			path = Services;
@@ -373,6 +390,7 @@
 			isa = PBXGroup;
 			children = (
 				7FCB19448D5469777F6CBFC7 /* EmptyStateView.swift */,
+				F73C2028E2A568BD7A459197 /* HintBannerView.swift */,
 				E8BD9B60D350A79BFACD49FC /* MoneyTextField.swift */,
 				355E5DAE5B3E2CB3F5482301 /* PremiumBadgeView.swift */,
 				32ACB6414A9F7661FC7899B7 /* ProgressRingView.swift */,
@@ -494,9 +512,11 @@
 				A53EDBC397D98845D3DCB5C0 /* CategoryPickerView.swift in Sources */,
 				57165A646E2D154B400626A4 /* Color+Theme.swift in Sources */,
 				1353FA2BAA215B42CFB779D1 /* CreateGoalView.swift in Sources */,
+				34C5845035EB51A9334B5E63 /* CreateRecurringRuleView.swift in Sources */,
 				D326A53587BF2439997CDA5D /* Date+Extensions.swift in Sources */,
 				33973DDFA7E10D86F57F7934 /* Decimal+Financial.swift in Sources */,
 				963057EEB4937B5BFEA0AE67 /* EmptyStateView.swift in Sources */,
+				DFDFCDC6622E6A8D39CEEC0F /* EditGoalView.swift in Sources */,
 				11315E1D5CB9D5484C810F34 /* ExportService.swift in Sources */,
 				BCCDB76D0314178BE3241C1D /* FeatureDiscoveryFlags.swift in Sources */,
 				3DEC0221CD7D94732AC557FA /* FinancialCalculator.swift in Sources */,
@@ -505,11 +525,13 @@
 				AFBCBABFB0FD34015A722032 /* GoalDetailViewModel.swift in Sources */,
 				E72A82B7ACA0A0D15E66A2FA /* GoalEntity+CoreData.swift in Sources */,
 				21C665FCAFA0F694834D0A26 /* GoalProjection.swift in Sources */,
+				7662929DF4EAC26E9388B2DE /* GoalProjectionsView.swift in Sources */,
 				059417A73ACEA7A6A837C83A /* GoalService.swift in Sources */,
 				01A2994967DC051E8DB706CF /* GoalsListView.swift in Sources */,
 				6B9C64F7A85854A6A05D24BA /* GoalsViewModel.swift in Sources */,
 				0E5BA0B5393AD4BF251D13F1 /* GuideContentView.swift in Sources */,
 				4595A5E2D6D2700C92FBEDCB /* GuideView.swift in Sources */,
+				1D0DBEB1505722CE80ECE48C /* HintBannerView.swift in Sources */,
 				0F147B2BAD1C655D5BF386B3 /* InsightsDashboardView.swift in Sources */,
 				8DD5416577800BB964647BAC /* InsightsViewModel.swift in Sources */,
 				A1E9722EDC176BF2BD215204 /* MainTabView.swift in Sources */,
@@ -524,6 +546,8 @@
 				E138EF3BA5879A6A47F90BB0 /* PremiumManager.swift in Sources */,
 				6AD7170E51B6AE0E380EA9C6 /* ProgressRingView.swift in Sources */,
 				78ABAD253E0490BE72D11E57 /* RecurringRuleEntity+CoreData.swift in Sources */,
+				DC8BB736A06213DF350CE8CE /* RecurringRuleService.swift in Sources */,
+				33014EE778676CB0215FE576 /* RecurringRulesView.swift in Sources */,
 				73DBEE7826ED5F6B5E6EBCD9 /* SettingsView.swift in Sources */,
 				02CF8C32FF3BE56146F9AC3E /* SuperFinansApp.swift in Sources */,
 				F97A9CA3FE613BD205F7B411 /* SuperFinansPaywallView.swift in Sources */,

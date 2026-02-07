@@ -77,6 +77,9 @@ final class TransactionService: ObservableObject {
         }
 
         persistence.save()
+
+        FeatureDiscoveryFlags.shared.trackTransaction()
+
         return tx
     }
 

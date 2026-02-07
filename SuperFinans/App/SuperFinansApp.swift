@@ -48,7 +48,7 @@ struct SuperFinansApp: App {
     var body: some Scene {
         WindowGroup {
             if hasCompletedOnboarding {
-                MainTabView()
+                MainTabView(deepLinkGoalId: $deepLinkGoalId)
                     .environment(\.managedObjectContext, PersistenceController.shared.viewContext)
                     .tint(.goalMint)
                     .onOpenURL { url in
@@ -89,6 +89,10 @@ struct SuperFinansApp: App {
         switch phase {
         case .active:
             PremiumManager.shared.refreshStatus()
+            // Generate any due recurring transactions
+            Task { @MainActor in
+                RecurringRuleService.shared.generateDueTransactions()
+            }
         case .background:
             PersistenceController.shared.save()
         case .inactive:

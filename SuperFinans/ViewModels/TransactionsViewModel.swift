@@ -18,6 +18,7 @@ final class TransactionsViewModel: ObservableObject {
     @Published var showAddTransaction = false
     @Published var totalSpending: Money = .zero()
     @Published var totalIncome: Money = .zero()
+    @Published var runningBalances: [UUID: Money] = [:]
 
     // MARK: - Grouped
 
@@ -53,6 +54,8 @@ final class TransactionsViewModel: ObservableObject {
 
         let income = transactionService.totalIncome(for: selectedMonth)
         totalIncome = Money(minorUnits: income, currencyCode: currency)
+
+        computeRunningBalances()
     }
 
     func changeMonth(by offset: Int) {
@@ -69,5 +72,24 @@ final class TransactionsViewModel: ObservableObject {
 
     func refresh() {
         loadTransactions()
+    }
+
+    // MARK: - Running Balance
+
+    private func computeRunningBalances() {
+        let currency = transactions.first?.currencyCode ?? "USD"
+        // Sort oldest first for cumulative sum
+        let sorted = transactions.sorted { ($0.date ?? .distantPast) < ($1.date ?? .distantPast) }
+        var cumulative: Int64 = 0
+        var balances: [UUID: Money] = [:]
+
+        for tx in sorted {
+            cumulative += tx.amountMinorUnits
+            if let id = tx.id {
+                balances[id] = Money(minorUnits: cumulative, currencyCode: currency)
+            }
+        }
+
+        runningBalances = balances
     }
 }

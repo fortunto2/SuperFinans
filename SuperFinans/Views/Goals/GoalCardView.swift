@@ -2,7 +2,8 @@
 //  GoalCardView.swift
 //  SuperFinans
 //
-//  Card showing a goal with progress ring in the goals list.
+//  Redesigned card showing a goal with progress bar, status badge,
+//  and key metrics in a VStack layout.
 //
 
 import SwiftUI
@@ -16,44 +17,80 @@ struct GoalCardView: View {
     }
 
     var body: some View {
-        HStack(spacing: 16) {
-            // Progress ring
-            CompactProgressRing(progress: goal.progressPercentage, color: goalColor)
+        VStack(alignment: .leading, spacing: 12) {
+            // Top: Icon + Name + Status Badge
+            HStack(spacing: 8) {
+                Image(systemName: goal.iconName ?? "star.fill")
+                    .font(.title3)
+                    .foregroundColor(goalColor)
+                    .frame(width: 32, height: 32)
+                    .background(goalColor.opacity(0.12))
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
-            // Goal info
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 6) {
-                    Image(systemName: goal.iconName ?? "star.fill")
-                        .font(.subheadline)
-                        .foregroundColor(goalColor)
-                    Text(goal.displayName)
-                        .font(.headline)
-                        .lineLimit(1)
-                }
+                Text(goal.displayName)
+                    .font(.headline)
+                    .lineLimit(1)
 
+                Spacer()
+
+                statusBadge
+            }
+
+            // Middle: Progress bar + percentage
+            HStack(spacing: 10) {
+                ProgressView(value: goal.progressPercentage)
+                    .tint(goalColor)
+
+                Text("\(Int(goal.progressPercentage * 100))%")
+                    .font(.caption.bold())
+                    .foregroundColor(goalColor)
+                    .frame(width: 40, alignment: .trailing)
+            }
+
+            // Bottom: Current / Target + Date
+            HStack {
                 Text("\(goal.currentAmount.formatted) of \(goal.targetAmount.formatted)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-            }
 
-            Spacer()
+                Spacer()
 
-            // Target date
-            if let targetDate = goal.targetDate {
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text(targetDate.monthYearFormatted)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    if let months = goal.monthsRemaining, months > 0 {
-                        Text("\(months) mo")
+                if let targetDate = goal.targetDate {
+                    HStack(spacing: 4) {
+                        Image(systemName: "calendar")
                             .font(.caption2)
-                            .foregroundStyle(.tertiary)
+                        Text(targetDate.monthYearFormatted)
+                            .font(.caption)
+                        if let months = goal.monthsRemaining, months > 0 {
+                            Text("(\(months) mo)")
+                                .font(.caption2)
+                        }
                     }
+                    .foregroundStyle(.tertiary)
                 }
             }
         }
         .padding()
         .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .shadow(color: goalColor.opacity(0.08), radius: 8, y: 4)
+        .opacity(goal.isComplete ? 0.7 : 1.0)
+    }
+
+    // MARK: - Status Badge
+
+    private var statusBadge: some View {
+        let status = goal.paceStatus
+        return HStack(spacing: 3) {
+            Image(systemName: status.icon)
+                .font(.caption2)
+            Text(status.label)
+                .font(.caption2.bold())
+        }
+        .foregroundColor(status.color)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(status.color.opacity(0.12))
+        .clipShape(Capsule())
     }
 }

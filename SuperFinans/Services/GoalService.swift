@@ -84,6 +84,7 @@ final class GoalService: ObservableObject {
         goal.updatedAt = Date()
         persistence.save()
 
+        FeatureDiscoveryFlags.shared.trackFirstGoal()
         NotificationCenter.default.post(name: .goalCreated, object: goal.id)
         return goal
     }
@@ -111,6 +112,8 @@ final class GoalService: ObservableObject {
         goal.currentAmountMinorUnits += amount
         goal.updatedAt = Date()
         persistence.save()
+
+        FeatureDiscoveryFlags.shared.trackDeposit()
 
         // Check milestones
         checkMilestone(for: goal)

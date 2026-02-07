@@ -57,7 +57,10 @@ final class AccountService: ObservableObject {
         currencyCode: String = "USD",
         balance: Int64 = 0,
         iconName: String? = nil,
-        colorHex: String = "42A5F5"
+        colorHex: String = "42A5F5",
+        annualInterestRate: Decimal? = nil,
+        expectedAnnualReturn: Decimal? = nil,
+        benchmarkTicker: String? = nil
     ) -> AccountEntity {
         let ctx = persistence.viewContext
         let account = AccountEntity(context: ctx)
@@ -72,6 +75,15 @@ final class AccountService: ObservableObject {
         account.isArchived = false
         account.createdAt = Date()
         account.updatedAt = Date()
+
+        if let rate = annualInterestRate {
+            account.annualInterestRate = NSDecimalNumber(decimal: rate)
+        }
+        if let ret = expectedAnnualReturn {
+            account.expectedAnnualReturn = NSDecimalNumber(decimal: ret)
+        }
+        account.benchmarkTicker = benchmarkTicker
+
         persistence.save()
         return account
     }

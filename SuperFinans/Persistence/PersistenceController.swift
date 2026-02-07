@@ -156,6 +156,9 @@ final class PersistenceController: @unchecked Sendable {
         let accountCreated = attr("createdAt", .dateAttributeType, optional: true)
         let accountUpdated = attr("updatedAt", .dateAttributeType, optional: true)
         let accountModifiedBy = attr("lastModifiedBy", .stringAttributeType, optional: true)
+        let accountRate = attr("annualInterestRate", .decimalAttributeType, optional: true)
+        let accountExpectedReturn = attr("expectedAnnualReturn", .decimalAttributeType, optional: true)
+        let accountTicker = attr("benchmarkTicker", .stringAttributeType, optional: true)
 
         // --- TransactionEntity ---
         let transactionEntity = NSEntityDescription()
@@ -218,7 +221,8 @@ final class PersistenceController: @unchecked Sendable {
         accountEntity.properties = [
             accountId, accountName, accountType, accountCurrency, accountBalance,
             accountIcon, accountColor, accountSort, accountArchived,
-            accountCreated, accountUpdated, accountModifiedBy
+            accountCreated, accountUpdated, accountModifiedBy,
+            accountRate, accountExpectedReturn, accountTicker
         ]
 
         transactionEntity.properties = [

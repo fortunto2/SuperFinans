@@ -7,6 +7,7 @@
 
 import CoreData
 import Foundation
+import SwiftUI
 
 @objc(GoalEntity)
 public class GoalEntity: NSManagedObject {
@@ -82,6 +83,61 @@ extension GoalEntity {
 
     var currentMilestone: GoalMilestone? {
         GoalMilestone.reached(for: progressPercentage * 100)
+    }
+
+    var paceStatus: GoalPaceStatus {
+        if isComplete { return .completed }
+        guard targetAmountMinorUnits > 0 else { return .noTarget }
+        guard let targetDate, targetDate > Date() else {
+            // Past due or no date
+            if targetDate != nil { return .behind }
+            return .noTarget
+        }
+        // Expected progress based on time elapsed
+        guard let createdAt else { return .onTrack }
+        let totalDuration = targetDate.timeIntervalSince(createdAt)
+        guard totalDuration > 0 else { return .onTrack }
+        let elapsed = Date().timeIntervalSince(createdAt)
+        let expectedProgress = elapsed / totalDuration
+        let actualProgress = progressPercentage
+        // Behind if actual progress is less than 80% of expected
+        return actualProgress >= expectedProgress * 0.8 ? .onTrack : .behind
+    }
+}
+
+// MARK: - Pace Status
+
+enum GoalPaceStatus: String, Sendable {
+    case onTrack
+    case behind
+    case completed
+    case noTarget
+
+    var label: String {
+        switch self {
+        case .onTrack: return "On Track"
+        case .behind: return "Behind"
+        case .completed: return "Completed"
+        case .noTarget: return "No Target"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .onTrack: return .incomeGreen
+        case .behind: return .warningAmber
+        case .completed: return .goalMint
+        case .noTarget: return .secondary
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .onTrack: return "checkmark.circle.fill"
+        case .behind: return "exclamationmark.triangle.fill"
+        case .completed: return "star.fill"
+        case .noTarget: return "minus.circle.fill"
+        }
     }
 }
 

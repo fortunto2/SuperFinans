@@ -3,7 +3,7 @@
 //  SuperFinans
 //
 //  Detailed view of a single goal with projection chart,
-//  what-if slider, and deposit history.
+//  what-if slider, deposit history, and edit support.
 //
 
 import SwiftUI
@@ -23,6 +23,9 @@ struct GoalDetailView: View {
                 // Header with progress ring
                 headerSection
 
+                // Compound interest hint (progressive disclosure)
+                compoundInterestHint
+
                 // Projection chart
                 projectionSection
 
@@ -39,8 +42,22 @@ struct GoalDetailView: View {
         }
         .navigationTitle(viewModel.goal.displayName)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    viewModel.showEditGoal = true
+                } label: {
+                    Image(systemName: "pencil")
+                }
+            }
+        }
         .sheet(isPresented: $viewModel.showAddDeposit) {
             addDepositSheet
+        }
+        .sheet(isPresented: $viewModel.showEditGoal) {
+            viewModel.refreshGoal()
+        } content: {
+            EditGoalView(goal: viewModel.goal)
         }
     }
 
@@ -85,6 +102,22 @@ struct GoalDetailView: View {
                 .padding(.vertical, 8)
                 .background(Color.goalMint.opacity(0.1))
                 .clipShape(Capsule())
+            }
+        }
+    }
+
+    // MARK: - Compound Interest Hint
+
+    @ViewBuilder
+    private var compoundInterestHint: some View {
+        if FeatureDiscoveryFlags.shared.shouldShowCompoundInterestHint
+            && viewModel.goal.interestRate == 0 {
+            HintBannerView(
+                icon: "chart.line.uptrend.xyaxis",
+                message: "Enable compound interest to see how your savings grow faster over time. Edit your goal to set an interest rate.",
+                color: .goalMint
+            ) {
+                FeatureDiscoveryFlags.shared.hasShownCompoundInterestHint = true
             }
         }
     }

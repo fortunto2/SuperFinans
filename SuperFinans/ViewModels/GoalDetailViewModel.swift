@@ -19,6 +19,7 @@ final class GoalDetailViewModel: ObservableObject {
     @Published var showAddDeposit = false
     @Published var depositAmount: String = ""
     @Published var depositNote: String = ""
+    @Published var showEditGoal = false
 
     // MARK: - Services
 
@@ -108,6 +109,7 @@ final class GoalDetailViewModel: ObservableObject {
             amount: minorUnits,
             note: depositNote.isEmpty ? nil : depositNote
         )
+        FeatureDiscoveryFlags.shared.trackDeposit()
 
         depositAmount = ""
         depositNote = ""
@@ -125,6 +127,15 @@ final class GoalDetailViewModel: ObservableObject {
     func updateContribution() {
         goal.monthlyContributionMinorUnits = whatIfMonthlyContribution
         goalService.updateGoal(goal)
+        updateProjection()
+    }
+
+    // MARK: - Refresh
+
+    func refreshGoal() {
+        if let id = goal.id, let refreshed = goalService.fetchGoal(id: id) {
+            goal = refreshed
+        }
         updateProjection()
     }
 }

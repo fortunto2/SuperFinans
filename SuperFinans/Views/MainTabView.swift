@@ -2,36 +2,36 @@
 //  MainTabView.swift
 //  SuperFinans
 //
-//  4-tab navigation: Goals, Transactions, Insights, Settings.
+//  4-tab navigation: Dashboard, Cash Flow, Balance Sheet, Settings.
 //
 
 import SwiftUI
 
 struct MainTabView: View {
 
-    @State private var selectedTab: Tab = .goals
+    @State private var selectedTab: Tab = .dashboard
     @Binding var deepLinkGoalId: UUID?
 
     enum Tab: String, CaseIterable {
-        case goals
-        case transactions
-        case insights
+        case dashboard
+        case cashFlow
+        case balance
         case settings
 
         var title: String {
             switch self {
-            case .goals: return "Goals"
-            case .transactions: return "Transactions"
-            case .insights: return "Insights"
+            case .dashboard: return "Dashboard"
+            case .cashFlow: return "Cash Flow"
+            case .balance: return "Balance"
             case .settings: return "Settings"
             }
         }
 
         var icon: String {
             switch self {
-            case .goals: return "star.fill"
-            case .transactions: return "list.bullet.rectangle.portrait"
-            case .insights: return "chart.bar.fill"
+            case .dashboard: return "flame.fill"
+            case .cashFlow: return "arrow.left.arrow.right"
+            case .balance: return "scale.3d"
             case .settings: return "gearshape.fill"
             }
         }
@@ -39,23 +39,23 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            GoalsListView(deepLinkGoalId: $deepLinkGoalId)
+            DashboardView(deepLinkGoalId: $deepLinkGoalId)
                 .tabItem {
-                    Label(Tab.goals.title, systemImage: Tab.goals.icon)
+                    Label(Tab.dashboard.title, systemImage: Tab.dashboard.icon)
                 }
-                .tag(Tab.goals)
+                .tag(Tab.dashboard)
 
-            TransactionsListView()
+            CashFlowView()
                 .tabItem {
-                    Label(Tab.transactions.title, systemImage: Tab.transactions.icon)
+                    Label(Tab.cashFlow.title, systemImage: Tab.cashFlow.icon)
                 }
-                .tag(Tab.transactions)
+                .tag(Tab.cashFlow)
 
-            InsightsDashboardView()
+            BalanceSheetView()
                 .tabItem {
-                    Label(Tab.insights.title, systemImage: Tab.insights.icon)
+                    Label(Tab.balance.title, systemImage: Tab.balance.icon)
                 }
-                .tag(Tab.insights)
+                .tag(Tab.balance)
 
             SettingsView()
                 .tabItem {
@@ -66,7 +66,7 @@ struct MainTabView: View {
         .tint(.goalMint)
         .onChange(of: deepLinkGoalId) { _ in
             if deepLinkGoalId != nil {
-                selectedTab = .goals
+                selectedTab = .dashboard
             }
         }
     }

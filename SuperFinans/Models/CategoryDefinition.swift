@@ -129,4 +129,62 @@ enum CategoryDefinition: String, CaseIterable, Codable, Identifiable, Sendable {
     static var expenseCategories: [CategoryDefinition] {
         allCases.filter { $0 != .income }
     }
+
+    /// Cashflow expense group classification
+    var expenseGroup: ExpenseGroup {
+        switch self {
+        case .housing, .groceries, .utilities, .transportation,
+             .healthcare, .insurance, .childcare:
+            return .needs
+        case .dining, .entertainment, .shopping, .clothing,
+             .personalCare, .travel, .pets, .education, .other:
+            return .wants
+        case .debt:
+            return .debtService
+        case .savings, .investments:
+            return .financial
+        case .income:
+            return .income
+        }
+    }
+}
+
+// MARK: - Expense Group
+
+enum ExpenseGroup: String, CaseIterable, Codable, Sendable {
+    case needs
+    case wants
+    case debtService
+    case financial
+    case income
+
+    var displayName: String {
+        switch self {
+        case .needs: return "Needs"
+        case .wants: return "Wants"
+        case .debtService: return "Debt Service"
+        case .financial: return "Financial"
+        case .income: return "Income"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .needs: return "house.fill"
+        case .wants: return "heart.fill"
+        case .debtService: return "creditcard.fill"
+        case .financial: return "chart.line.uptrend.xyaxis"
+        case .income: return "banknote.fill"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .needs: return .blue
+        case .wants: return .purple
+        case .debtService: return .red
+        case .financial: return .goalMint
+        case .income: return .incomeGreen
+        }
+    }
 }

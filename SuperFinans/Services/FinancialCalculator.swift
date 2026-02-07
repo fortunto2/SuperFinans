@@ -190,4 +190,89 @@ final class FinancialCalculator {
         guard target > 0 else { return 0 }
         return min(1.0, Double(current) / Double(target))
     }
+
+    // MARK: - Freedom Calculations
+
+    /// Calculate months until financial freedom (passive income >= expenses)
+    /// - Parameters:
+    ///   - currentInvestedAssets: Total invested assets in minor units
+    ///   - monthlyExpenses: Monthly expenses in minor units
+    ///   - monthlySurplus: Monthly surplus (income - expenses) in minor units
+    ///   - averageAnnualReturn: Weighted average annual return as decimal (e.g. 0.08)
+    /// - Returns: Number of months until freedom, or nil if > 600 months
+    func monthsToFreedom(
+        currentInvestedAssets: Int64,
+        monthlyExpenses: Int64,
+        monthlySurplus: Int64,
+        averageAnnualReturn: Decimal
+    ) -> Int? {
+        guard monthlyExpenses > 0 else { return 0 }
+        guard monthlySurplus > 0 || currentInvestedAssets > 0 else { return nil }
+
+        let monthlyRate = averageAnnualReturn / Decimal(12)
+        var assets = Decimal(currentInvestedAssets)
+        let expenses = Decimal(monthlyExpenses)
+        let surplus = Decimal(monthlySurplus)
+
+        for month in 1...600 {
+            assets = assets * (Decimal(1) + monthlyRate) + surplus
+            let passiveIncome = assets * monthlyRate
+            if passiveIncome >= expenses {
+                return month
+            }
+        }
+
+        return nil
+    }
+
+    /// Generate projection points for freedom chart
+    func freedomProjectionPoints(
+        currentInvestedAssets: Int64,
+        monthlyExpenses: Int64,
+        monthlySurplus: Int64,
+        averageAnnualReturn: Decimal,
+        maxMonths: Int = 360
+    ) -> [FreedomProjectionPoint] {
+        var points: [FreedomProjectionPoint] = []
+        let monthlyRate = averageAnnualReturn / Decimal(12)
+        var assets = Decimal(currentInvestedAssets)
+        let expenses = Decimal(monthlyExpenses)
+        let surplus = Decimal(monthlySurplus)
+        let now = Date()
+
+        // Starting point
+        let startPassive = assets * monthlyRate
+        let startRatio = expenses > 0 ? startPassive / expenses : 0
+        points.append(FreedomProjectionPoint(
+            month: 0,
+            date: now,
+            passiveIncome: startPassive.rounded(scale: 0),
+            totalInvestedAssets: assets.rounded(scale: 0),
+            expenses: expenses.rounded(scale: 0),
+            freedomRatio: startRatio
+        ))
+
+        let step = max(1, maxMonths / 36)
+
+        for month in 1...maxMonths {
+            assets = assets * (Decimal(1) + monthlyRate) + surplus
+            let passiveIncome = assets * monthlyRate
+            let ratio = expenses > 0 ? passiveIncome / expenses : 0
+
+            if month % step == 0 || month == maxMonths || ratio >= 1 {
+                points.append(FreedomProjectionPoint(
+                    month: month,
+                    date: now.addingMonths(month),
+                    passiveIncome: passiveIncome.rounded(scale: 0),
+                    totalInvestedAssets: assets.rounded(scale: 0),
+                    expenses: expenses.rounded(scale: 0),
+                    freedomRatio: ratio
+                ))
+            }
+
+            if ratio >= 1 { break }
+        }
+
+        return points
+    }
 }

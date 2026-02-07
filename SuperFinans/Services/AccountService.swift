@@ -54,19 +54,23 @@ final class AccountService: ObservableObject {
     func createAccount(
         name: String,
         type: AccountType = .checking,
+        group: AccountGroup = .personal,
         currencyCode: String = "USD",
         balance: Int64 = 0,
         iconName: String? = nil,
         colorHex: String = "42A5F5",
         annualInterestRate: Decimal? = nil,
         expectedAnnualReturn: Decimal? = nil,
-        benchmarkTicker: String? = nil
+        benchmarkTicker: String? = nil,
+        monthlyPayment: Int64 = 0,
+        annualDebtInterestRate: Decimal? = nil
     ) -> AccountEntity {
         let ctx = persistence.viewContext
         let account = AccountEntity(context: ctx)
         account.id = UUID()
         account.name = name
         account.type = type.rawValue
+        account.group = group.rawValue
         account.currencyCode = currencyCode
         account.balanceMinorUnits = balance
         account.iconName = iconName ?? type.iconName
@@ -83,6 +87,10 @@ final class AccountService: ObservableObject {
             account.expectedAnnualReturn = NSDecimalNumber(decimal: ret)
         }
         account.benchmarkTicker = benchmarkTicker
+        account.monthlyPaymentMinorUnits = monthlyPayment
+        if let debtRate = annualDebtInterestRate {
+            account.annualDebtInterestRate = NSDecimalNumber(decimal: debtRate)
+        }
 
         persistence.save()
         return account

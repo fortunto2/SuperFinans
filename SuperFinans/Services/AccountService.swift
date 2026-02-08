@@ -14,7 +14,7 @@ final class AccountService: ObservableObject {
     static let shared = AccountService()
     private let persistence: PersistenceController
 
-    private init(persistence: PersistenceController = .shared) {
+    init(persistence: PersistenceController = .shared) {
         self.persistence = persistence
     }
 

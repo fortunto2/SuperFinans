@@ -29,6 +29,7 @@ struct TransactionsListView: View {
                 }
             }
             .navigationTitle("Transactions")
+            .onAppear { viewModel.refresh() }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     HStack(spacing: 12) {
@@ -93,10 +94,88 @@ struct TransactionsListView: View {
         .background(.ultraThinMaterial)
     }
 
+    // MARK: - Cash Flow Summary
+
+    private var cashFlowSummary: some View {
+        DisclosureGroup("Cash Flow Summary") {
+            VStack(spacing: 8) {
+                // Income
+                HStack {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .foregroundColor(.incomeGreen)
+                    Text("Income")
+                        .font(.subheadline.bold())
+                    Spacer()
+                    Text(viewModel.totalIncome.formatted)
+                        .font(.subheadline.bold())
+                        .foregroundColor(.incomeGreen)
+                }
+                HStack {
+                    Text("  Active (Salary/Business)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(viewModel.activeIncome.formatted)
+                        .font(.caption)
+                }
+                HStack {
+                    Text("  Passive (Investments)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(viewModel.passiveIncome.formatted)
+                        .font(.caption)
+                        .foregroundColor(.goalMint)
+                }
+
+                Divider()
+
+                // Expenses
+                HStack {
+                    Image(systemName: "arrow.down.circle.fill")
+                        .foregroundColor(.expenseRed)
+                    Text("Expenses")
+                        .font(.subheadline.bold())
+                    Spacer()
+                    Text(viewModel.totalSpending.formatted)
+                        .font(.subheadline.bold())
+                        .foregroundColor(.expenseRed)
+                }
+                ForEach(viewModel.expensesByGroup, id: \.group) { item in
+                    HStack {
+                        Text("  \(item.group.displayName)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(item.total.formatted)
+                            .font(.caption)
+                    }
+                }
+
+                Divider()
+
+                // Net Cash Flow
+                HStack {
+                    Text("Net Cash Flow")
+                        .font(.subheadline.bold())
+                    Spacer()
+                    Text(viewModel.netCashFlow.formatted)
+                        .font(.subheadline.bold())
+                        .foregroundColor(viewModel.netCashFlow.isNegative ? .expenseRed : .incomeGreen)
+                }
+            }
+            .padding(.top, 4)
+        }
+    }
+
     // MARK: - Transactions List
 
     private var transactionsList: some View {
         List {
+            Section {
+                cashFlowSummary
+            }
+
             ForEach(viewModel.groupedTransactions, id: \.date) { group in
                 Section {
                     ForEach(group.transactions, id: \.id) { transaction in

@@ -3,7 +3,7 @@
 //  SuperFinans
 //
 //  ViewModel for the Dashboard — Freedom Ratio, Net Worth, Monthly Snapshot,
-//  Time to Freedom, Passive Income Breakdown.
+//  Time to Freedom, Passive Income Breakdown, Recent Transactions.
 //
 
 import Foundation
@@ -27,15 +27,16 @@ final class DashboardViewModel: ObservableObject {
     @Published var passiveIncomeBreakdown: [(account: AccountEntity, income: Money)] = []
 
     @Published var milestones: [GoalEntity] = []
+    @Published var recentTransactions: [TransactionEntity] = []
 
     // Sheets
     @Published var showAddTransaction = false
-    @Published var showCreateAccount = false
     @Published var showPaywall = false
 
     // MARK: - Services
 
     private let cashFlowService: CashFlowService
+    private let transactionService: TransactionService
     private let goalService: GoalService
     private var cancellables = Set<AnyCancellable>()
 
@@ -51,9 +52,11 @@ final class DashboardViewModel: ObservableObject {
 
     init(
         cashFlowService: CashFlowService? = nil,
+        transactionService: TransactionService? = nil,
         goalService: GoalService? = nil
     ) {
         self.cashFlowService = cashFlowService ?? CashFlowService.shared
+        self.transactionService = transactionService ?? TransactionService.shared
         self.goalService = goalService ?? GoalService.shared
         setupObservers()
         loadAll()
@@ -108,6 +111,9 @@ final class DashboardViewModel: ObservableObject {
 
         // Milestones
         milestones = goalService.fetchGoals()
+
+        // Recent transactions (last 5)
+        recentTransactions = Array(transactionService.fetchTransactions().prefix(5))
     }
 
     // MARK: - Observers

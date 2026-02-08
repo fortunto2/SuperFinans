@@ -61,12 +61,18 @@ struct BalanceSheetView: View {
             }
             .listStyle(.insetGrouped)
             .navigationTitle("Balance Sheet")
+            .onAppear { viewModel.loadData() }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        viewModel.showCreateAccount = true
-                    } label: {
-                        Image(systemName: "plus")
+                    HStack(spacing: 12) {
+                        NavigationLink(destination: AccountsManagementView()) {
+                            Image(systemName: "gearshape")
+                        }
+                        Button {
+                            viewModel.showCreateAccount = true
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }

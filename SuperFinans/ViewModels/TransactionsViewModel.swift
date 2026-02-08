@@ -20,6 +20,12 @@ final class TransactionsViewModel: ObservableObject {
     @Published var totalIncome: Money = .zero()
     @Published var runningBalances: [UUID: Money] = [:]
 
+    // Cash flow summary
+    @Published var activeIncome: Money = .zero()
+    @Published var passiveIncome: Money = .zero()
+    @Published var expensesByGroup: [(group: ExpenseGroup, total: Money)] = []
+    @Published var netCashFlow: Money = .zero()
+
     // MARK: - Grouped
 
     var groupedTransactions: [(date: String, displayDate: String, transactions: [TransactionEntity])] {
@@ -34,12 +40,17 @@ final class TransactionsViewModel: ObservableObject {
     // MARK: - Services
 
     private let transactionService: TransactionService
+    private let cashFlowService: CashFlowService
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Init
 
-    init(transactionService: TransactionService? = nil) {
+    init(
+        transactionService: TransactionService? = nil,
+        cashFlowService: CashFlowService? = nil
+    ) {
         self.transactionService = transactionService ?? TransactionService.shared
+        self.cashFlowService = cashFlowService ?? CashFlowService.shared
         loadTransactions()
     }
 
@@ -48,12 +59,24 @@ final class TransactionsViewModel: ObservableObject {
     func loadTransactions() {
         transactions = transactionService.fetchTransactions(for: selectedMonth)
 
-        let currency = transactions.first?.currencyCode ?? "USD"
+        let currency = UserDefaults.standard.string(forKey: "superfinans.currency_code") ?? "USD"
         let spending = transactionService.totalSpending(for: selectedMonth)
         totalSpending = Money(minorUnits: spending, currencyCode: currency)
 
         let income = transactionService.totalIncome(for: selectedMonth)
         totalIncome = Money(minorUnits: income, currencyCode: currency)
+
+        // Cash flow summary
+        let active = cashFlowService.activeIncome(for: selectedMonth)
+        let passive = cashFlowService.totalMonthlyPassiveIncome()
+        activeIncome = Money(minorUnits: active, currencyCode: currency)
+        passiveIncome = Money(minorUnits: passive, currencyCode: currency)
+
+        let expGroups = cashFlowService.expensesByGroup(for: selectedMonth)
+        expensesByGroup = expGroups.map { (group: $0.group, total: Money(minorUnits: $0.total, currencyCode: currency)) }
+
+        let totalExp = cashFlowService.totalExpenses(for: selectedMonth)
+        netCashFlow = Money(minorUnits: (active + passive) - totalExp, currencyCode: currency)
 
         computeRunningBalances()
     }

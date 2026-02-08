@@ -79,9 +79,9 @@ struct EditGoalView: View {
 
                         if let account = selectedAccount, account.effectiveAnnualRate > 0 {
                             HStack(spacing: 6) {
-                                Image(systemName: "percent")
+                                Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.goalMint)
-                                Text("Rate from \(account.displayName): \(account.rateDescription ?? "")")
+                                Text("\(account.rateDescription ?? "") will be used for projections")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -142,19 +142,34 @@ struct EditGoalView: View {
                     .padding(.vertical, 4)
                 }
 
-                // Advanced (compound interest)
+                // Savings & interest
                 Section {
-                    DisclosureGroup("Compound Interest") {
+                    DisclosureGroup("Savings Plan") {
                         MoneyTextField(label: "Monthly Contribution", value: $monthlyContribution, currencyCode: currencyCode)
-                        HStack {
-                            Text("Annual Interest Rate")
-                            Spacer()
-                            TextField("0.0", text: $annualInterestRate)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .frame(width: 60)
-                            Text("%")
+
+                        if let account = selectedAccount, account.effectiveAnnualRate > 0 {
+                            // Rate from account — read-only
+                            HStack {
+                                Text("Interest Rate")
+                                Spacer()
+                                Text(account.rateDescription ?? "")
+                                    .foregroundColor(.goalMint)
+                            }
+                            Text("Rate from \(account.displayName). Change it in account settings.")
+                                .font(.caption)
                                 .foregroundStyle(.secondary)
+                        } else {
+                            // Manual rate input
+                            HStack {
+                                Text("Annual Interest Rate")
+                                Spacer()
+                                TextField("0.0", text: $annualInterestRate)
+                                    .keyboardType(.decimalPad)
+                                    .multilineTextAlignment(.trailing)
+                                    .frame(width: 60)
+                                Text("%")
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }

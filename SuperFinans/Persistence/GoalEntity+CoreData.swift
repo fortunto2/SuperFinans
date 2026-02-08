@@ -54,8 +54,12 @@ extension GoalEntity {
         Money(minorUnits: monthlyContributionMinorUnits, currencyCode: currency)
     }
 
+    /// Effective interest rate: prefers account rate if linked, falls back to goal's own rate
     var interestRate: Decimal {
-        annualInterestRate?.decimalValue ?? Decimal(0)
+        if let acct = account, acct.effectiveAnnualRate > 0 {
+            return acct.effectiveAnnualRate
+        }
+        return annualInterestRate?.decimalValue ?? Decimal(0)
     }
 
     var compounding: CompoundingFrequency {

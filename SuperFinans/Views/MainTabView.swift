@@ -2,7 +2,7 @@
 //  MainTabView.swift
 //  SuperFinans
 //
-//  4-tab navigation: Dashboard, Cash Flow, Balance Sheet, Settings.
+//  4-tab navigation: Dashboard, Transactions, Wealth, Settings.
 //
 
 import SwiftUI
@@ -14,15 +14,15 @@ struct MainTabView: View {
 
     enum Tab: String, CaseIterable {
         case dashboard
-        case cashFlow
-        case balance
+        case transactions
+        case wealth
         case settings
 
         var title: String {
             switch self {
             case .dashboard: return "Dashboard"
-            case .cashFlow: return "Cash Flow"
-            case .balance: return "Balance"
+            case .transactions: return "Transactions"
+            case .wealth: return "Wealth"
             case .settings: return "Settings"
             }
         }
@@ -30,8 +30,8 @@ struct MainTabView: View {
         var icon: String {
             switch self {
             case .dashboard: return "flame.fill"
-            case .cashFlow: return "arrow.left.arrow.right"
-            case .balance: return "scale.3d"
+            case .transactions: return "list.bullet.rectangle.portrait"
+            case .wealth: return "chart.line.uptrend.xyaxis"
             case .settings: return "gearshape.fill"
             }
         }
@@ -45,17 +45,17 @@ struct MainTabView: View {
                 }
                 .tag(Tab.dashboard)
 
-            CashFlowView()
+            TransactionsListView()
                 .tabItem {
-                    Label(Tab.cashFlow.title, systemImage: Tab.cashFlow.icon)
+                    Label(Tab.transactions.title, systemImage: Tab.transactions.icon)
                 }
-                .tag(Tab.cashFlow)
+                .tag(Tab.transactions)
 
             BalanceSheetView()
                 .tabItem {
-                    Label(Tab.balance.title, systemImage: Tab.balance.icon)
+                    Label(Tab.wealth.title, systemImage: Tab.wealth.icon)
                 }
-                .tag(Tab.balance)
+                .tag(Tab.wealth)
 
             SettingsView()
                 .tabItem {

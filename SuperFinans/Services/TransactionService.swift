@@ -14,7 +14,7 @@ final class TransactionService: ObservableObject {
     static let shared = TransactionService()
     private let persistence: PersistenceController
 
-    private init(persistence: PersistenceController = .shared) {
+    init(persistence: PersistenceController = .shared) {
         self.persistence = persistence
     }
 

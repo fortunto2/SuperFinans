@@ -14,7 +14,7 @@ final class GoalService: ObservableObject {
     static let shared = GoalService()
     private let persistence: PersistenceController
 
-    private init(persistence: PersistenceController = .shared) {
+    init(persistence: PersistenceController = .shared) {
         self.persistence = persistence
     }
 

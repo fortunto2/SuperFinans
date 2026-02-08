@@ -15,7 +15,7 @@ final class RecurringRuleService {
     static let shared = RecurringRuleService()
     private let persistence: PersistenceController
 
-    private init(persistence: PersistenceController = .shared) {
+    init(persistence: PersistenceController = .shared) {
         self.persistence = persistence
     }
 
@@ -89,6 +89,8 @@ final class RecurringRuleService {
     // MARK: - Generate Due Transactions
 
     /// Generate transactions for all active rules whose nextDueDate <= today.
+    /// Uses a while loop to catch up on ALL missed periods (e.g. if the app
+    /// wasn't opened for 2 months, it generates all overdue transactions).
     /// Call this when the app becomes active.
     func generateDueTransactions() {
         let rules = fetchActiveRules()
@@ -96,31 +98,32 @@ final class RecurringRuleService {
         let ctx = persistence.viewContext
 
         for rule in rules {
-            guard let dueDate = rule.nextDueDate, dueDate <= today else { continue }
+            // Catch up on ALL overdue periods, not just one
+            while let dueDate = rule.nextDueDate, dueDate <= today {
+                // Create the transaction
+                let tx = TransactionEntity(context: ctx)
+                tx.id = UUID()
+                tx.amountMinorUnits = rule.templateAmountMinorUnits
+                tx.currencyCode = rule.currencyCode ?? "USD"
+                tx.categoryId = rule.categoryId
+                tx.note = rule.note
+                tx.date = dueDate
+                tx.isRecurring = true
+                tx.recurringRuleId = rule.id
+                tx.createdAt = Date()
+                tx.updatedAt = Date()
+                tx.account = rule.account
+                tx.recurringRule = rule
 
-            // Create the transaction
-            let tx = TransactionEntity(context: ctx)
-            tx.id = UUID()
-            tx.amountMinorUnits = rule.templateAmountMinorUnits
-            tx.currencyCode = rule.currencyCode ?? "USD"
-            tx.categoryId = rule.categoryId
-            tx.note = rule.note
-            tx.date = dueDate
-            tx.isRecurring = true
-            tx.recurringRuleId = rule.id
-            tx.createdAt = Date()
-            tx.updatedAt = Date()
-            tx.account = rule.account
-            tx.recurringRule = rule
+                // Update account balance
+                if let account = rule.account {
+                    account.balanceMinorUnits += rule.templateAmountMinorUnits
+                    account.updatedAt = Date()
+                }
 
-            // Update account balance
-            if let account = rule.account {
-                account.balanceMinorUnits += rule.templateAmountMinorUnits
-                account.updatedAt = Date()
+                // Advance nextDueDate
+                rule.nextDueDate = nextDate(after: dueDate, frequency: rule.recurringFrequency)
             }
-
-            // Advance nextDueDate
-            rule.nextDueDate = nextDate(after: dueDate, frequency: rule.recurringFrequency)
         }
 
         persistence.save()

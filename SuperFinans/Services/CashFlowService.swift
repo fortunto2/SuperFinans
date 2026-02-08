@@ -18,7 +18,7 @@ final class CashFlowService: ObservableObject {
     private let accountService: AccountService
     private let transactionService: TransactionService
 
-    private init(
+    init(
         persistence: PersistenceController = .shared,
         accountService: AccountService = .shared,
         transactionService: TransactionService = .shared

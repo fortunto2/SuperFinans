@@ -18,8 +18,11 @@ struct CreateRecurringRuleView: View {
     @State private var frequency: RecurringFrequency = .monthly
     @State private var nextDueDate = Date()
     @State private var currencyCode = "USD"
+    @State private var selectedAccount: AccountEntity?
+    @State private var accounts: [AccountEntity] = []
 
     private let service = RecurringRuleService.shared
+    private let accountService = AccountService.shared
 
     var isValid: Bool {
         !amount.isEmpty
@@ -50,6 +53,21 @@ struct CreateRecurringRuleView: View {
                     }
                 }
 
+                Section("Account") {
+                    if accounts.isEmpty {
+                        Text("No accounts. Create one in the Wealth tab first.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Picker("Account", selection: $selectedAccount) {
+                            Text("None").tag(AccountEntity?.none)
+                            ForEach(accounts, id: \.id) { account in
+                                Text(account.displayName).tag(AccountEntity?.some(account))
+                            }
+                        }
+                    }
+                }
+
                 Section("Schedule") {
                     Picker("Frequency", selection: $frequency) {
                         ForEach(RecurringFrequency.allCases, id: \.self) { freq in
@@ -61,6 +79,7 @@ struct CreateRecurringRuleView: View {
                 }
             }
             .navigationTitle("New Recurring Rule")
+            .onAppear { accounts = accountService.fetchAccounts() }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -89,8 +108,12 @@ struct CreateRecurringRuleView: View {
             categoryId: selectedCategory?.rawValue,
             note: note.isEmpty ? nil : note,
             frequency: frequency,
-            nextDueDate: nextDueDate
+            nextDueDate: nextDueDate,
+            account: selectedAccount
         )
+
+        // Generate any immediately due transactions
+        service.generateDueTransactions()
 
         dismiss()
     }

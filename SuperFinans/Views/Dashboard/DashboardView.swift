@@ -41,25 +41,19 @@ struct DashboardView: View {
                         milestonesSection
                     }
 
-                    // Quick Actions
-                    quickActionsSection
+                    // Recent Transactions
+                    if !viewModel.recentTransactions.isEmpty {
+                        recentTransactionsSection
+                    }
                 }
                 .padding()
             }
             .navigationTitle("Dashboard")
+            .onAppear { viewModel.loadAll() }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button {
-                            viewModel.showAddTransaction = true
-                        } label: {
-                            Label("Add Transaction", systemImage: "plus.circle")
-                        }
-                        Button {
-                            viewModel.showCreateAccount = true
-                        } label: {
-                            Label("Add Account", systemImage: "building.columns")
-                        }
+                    Button {
+                        viewModel.showAddTransaction = true
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -69,11 +63,6 @@ struct DashboardView: View {
                 viewModel.loadAll()
             } content: {
                 AddTransactionView()
-            }
-            .sheet(isPresented: $viewModel.showCreateAccount) {
-                viewModel.loadAll()
-            } content: {
-                AccountFormView(mode: .create)
             }
             .navigationDestination(for: GoalEntity.self) { goal in
                 GoalDetailView(goal: goal)
@@ -364,33 +353,27 @@ struct DashboardView: View {
         )
     }
 
-    // MARK: - Quick Actions
+    // MARK: - Recent Transactions
 
-    private var quickActionsSection: some View {
-        HStack(spacing: 12) {
-            Button {
-                viewModel.showAddTransaction = true
-            } label: {
-                Label("Add Transaction", systemImage: "plus.circle.fill")
-                    .font(.subheadline.bold())
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(LinearGradient.mintGradient)
-                    .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+    private var recentTransactionsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "clock.arrow.circlepath")
+                    .foregroundColor(.goalMint)
+                Text("Recent Transactions")
+                    .font(.headline)
+                Spacer()
             }
 
-            Button {
-                viewModel.showCreateAccount = true
-            } label: {
-                Label("Add Account", systemImage: "building.columns")
-                    .font(.subheadline.bold())
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(Color(.secondarySystemGroupedBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            ForEach(viewModel.recentTransactions, id: \.id) { transaction in
+                TransactionRow(transaction: transaction)
             }
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.secondarySystemGroupedBackground))
+        )
     }
 }
 

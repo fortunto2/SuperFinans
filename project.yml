@@ -1,6 +1,6 @@
 name: SuperFinans
 options:
-  bundleIdPrefix: app.superfinans
+  bundleIdPrefix: co.superduperai
   deploymentTarget:
     iOS: "17.0"
   xcodeVersion: "16.0"
@@ -34,7 +34,7 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: app.superfinans.SuperFinans
+        PRODUCT_BUNDLE_IDENTIFIER: co.superduperai.SuperFinans
         INFOPLIST_KEY_CFBundleDisplayName: SuperFinans
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
@@ -52,7 +52,7 @@ targets:
       path: SuperFinans/SuperFinans.entitlements
       properties:
         com.apple.developer.icloud-container-identifiers:
-          - "iCloud.app.superfinans"
+          - "iCloud.co.superduperai.SuperFinans"
         com.apple.developer.icloud-services:
           - "CloudKit"
         com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"

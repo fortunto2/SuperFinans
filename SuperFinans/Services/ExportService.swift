@@ -100,6 +100,49 @@ final class ExportService {
         return try? encoder.encode(exportData)
     }
 
+    // MARK: - CSV
+
+    /// Transactions as a spreadsheet. JSON is the honest archive format and stays
+    /// free; this is the one people actually open in Numbers or Excel.
+    func exportTransactionsCSV() -> Data? {
+        let transactions = TransactionService.shared.fetchTransactions()
+        var rows = ["date,account,category,note,amount,currency"]
+
+        for tx in transactions {
+            let money = Money(minorUnits: tx.amountMinorUnits,
+                              currencyCode: tx.account?.currency ?? "USD")
+            rows.append([
+                Self.csvField(tx.date?.iso8601Day ?? ""),
+                Self.csvField(tx.account?.displayName ?? ""),
+                Self.csvField(tx.categoryId ?? ""),
+                Self.csvField(tx.note ?? ""),
+                NSDecimalNumber(decimal: money.decimalAmount).stringValue,
+                Self.csvField(money.currencyCode),
+            ].joined(separator: ","))
+        }
+        return rows.joined(separator: "\n").data(using: .utf8)
+    }
+
+    /// Quotes only when needed, and doubles any quote inside — the two rules that
+    /// separate a CSV that opens cleanly from one that shifts every column.
+    private static func csvField(_ value: String) -> String {
+        guard value.contains(where: { ",\"\n".contains($0) }) else { return value }
+        return "\"" + value.replacingOccurrences(of: "\"", with: "\"\"") + "\""
+    }
+
+    func exportCSVFileURL() -> URL? {
+        guard let data = exportTransactionsCSV() else { return nil }
+        let fileName = "SuperFinans_Transactions_\(Date().dateGroupKey).csv"
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        do {
+            try data.write(to: url)
+            return url
+        } catch {
+            print("ExportService: Failed to write CSV: \(error)")
+            return nil
+        }
+    }
+
     func exportFileURL() -> URL? {
         guard let data = exportJSON() else { return nil }
         let fileName = "SuperFinans_Export_\(Date().dateGroupKey).json"

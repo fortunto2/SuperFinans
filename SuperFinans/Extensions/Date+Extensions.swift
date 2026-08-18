@@ -61,6 +61,14 @@ extension Date {
     }
 
     /// Group key for transactions list (e.g., "2025-01-15")
+    /// yyyy-MM-dd, fixed locale — a CSV that sorts and parses anywhere.
+    var iso8601Day: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter.string(from: self)
+    }
+
     var dateGroupKey: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"

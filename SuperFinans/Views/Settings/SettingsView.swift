@@ -12,6 +12,7 @@ import SuperDuperAiAuth
 struct SettingsView: View {
 
     @AppStorage("com.superduperai.analytics.enabled") private var analyticsEnabled = true
+    @StateObject private var supporterStore = SupporterStore.shared
 
     @AppStorage("superfinans.currency_code") private var currencyCode = "USD"
     @AppStorage("superfinans.appearance") private var appearance = "system"
@@ -55,34 +56,33 @@ struct SettingsView: View {
                 }
 
                 // Purchase
-                Section("Premium") {
-                    if PremiumManager.shared.isPremium {
-                        Label("Premium Active", systemImage: "crown.fill")
-                            .foregroundColor(.goalMint)
-                    } else {
-                        Button {
-                            showPaywall = true
-                        } label: {
-                            HStack {
-                                Label("Upgrade to Premium", systemImage: "crown.fill")
-                                Spacer()
-                                Text("$29.99")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
+                // Not "Premium" — nothing is locked. The price comes from
+                // StoreKit so it is right in every storefront, rather than a
+                // hardcoded $29.99 that is wrong everywhere outside the US.
+                Section {
+                    SupporterSettingsRow(store: supporterStore)
                 }
 
                 // Currency
                 Section("Currency") {
-                    Picker("Default Currency", selection: $currencyCode) {
-                        Text("USD — US Dollar").tag("USD")
-                        Text("EUR — Euro").tag("EUR")
-                        Text("GBP — British Pound").tag("GBP")
-                        Text("CAD — Canadian Dollar").tag("CAD")
-                        Text("AUD — Australian Dollar").tag("AUD")
-                        Text("JPY — Japanese Yen").tag("JPY")
+                    NavigationLink {
+                        CurrencyPickerView(selection: $currencyCode) { code in
+                            var plan = FreedomPlanStore.shared.plan
+                            plan.currencyCode = code
+                            plan.displayCurrencyCode = CurrencyClass.isHard(code) ? nil : "USD"
+                            FreedomPlanStore.shared.plan = plan
+                            FreedomPlanStorage.defaults.set(code, forKey: FreedomPlanStorage.currencyKey)
+                        }
+                        .navigationTitle("Currency")
+                        .navigationBarTitleDisplayMode(.inline)
+                    } label: {
+                        HStack {
+                            Text("Default Currency")
+                            Spacer()
+                            Text("\(currencyCode) — \(CurrencyPickerView.name(for: currencyCode))")
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
                     }
                 }
 
@@ -95,6 +95,15 @@ struct SettingsView: View {
                         }
                     } label: {
                         Label("Export Data (JSON)", systemImage: "square.and.arrow.up")
+                    }
+
+                    if supporterStore.isSupporter {
+                        Button {
+                            exportURL = ExportService.shared.exportCSVFileURL()
+                            if exportURL != nil { showExportSheet = true }
+                        } label: {
+                            Label("Export Transactions (CSV)", systemImage: "tablecells")
+                        }
                     }
                 }
 

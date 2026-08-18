@@ -30,10 +30,12 @@
 		3D9B5C5BACE6BD3DBCCB3925 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957335728263886208904E07 /* DashboardView.swift */; };
 		3DEC0221CD7D94732AC557FA /* FinancialCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAE848425B07DBE35BB6FFA /* FinancialCalculator.swift */; };
 		42DB818A77FF1D085A5D2695 /* SuperFinansWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2A98645638BFA68FE5A8EAC0 /* SuperFinansWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		438A6F13281B93FFF4B656EA /* SupporterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962DCEC3ECA4F23CFB4C2F6D /* SupporterView.swift */; };
 		438B21652BD4997CEA70BF6F /* GoalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A44CCDDEBA64009AF0041 /* GoalCardView.swift */; };
 		4595A5E2D6D2700C92FBEDCB /* GuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791EA0D63DE585E171055B3 /* GuideView.swift */; };
 		479802C16C3FDCB52EA21F92 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3D06217219AB2EBDEFFD4E /* NotificationService.swift */; };
 		4A3CA6D3E4C194B2BEC1B795 /* privacy_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 1466FD0A806EF785525A893B /* privacy_guide.md */; };
+		4AE074D1BC9A2D5480C6410A /* SupporterStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC96ADADBF29E9651258C39E /* SupporterStore.swift */; };
 		4B25C835F2E0B2964ACAE6F1 /* RecurringRuleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B8804C41053A34A96366E3 /* RecurringRuleService.swift */; };
 		4F94E9E206E7085E8861DFE8 /* GoalProjectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99279F913EAC5E93FC416AEE /* GoalProjectionsView.swift */; };
 		5011C4FCB7C1F8E87EBC7741 /* FreedomPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210047B960EA4FDE48AF8FC9 /* FreedomPlan.swift */; };
@@ -187,6 +189,7 @@
 		88B085A0F81F2FC272491C1A /* superduperai-analytics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "superduperai-analytics"; path = "../../shared/superduperai-analytics"; sourceTree = SOURCE_ROOT; };
 		9226DDCFB7D99C600DAC3C9A /* NumpadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumpadView.swift; sourceTree = "<group>"; };
 		957335728263886208904E07 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		962DCEC3ECA4F23CFB4C2F6D /* SupporterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupporterView.swift; sourceTree = "<group>"; };
 		96C5954F265AEBEC629EBAF0 /* AccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountService.swift; sourceTree = "<group>"; };
 		96D89706A25078EE478737F6 /* CashFlowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashFlowService.swift; sourceTree = "<group>"; };
 		984B5A3FDB9B1B49AD9EC410 /* SuperFinans.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SuperFinans.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -210,6 +213,7 @@
 		C8A43EFE8571D810A35801CF /* LifeEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeEventsView.swift; sourceTree = "<group>"; };
 		CA841985F718EAFA24FEAD64 /* GoalDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailViewModel.swift; sourceTree = "<group>"; };
 		CB61C8B129750C9FD829EE0A /* FeatureDiscoveryFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureDiscoveryFlags.swift; sourceTree = "<group>"; };
+		CC96ADADBF29E9651258C39E /* SupporterStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupporterStore.swift; sourceTree = "<group>"; };
 		CEF903AFFAAD95EB975C07A5 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		D0C76CBB5484F9DA14E58E0F /* PortfolioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioView.swift; sourceTree = "<group>"; };
 		D4108C832DE771B5425A1E9E /* SuperFinansTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SuperFinansTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -299,6 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				E386B5F16D483A6BDB605BFE /* SuperFinansPaywallView.swift */,
+				962DCEC3ECA4F23CFB4C2F6D /* SupporterView.swift */,
 			);
 			path = Paywall;
 			sourceTree = "<group>";
@@ -386,6 +391,7 @@
 				7CE6175B4FC4637C30A84A6F /* PremiumManager.swift */,
 				C6A1AD0EFB2E224B53D95B4A /* RateService.swift */,
 				B1B8804C41053A34A96366E3 /* RecurringRuleService.swift */,
+				CC96ADADBF29E9651258C39E /* SupporterStore.swift */,
 				A0DB6298A29B8E2204C3DE0C /* TransactionService.swift */,
 			);
 			path = Services;
@@ -786,6 +792,8 @@
 				73DBEE7826ED5F6B5E6EBCD9 /* SettingsView.swift in Sources */,
 				02CF8C32FF3BE56146F9AC3E /* SuperFinansApp.swift in Sources */,
 				F97A9CA3FE613BD205F7B411 /* SuperFinansPaywallView.swift in Sources */,
+				4AE074D1BC9A2D5480C6410A /* SupporterStore.swift in Sources */,
+				438A6F13281B93FFF4B656EA /* SupporterView.swift in Sources */,
 				598B1DC04C2EB09CE846CEF0 /* TransactionEntity+CoreData.swift in Sources */,
 				E481270512721F5010B2852C /* TransactionService.swift in Sources */,
 				7F9728649B13129132260F64 /* TransactionsListView.swift in Sources */,

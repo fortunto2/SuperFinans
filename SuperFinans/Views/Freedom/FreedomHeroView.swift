@@ -13,6 +13,8 @@ struct FreedomHeroView: View {
     @ObservedObject var store: FreedomPlanStore
     @State private var extraMonthly: Double = 0
     @State private var showSetup = false
+    @State private var snapshot: RateSnapshot? = RateService.cached()
+    @State private var switching = false
 
     private var plan: FreedomPlan { store.plan }
 
@@ -33,8 +35,10 @@ struct FreedomHeroView: View {
     var body: some View {
         VStack(spacing: 20) {
             headline
+            target
             coverage
             if plan.monthlySavingsMinor >= 0 { whatIf }
+            if !plan.returnAssumptionIsCredible { softCurrencyNote }
             Button {
                 showSetup = true
             } label: {
@@ -49,6 +53,79 @@ struct FreedomHeroView: View {
         .sheet(isPresented: $showSetup) {
             FreedomSetupView(store: store) { extraMonthly = 0 }
         }
+        .task {
+            snapshot = await RateService.shared.refreshIfNeeded()
+        }
+    }
+
+    // MARK: - Target
+
+    /// The number the whole plan is walking towards. Shown in a second currency
+    /// when the first one is not what the person actually thinks in.
+    private var target: some View {
+        VStack(spacing: 2) {
+            Text("You need")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text(money(boosted.targetAssetsMinor))
+                .font(.title3.bold())
+                .monospacedDigit()
+            if let secondary = secondaryAmount(boosted.targetAssetsMinor) {
+                Text("≈ \(secondary)")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .monospacedDigit()
+            }
+        }
+    }
+
+    // MARK: - Soft currency
+
+    /// Says the quiet part out loud instead of quietly producing a wrong year.
+    private var softCurrencyNote: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("\(plan.currencyCode) and a 7% return")
+                .font(.footnote.bold())
+            Text("7% is what a dollar-denominated market returns over decades. In \(plan.currencyCode) that figure quietly ignores inflation, and over 20 years the error is measured in years.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            if snapshot != nil {
+                Button {
+                    switchToDollars()
+                } label: {
+                    Text(switching ? "Converting…" : "Restate the plan in USD")
+                        .font(.caption.bold())
+                }
+                .disabled(switching)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.warningAmber.opacity(0.15))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+
+    private func switchToDollars() {
+        guard let snapshot, let converted = plan.converted(to: "USD", using: snapshot) else { return }
+        switching = true
+        store.plan = converted
+        switching = false
+    }
+
+    // MARK: - Money formatting
+
+    private func money(_ minor: Int64) -> String {
+        Money(minorUnits: minor, currencyCode: plan.currencyCode).formatted
+    }
+
+    /// The same amount in the person's second currency, if they kept one.
+    private func secondaryAmount(_ minor: Int64) -> String? {
+        guard let code = plan.displayCurrencyCode, code != plan.currencyCode,
+              let snapshot,
+              let value = snapshot.convert(Double(minor) / 100, from: plan.currencyCode, to: code)
+        else { return nil }
+        return Money(amount: Decimal(value), currencyCode: code).formatted
     }
 
     // MARK: - Headline

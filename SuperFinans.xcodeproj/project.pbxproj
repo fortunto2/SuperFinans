@@ -16,6 +16,7 @@
 		0F147B2BAD1C655D5BF386B3 /* InsightsDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B977E8B288C76E7F300B58CB /* InsightsDashboardView.swift */; };
 		11315E1D5CB9D5484C810F34 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120B20157C32CB2E86183E36 /* ExportService.swift */; };
 		1353FA2BAA215B42CFB779D1 /* CreateGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53665CB12B2C7887B7101D /* CreateGoalView.swift */; };
+		154AE5063EB8CBB60306C578 /* RateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A1AD0EFB2E224B53D95B4A /* RateService.swift */; };
 		157F42935315BF3C6B1CAEDA /* AccountsManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7BBA7637FC4EEB861D22B0 /* AccountsManagementView.swift */; };
 		1AB8F75629A25BCF25F5A801 /* MoneyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BD9B60D350A79BFACD49FC /* MoneyTextField.swift */; };
 		1E7021C48C8FC20305DA1CED /* ru_transactions_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = B766F893DE2C18462622F1AA /* ru_transactions_guide.md */; };
@@ -83,6 +84,7 @@
 		E138EF3BA5879A6A47F90BB0 /* PremiumManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE6175B4FC4637C30A84A6F /* PremiumManager.swift */; };
 		E3BF78863A69A5B9087F2250 /* HintBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D6DE702C511EA1A3C67DA7 /* HintBannerView.swift */; };
 		E481270512721F5010B2852C /* TransactionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DB6298A29B8E2204C3DE0C /* TransactionService.swift */; };
+		E70C35E7BAF2DDC5D10CCDA0 /* FreedomPlanStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A31518B03B62AB2B934E9A5 /* FreedomPlanStore.swift */; };
 		E72A82B7ACA0A0D15E66A2FA /* GoalEntity+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6CCDD069FC707D59E0C5C17 /* GoalEntity+CoreData.swift */; };
 		E91E65BADCE6D25D476F2CF5 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF903AFFAAD95EB975C07A5 /* OnboardingView.swift */; };
 		EA1E35DECEE427833DFCDE60 /* premium_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 45F025412972F19AFF3CA811 /* premium_guide.md */; };
@@ -163,6 +165,7 @@
 		65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomSetupView.swift; sourceTree = "<group>"; };
 		668CA74725D2689A41C1EC2B /* BalanceSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSheetViewModel.swift; sourceTree = "<group>"; };
 		67AAC27A2D05D963E7CAE3A8 /* CategoryDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDefinition.swift; sourceTree = "<group>"; };
+		6A31518B03B62AB2B934E9A5 /* FreedomPlanStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomPlanStore.swift; sourceTree = "<group>"; };
 		6CCE5B7DF2504F6D223C865B /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		6D807F0E43270764425C5978 /* GoalsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsViewModel.swift; sourceTree = "<group>"; };
 		7109317764CE39D954291E62 /* PortfolioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewModel.swift; sourceTree = "<group>"; };
@@ -197,6 +200,7 @@
 		BA710866CE3167879319D105 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BBF71E08A00ADF8B0DF11536 /* CategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
 		BE4421F3DE314723DEEB07F3 /* FreedomYearWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomYearWidget.swift; sourceTree = "<group>"; };
+		C6A1AD0EFB2E224B53D95B4A /* RateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateService.swift; sourceTree = "<group>"; };
 		C6D2CAB725021737A072ACF2 /* FreedomHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomHeroView.swift; sourceTree = "<group>"; };
 		CA841985F718EAFA24FEAD64 /* GoalDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailViewModel.swift; sourceTree = "<group>"; };
 		CB61C8B129750C9FD829EE0A /* FeatureDiscoveryFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureDiscoveryFlags.swift; sourceTree = "<group>"; };
@@ -366,10 +370,12 @@
 				120B20157C32CB2E86183E36 /* ExportService.swift */,
 				CB61C8B129750C9FD829EE0A /* FeatureDiscoveryFlags.swift */,
 				7AAE848425B07DBE35BB6FFA /* FinancialCalculator.swift */,
+				6A31518B03B62AB2B934E9A5 /* FreedomPlanStore.swift */,
 				B89E5B6F936357F3E36DA656 /* GoalService.swift */,
 				887C20AC783941264CE861AF /* MarkdownService.swift */,
 				ED3D06217219AB2EBDEFFD4E /* NotificationService.swift */,
 				7CE6175B4FC4637C30A84A6F /* PremiumManager.swift */,
+				C6A1AD0EFB2E224B53D95B4A /* RateService.swift */,
 				B1B8804C41053A34A96366E3 /* RecurringRuleService.swift */,
 				A0DB6298A29B8E2204C3DE0C /* TransactionService.swift */,
 			);
@@ -729,6 +735,7 @@
 				3DEC0221CD7D94732AC557FA /* FinancialCalculator.swift in Sources */,
 				DB100ACA1D36D1671C5A0C7E /* FreedomHeroView.swift in Sources */,
 				5011C4FCB7C1F8E87EBC7741 /* FreedomPlan.swift in Sources */,
+				E70C35E7BAF2DDC5D10CCDA0 /* FreedomPlanStore.swift in Sources */,
 				BBE228AF623F08531BAD1C9D /* FreedomProjection.swift in Sources */,
 				9A90B38CC9FF85BC5B3F434A /* FreedomSetupView.swift in Sources */,
 				438B21652BD4997CEA70BF6F /* GoalCardView.swift in Sources */,
@@ -758,6 +765,7 @@
 				66C0BAC85CFCFE9A478D1F55 /* PremiumBadgeView.swift in Sources */,
 				E138EF3BA5879A6A47F90BB0 /* PremiumManager.swift in Sources */,
 				6AD7170E51B6AE0E380EA9C6 /* ProgressRingView.swift in Sources */,
+				154AE5063EB8CBB60306C578 /* RateService.swift in Sources */,
 				78ABAD253E0490BE72D11E57 /* RecurringRuleEntity+CoreData.swift in Sources */,
 				4B25C835F2E0B2964ACAE6F1 /* RecurringRuleService.swift in Sources */,
 				F300EA878D7BBD73F5D00890 /* RecurringRulesView.swift in Sources */,

@@ -11,7 +11,6 @@
 //
 
 import Foundation
-import WidgetKit
 
 struct FreedomPlan: Codable, Equatable, Sendable {
 
@@ -27,6 +26,10 @@ struct FreedomPlan: Codable, Equatable, Sendable {
     var annualReturnPercent: Double
     /// ISO 4217 code the three numbers are expressed in.
     var currencyCode: String
+    /// Optional second currency shown alongside every amount. People who earn
+    /// in a soft currency still think in dollars, and the horizon here is long
+    /// enough that they are right to.
+    var displayCurrencyCode: String?
 
     static let defaultReturnPercent: Double = 7.0
 
@@ -37,12 +40,14 @@ struct FreedomPlan: Codable, Equatable, Sendable {
             monthlySavingsMinor: 0,
             birthYear: nil,
             annualReturnPercent: defaultReturnPercent,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            displayCurrencyCode: nil
         )
     }
 
     /// A plan is usable the moment we know what life costs.
     var isConfigured: Bool { monthlyExpensesMinor > 0 }
+
 }
 
 // MARK: - Outcome
@@ -174,42 +179,5 @@ enum FreedomPlanStorage {
               let plan = try? JSONDecoder().decode(FreedomPlan.self, from: data)
         else { return nil }
         return plan.isConfigured ? plan : nil
-    }
-}
-
-@MainActor
-final class FreedomPlanStore: ObservableObject {
-
-    static let shared = FreedomPlanStore()
-
-    private static let key = FreedomPlanStorage.key
-
-    @Published var plan: FreedomPlan {
-        didSet { save() }
-    }
-
-    init(defaults: UserDefaults = FreedomPlanStorage.defaults) {
-        self.defaults = defaults
-        let currency = defaults.string(forKey: "superfinans.currency_code")
-            ?? Locale.current.currency?.identifier
-            ?? "USD"
-        // Older plans were stored before the currency was pinned; follow the app.
-        if let data = defaults.data(forKey: Self.key),
-           let decoded = try? JSONDecoder().decode(FreedomPlan.self, from: data) {
-            self.plan = decoded
-        } else {
-            self.plan = .empty(currencyCode: currency)
-        }
-    }
-
-    private let defaults: UserDefaults
-
-    var outcome: FreedomOutcome { FreedomEngine.outcome(for: plan) }
-
-    private func save() {
-        guard let data = try? JSONEncoder().encode(plan) else { return }
-        defaults.set(data, forKey: Self.key)
-        // The home-screen number is only useful if it follows the app.
-        WidgetCenter.shared.reloadTimelines(ofKind: "FreedomYearWidget")
     }
 }

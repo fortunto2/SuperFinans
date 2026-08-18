@@ -113,6 +113,25 @@ struct SettingsView: View {
                     }
                 }
 
+                // Cross-promotion. Only apps that share this one's premise —
+                // multi-currency, privacy-first, no subscription — and only
+                // apps that are actually live on the Store.
+                Section("More from us") {
+                    Link(destination: URL(string: "https://apps.apple.com/app/id6759005730")!) {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("CurrencyPals")
+                                Text("Offline currency converter — the rates behind this app")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "arrow.left.arrow.right.circle.fill")
+                                .foregroundStyle(Color.goalMintDark)
+                        }
+                    }
+                }
+
                 // About
                 Section("About") {
                     HStack {

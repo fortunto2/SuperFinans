@@ -19,7 +19,7 @@ settings:
 
 packages:
   SuperDuperAiAuth:
-    path: /Users/alina/projects/SuperDuperAi/packages/auth-ios
+    path: /Users/rustam/startups/shared/superduperai-auth/packages/auth-ios
 
 targets:
   SuperFinans:
@@ -48,6 +48,7 @@ targets:
         INFOPLIST_KEY_UIBackgroundModes: "remote-notification"
     dependencies:
       - package: SuperDuperAiAuth
+      - target: SuperFinansWidgetExtension
     entitlements:
       path: SuperFinans/SuperFinans.entitlements
       properties:
@@ -56,6 +57,38 @@ targets:
         com.apple.developer.icloud-services:
           - "CloudKit"
         com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
+        com.apple.security.application-groups:
+          - "group.co.superduperai.SuperFinans"
+
+  SuperFinansWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: SuperFinansWidget
+      - path: SuperFinans/Models/FreedomPlan.swift
+      - path: SuperFinans/Extensions/Decimal+Financial.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: co.superduperai.SuperFinans.widget
+        PRODUCT_NAME: SuperFinansWidget
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: 1
+        SKIP_INSTALL: YES
+    info:
+      path: SuperFinansWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Freedom
+        CFBundleName: SuperFinansWidget
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        CFBundlePackageType: XPC!
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: SuperFinansWidget/SuperFinansWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - "group.co.superduperai.SuperFinans"
 
   SuperFinansTests:
     type: bundle.unit-test

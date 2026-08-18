@@ -28,7 +28,9 @@ struct Money: Equatable, Hashable, Codable, Sendable {
     /// Init from a major-unit decimal (e.g., 123.45)
     init(amount: Decimal, currencyCode: String) {
         let scale = Money.minorUnitScale(for: currencyCode)
-        let scaled = amount * Decimal(scale)
+        // .rounded(scale: 0) is not optional here: an unrounded Decimal with
+        // enough significant digits converts to 0, not to the nearest Int64.
+        let scaled = (amount * Decimal(scale)).rounded(scale: 0)
         self.minorUnits = NSDecimalNumber(decimal: scaled).int64Value
         self.currencyCode = currencyCode
     }

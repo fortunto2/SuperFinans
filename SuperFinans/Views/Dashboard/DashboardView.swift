@@ -12,6 +12,7 @@ import Charts
 struct DashboardView: View {
 
     @StateObject private var viewModel = DashboardViewModel()
+    @StateObject private var freedomStore = FreedomPlanStore.shared
     @Binding var deepLinkGoalId: UUID?
     @State private var navigationPath = NavigationPath()
 
@@ -19,17 +20,22 @@ struct DashboardView: View {
         NavigationStack(path: $navigationPath) {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Freedom Ratio
-                    freedomRatioCard
+                    // The answer, or the invitation to get one
+                    if freedomStore.plan.isConfigured {
+                        FreedomHeroView(store: freedomStore)
+                    } else {
+                        FreedomPromptView(store: freedomStore)
+                    }
 
-                    // Net Worth
-                    netWorthCard
-
-                    // Monthly Snapshot
-                    monthlySnapshotCard
-
-                    // Time to Freedom
-                    timeToFreedomCard
+                    // Ledger-derived cards stay hidden until there is a ledger.
+                    // Showing four zeros under a finished answer reads as broken.
+                    if viewModel.hasLedgerData {
+                        netWorthCard
+                        monthlySnapshotCard
+                        timeToFreedomCard
+                    } else if freedomStore.plan.isConfigured {
+                        refineHint
+                    }
 
                     // Passive Income Breakdown
                     if !viewModel.passiveIncomeBreakdown.isEmpty {
@@ -48,7 +54,7 @@ struct DashboardView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Dashboard")
+            .navigationTitle("Freedom")
             .onAppear { viewModel.loadAll() }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -194,6 +200,31 @@ struct DashboardView: View {
 
     // MARK: - Time to Freedom
 
+    /// The bridge from estimate to tracking: says what accounts buy you,
+    /// instead of showing empty cards that look like a bug.
+    private var refineHint: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("This is your estimate")
+                .font(.headline)
+            Text("Add accounts and it stops being an estimate — the year moves on its own as balances change.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.secondarySystemGroupedBackground))
+        )
+    }
+
+    /// One label per ~5 years of span. A yearly stride over a 30-year chart
+    /// renders as a smear of overlapping numbers.
+    private var chartYearStride: Int {
+        let months = viewModel.monthsToFreedom ?? 360
+        return max(2, Int((Double(months) / 12.0 / 5.0).rounded(.up)))
+    }
+
     private var timeToFreedomCard: some View {
         VStack(spacing: 12) {
             HStack {
@@ -247,7 +278,7 @@ struct DashboardView: View {
                     }
                     .chartYAxis(.hidden)
                     .chartXAxis {
-                        AxisMarks(values: .stride(by: .year, count: max(1, (viewModel.monthsToFreedom ?? 120) / 12 / 5))) { _ in
+                        AxisMarks(values: .stride(by: .year, count: chartYearStride)) { _ in
                             AxisGridLine()
                             AxisValueLabel(format: .dateTime.year())
                         }

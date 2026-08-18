@@ -37,6 +37,17 @@ struct SuperFinansApp: App {
             products: [ProductConfig(id: "superfinans.premium.lifetime", tier: .lifetime)]
         )
 
+        // Pin the base currency on first launch. Without this the freedom plan
+        // reads the locale while everything else falls back to USD, and the same
+        // screen shows two currencies.
+        let currencyKey = "superfinans.currency_code"
+        if UserDefaults.standard.string(forKey: currencyKey) == nil {
+            UserDefaults.standard.set(
+                Locale.current.currency?.identifier ?? "USD",
+                forKey: currencyKey
+            )
+        }
+
         // Ensure a default account exists
         Task { @MainActor in
             AccountService.shared.ensureDefaultAccount()

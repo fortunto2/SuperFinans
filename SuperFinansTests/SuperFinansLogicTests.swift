@@ -1116,42 +1116,46 @@ final class RecurringRuleTests: XCTestCase {
             balance: 0
         )
 
-        // Jan 2, 2026
-        var comps = DateComponents()
-        comps.year = 2026
-        comps.month = 1
-        comps.day = 2
-        let jan2 = Calendar.current.date(from: comps)!
+        // Anchored to today, not to a calendar date: the original version was
+        // written against "today is Feb 8, 2026" and started failing the moment
+        // the calendar moved past it.
+        //
+        // Start 45 days ago → exactly two due dates have passed (day 0 and
+        // day 30), and the third lands ~15 days in the future.
+        let firstDue = Calendar.current.date(byAdding: .day, value: -45, to: Date())!
 
-        // Create monthly salary rule: $8,000 from Jan 2
+        // Create monthly salary rule: $8,000, first due 45 days ago
         let rule = recurringService.createRule(
             amount: 800_000,
             categoryId: "income",
             note: "Salary",
             frequency: .monthly,
-            nextDueDate: jan2,
+            nextDueDate: firstDue,
             account: checking
         )
 
-        // Generate (today is Feb 8, 2026)
         recurringService.generateDueTransactions()
 
         let txs = transactionService.fetchTransactions()
 
-        // Jan 2 is overdue → generates tx, advances to Feb 2
-        // Feb 2 is overdue → generates tx, advances to Mar 2
-        // Mar 2 is in future → stops
+        // day -45 is overdue → generates tx, advances to day -15
+        // day -15 is overdue → generates tx, advances to day +15
+        // day +15 is in the future → stops
         XCTAssertEqual(txs.count, 2,
-            "Should have 2 transactions (Jan + Feb). Got: \(txs.count)")
+            "Should have 2 transactions. Got: \(txs.count)")
 
         // Account balance = 2 * $8,000 = $16,000
         XCTAssertEqual(checking.balanceMinorUnits, 2 * 800_000,
             "Account should have $16,000")
 
-        // nextDueDate should be Mar 2
-        let nextComps = Calendar.current.dateComponents([.year, .month, .day], from: rule.nextDueDate!)
-        XCTAssertEqual(nextComps.month, 3, "Next due should be March")
-        XCTAssertEqual(nextComps.day, 2, "Next due should be 2nd")
+        // Next due sits in the future, two months on from the first
+        let expectedNext = Calendar.current.date(byAdding: .month, value: 2, to: firstDue)!
+        XCTAssertEqual(
+            Calendar.current.compare(rule.nextDueDate!, to: expectedNext, toGranularity: .day),
+            .orderedSame,
+            "Next due should be two months after the first"
+        )
+        XCTAssertGreaterThan(rule.nextDueDate!, Date(), "Next due must be in the future")
 
         // Income should show in CashFlowService
         let cashFlowService = CashFlowService(
@@ -1164,13 +1168,71 @@ final class RecurringRuleTests: XCTestCase {
         let nw = cashFlowService.netWorth()
         XCTAssertEqual(nw, 1_600_000, "Net worth should be $16,000")
 
-        // Check income for January
-        let janIncome = cashFlowService.activeIncome(for: jan2)
-        XCTAssertEqual(janIncome, 800_000, "Jan income should be $8,000")
+        // One salary in each of the two months the rule has already covered
+        XCTAssertEqual(cashFlowService.activeIncome(for: firstDue), 800_000,
+                       "First month should show one salary")
+        XCTAssertEqual(cashFlowService.activeIncome(for: firstDue.addingMonths(1)), 800_000,
+                       "Second month should show one salary")
+    }
+}
 
-        // Check income for February
-        let feb2 = jan2.addingMonths(1)
-        let febIncome = cashFlowService.activeIncome(for: feb2)
-        XCTAssertEqual(febIncome, 800_000, "Feb income should be $8,000")
+// MARK: - Freedom plan
+
+/// The three-number path is the product's whole promise: an answer without a
+/// ledger. These tests pin the arithmetic and the two edge cases that made the
+/// old dashboard look broken.
+final class FreedomEngineTests: XCTestCase {
+
+    private func plan(
+        expenses: Int64 = 1200_00,
+        savings: Int64 = 30_000_00,
+        monthly: Int64 = 800_00,
+        birthYear: Int? = 1990
+    ) -> FreedomPlan {
+        FreedomPlan(
+            monthlyExpensesMinor: expenses,
+            currentSavingsMinor: savings,
+            monthlySavingsMinor: monthly,
+            birthYear: birthYear,
+            annualReturnPercent: 7,
+            currencyCode: "USD"
+        )
+    }
+
+    func testReachesFreedomInAboutTenYears() throws {
+        let outcome = FreedomEngine.outcome(for: plan())
+        let years = try XCTUnwrap(outcome.years)
+        // 30k seed + 800/mo at 7% covers 1200/mo of spending in roughly a decade.
+        XCTAssertTrue((8...11).contains(years), "expected ~10 years, got \(years)")
+        let year = try XCTUnwrap(outcome.year)
+        XCTAssertEqual(outcome.age, year - 1990)
+    }
+
+    /// Regression: zero expenses used to return 0 months — "you are already
+    /// free" — which rendered as an empty dashboard with a smeared axis.
+    func testUnknownExpensesHasNoAnswer() {
+        XCTAssertNil(FreedomEngine.outcome(for: plan(expenses: 0)).months)
+    }
+
+    func testNoSavingsAndNoContributionsNeverArrives() {
+        XCTAssertNil(FreedomEngine.outcome(for: plan(savings: 0, monthly: 0)).months)
+    }
+
+    func testSavingMoreArrivesEarlier() {
+        let saved = FreedomEngine.monthsSaved(for: plan(), extraMonthlyMinor: 400_00)
+        XCTAssertNotNil(saved)
+        XCTAssertGreaterThan(saved ?? 0, 0)
+    }
+
+    func testTargetIsExpensesDividedByMonthlyRate() {
+        let outcome = FreedomEngine.outcome(for: plan())
+        // 1200 / (0.07/12) ≈ 205,714
+        XCTAssertEqual(Double(outcome.targetAssetsMinor) / 100, 205_714, accuracy: 50)
+    }
+
+    func testUnconfiguredPlanIsNotServedToTheWidget() {
+        let empty = FreedomPlan.empty(currencyCode: "USD")
+        XCTAssertFalse(empty.isConfigured)
+        XCTAssertTrue(plan().isConfigured)
     }
 }

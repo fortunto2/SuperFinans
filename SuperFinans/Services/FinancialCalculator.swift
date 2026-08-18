@@ -38,7 +38,7 @@ final class FinancialCalculator {
         guard annualRate > 0 else {
             // Simple addition without interest
             let result = pv + pmt * Decimal(months)
-            return NSDecimalNumber(decimal: result).int64Value
+            return NSDecimalNumber(decimal: result.rounded(scale: 0)).int64Value
         }
 
         let n = Decimal(compounding.periodsPerYear)
@@ -206,7 +206,8 @@ final class FinancialCalculator {
         monthlySurplus: Int64,
         averageAnnualReturn: Decimal
     ) -> Int? {
-        guard monthlyExpenses > 0 else { return 0 }
+        // Zero expenses is missing data, not freedom — refuse to answer.
+        guard monthlyExpenses > 0 else { return nil }
         guard monthlySurplus > 0 || currentInvestedAssets > 0 else { return nil }
 
         let monthlyRate = averageAnnualReturn / Decimal(12)

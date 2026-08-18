@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -27,12 +27,14 @@
 		378A842B95BE2843F9A5E6F5 /* CashFlowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D89706A25078EE478737F6 /* CashFlowService.swift */; };
 		3D9B5C5BACE6BD3DBCCB3925 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957335728263886208904E07 /* DashboardView.swift */; };
 		3DEC0221CD7D94732AC557FA /* FinancialCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAE848425B07DBE35BB6FFA /* FinancialCalculator.swift */; };
+		42DB818A77FF1D085A5D2695 /* SuperFinansWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2A98645638BFA68FE5A8EAC0 /* SuperFinansWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		438B21652BD4997CEA70BF6F /* GoalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A44CCDDEBA64009AF0041 /* GoalCardView.swift */; };
 		4595A5E2D6D2700C92FBEDCB /* GuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791EA0D63DE585E171055B3 /* GuideView.swift */; };
 		479802C16C3FDCB52EA21F92 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3D06217219AB2EBDEFFD4E /* NotificationService.swift */; };
 		4A3CA6D3E4C194B2BEC1B795 /* privacy_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 1466FD0A806EF785525A893B /* privacy_guide.md */; };
 		4B25C835F2E0B2964ACAE6F1 /* RecurringRuleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B8804C41053A34A96366E3 /* RecurringRuleService.swift */; };
 		4F94E9E206E7085E8861DFE8 /* GoalProjectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99279F913EAC5E93FC416AEE /* GoalProjectionsView.swift */; };
+		5011C4FCB7C1F8E87EBC7741 /* FreedomPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210047B960EA4FDE48AF8FC9 /* FreedomPlan.swift */; };
 		5349EFA83CA655750436111E /* NumpadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9226DDCFB7D99C600DAC3C9A /* NumpadView.swift */; };
 		57165A646E2D154B400626A4 /* Color+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF151E703880E7A28CF8BFE /* Color+Theme.swift */; };
 		598B1DC04C2EB09CE846CEF0 /* TransactionEntity+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4C0AD787DCF56A31B10F3E /* TransactionEntity+CoreData.swift */; };
@@ -59,19 +61,24 @@
 		90B943097D357DCFADB42DE9 /* BalanceSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578891C304B041CD068D4059 /* BalanceSheetView.swift */; };
 		963057EEB4937B5BFEA0AE67 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCB19448D5469777F6CBFC7 /* EmptyStateView.swift */; };
 		96F4432C83FF6899F9FD47F6 /* CreateRecurringRuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FD25894C255EB65C1BF41F /* CreateRecurringRuleView.swift */; };
+		9A90B38CC9FF85BC5B3F434A /* FreedomSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */; };
 		A1E9722EDC176BF2BD215204 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8580F400F5BDDF7D9808A668 /* MainTabView.swift */; };
 		A53EDBC397D98845D3DCB5C0 /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF71E08A00ADF8B0DF11536 /* CategoryPickerView.swift */; };
 		A7CEED6ED807423F5FCD5816 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74258EE15931AED3718FF7EE /* AppDelegate.swift */; };
 		A803ABAFED4361AC89CCBD88 /* PortfolioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7109317764CE39D954291E62 /* PortfolioViewModel.swift */; };
 		AA41A6BC23DD19241E83FD63 /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116631E538B5655877067F7 /* Money.swift */; };
 		AC77555ACBE6941EF2DFDE96 /* ru_goals_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 823942CB5BDA5C6F26D8C733 /* ru_goals_guide.md */; };
+		ADE4CF619C2712921FC8F2C9 /* FreedomPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210047B960EA4FDE48AF8FC9 /* FreedomPlan.swift */; };
 		AFBCBABFB0FD34015A722032 /* GoalDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA841985F718EAFA24FEAD64 /* GoalDetailViewModel.swift */; };
+		B1238EE891AD77C84FB71F8A /* FreedomYearWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4421F3DE314723DEEB07F3 /* FreedomYearWidget.swift */; };
 		B61C12FA9B1C25EA69E20A60 /* goals_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 1BC048795F0D360624D55D40 /* goals_guide.md */; };
 		BBE228AF623F08531BAD1C9D /* FreedomProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88352985CC6782094E13ADAC /* FreedomProjection.swift */; };
 		BCCDB76D0314178BE3241C1D /* FeatureDiscoveryFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB61C8B129750C9FD829EE0A /* FeatureDiscoveryFlags.swift */; };
+		BFD08D27E3DAA462DBEAFCBB /* Decimal+Financial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102777033FDD4EB4DE17C39 /* Decimal+Financial.swift */; };
 		C645B96BE9FED87596FD496B /* ru_insights_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = AEBCEF276DB772C0AA4B2C95 /* ru_insights_guide.md */; };
 		CFDDA885C0F039EE64526562 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4653BD9D91F495011E99DE00 /* TransactionsViewModel.swift */; };
 		D326A53587BF2439997CDA5D /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCE5B7DF2504F6D223C865B /* Date+Extensions.swift */; };
+		DB100ACA1D36D1671C5A0C7E /* FreedomHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D2CAB725021737A072ACF2 /* FreedomHeroView.swift */; };
 		DBEB81014044A9A0FB724728 /* PortfolioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C76CBB5484F9DA14E58E0F /* PortfolioView.swift */; };
 		E138EF3BA5879A6A47F90BB0 /* PremiumManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE6175B4FC4637C30A84A6F /* PremiumManager.swift */; };
 		E3BF78863A69A5B9087F2250 /* HintBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D6DE702C511EA1A3C67DA7 /* HintBannerView.swift */; };
@@ -96,10 +103,32 @@
 			remoteGlobalIDString = C672103FE859E0BB29F22297;
 			remoteInfo = SuperFinans;
 		};
+		E2B1588026A07DC33704B8E1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9BAB07719C9D0024D2644DB1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8FEF3FC172D886A227C38A05;
+			remoteInfo = SuperFinansWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		207630441BD0E9B2E4A6CF8F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				42DB818A77FF1D085A5D2695 /* SuperFinansWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		02A8C21C81659381F672FA77 /* insights_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = insights_guide.md; sourceTree = "<group>"; };
+		0763C9DDA686106672FB3491 /* SuperFinansWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SuperFinansWidget.entitlements; sourceTree = "<group>"; };
 		1040FC42551981E71E22E4D3 /* EditGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGoalView.swift; sourceTree = "<group>"; };
 		120B20157C32CB2E86183E36 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
 		1466FD0A806EF785525A893B /* privacy_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = privacy_guide.md; sourceTree = "<group>"; };
@@ -110,8 +139,10 @@
 		1BC048795F0D360624D55D40 /* goals_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = goals_guide.md; sourceTree = "<group>"; };
 		1E4D24105D48BB4935894ADD /* TransactionsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsListView.swift; sourceTree = "<group>"; };
 		1F71417862F23E0134493D40 /* AddTransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewModel.swift; sourceTree = "<group>"; };
+		210047B960EA4FDE48AF8FC9 /* FreedomPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomPlan.swift; sourceTree = "<group>"; };
 		2102777033FDD4EB4DE17C39 /* Decimal+Financial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+Financial.swift"; sourceTree = "<group>"; };
 		27BB10F8BC29E2EAAD868D30 /* ru_premium_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ru_premium_guide.md; sourceTree = "<group>"; };
+		2A98645638BFA68FE5A8EAC0 /* SuperFinansWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = SuperFinansWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B11268D697846C1FECE778F /* GoalProjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalProjection.swift; sourceTree = "<group>"; };
 		2BE21D425C6C15C54DCF821D /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		32ACB6414A9F7661FC7899B7 /* ProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRingView.swift; sourceTree = "<group>"; };
@@ -127,8 +158,9 @@
 		4A997430CBEEB159D3429E30 /* AccountEntity+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountEntity+CoreData.swift"; sourceTree = "<group>"; };
 		5116631E538B5655877067F7 /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
 		565A44CCDDEBA64009AF0041 /* GoalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCardView.swift; sourceTree = "<group>"; };
-		57452061EA252A61A95C88C6 /* auth-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "auth-ios"; path = "../SuperDuperAi/packages/auth-ios"; sourceTree = SOURCE_ROOT; };
+		57452061EA252A61A95C88C6 /* auth-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "auth-ios"; path = "../../shared/superduperai-auth/packages/auth-ios"; sourceTree = SOURCE_ROOT; };
 		578891C304B041CD068D4059 /* BalanceSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSheetView.swift; sourceTree = "<group>"; };
+		65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomSetupView.swift; sourceTree = "<group>"; };
 		668CA74725D2689A41C1EC2B /* BalanceSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSheetViewModel.swift; sourceTree = "<group>"; };
 		67AAC27A2D05D963E7CAE3A8 /* CategoryDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDefinition.swift; sourceTree = "<group>"; };
 		6CCE5B7DF2504F6D223C865B /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -164,6 +196,8 @@
 		B977E8B288C76E7F300B58CB /* InsightsDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsDashboardView.swift; sourceTree = "<group>"; };
 		BA710866CE3167879319D105 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BBF71E08A00ADF8B0DF11536 /* CategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
+		BE4421F3DE314723DEEB07F3 /* FreedomYearWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomYearWidget.swift; sourceTree = "<group>"; };
+		C6D2CAB725021737A072ACF2 /* FreedomHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomHeroView.swift; sourceTree = "<group>"; };
 		CA841985F718EAFA24FEAD64 /* GoalDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailViewModel.swift; sourceTree = "<group>"; };
 		CB61C8B129750C9FD829EE0A /* FeatureDiscoveryFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureDiscoveryFlags.swift; sourceTree = "<group>"; };
 		CEF903AFFAAD95EB975C07A5 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -175,6 +209,7 @@
 		E5AFF3741D9DF365B3D2A9C7 /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
 		E8BD9B60D350A79BFACD49FC /* MoneyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyTextField.swift; sourceTree = "<group>"; };
 		ED3D06217219AB2EBDEFFD4E /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		F37D46F647A1AA045C308328 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F4C20C51E503276181B95E75 /* SuperFinans.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SuperFinans.entitlements; sourceTree = "<group>"; };
 		F4ED64F4E86883DB98A7E53C /* GoalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailView.swift; sourceTree = "<group>"; };
 		F6CCDD069FC707D59E0C5C17 /* GoalEntity+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GoalEntity+CoreData.swift"; sourceTree = "<group>"; };
@@ -202,6 +237,7 @@
 				25BB5D95065E0F513973D21C /* BalanceSheet */,
 				E113FA0E6A7B79884CF856BB /* Components */,
 				FD2BE7C7D22DA31DB5899D2A /* Dashboard */,
+				4BA9283977E86E7711912794 /* Freedom */,
 				173074F71B7F38E7FB46D4AF /* Goals */,
 				6B60E544C86A78C13A638650 /* Guide */,
 				6A824D7455F264363F20D801 /* Insights */,
@@ -287,6 +323,15 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		4BA9283977E86E7711912794 /* Freedom */ = {
+			isa = PBXGroup;
+			children = (
+				C6D2CAB725021737A072ACF2 /* FreedomHeroView.swift */,
+				65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */,
+			);
+			path = Freedom;
+			sourceTree = "<group>";
+		};
 		6A824D7455F264363F20D801 /* Insights */ = {
 			isa = PBXGroup;
 			children = (
@@ -342,6 +387,16 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		84D83ED1AFAFBC44ABD8C33C /* SuperFinansWidget */ = {
+			isa = PBXGroup;
+			children = (
+				BE4421F3DE314723DEEB07F3 /* FreedomYearWidget.swift */,
+				F37D46F647A1AA045C308328 /* Info.plist */,
+				0763C9DDA686106672FB3491 /* SuperFinansWidget.entitlements */,
+			);
+			path = SuperFinansWidget;
+			sourceTree = "<group>";
+		};
 		86B6108DB382B87CD69DBE93 /* SuperFinansTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -356,6 +411,7 @@
 				DD19615A204BEA0F74930475 /* Packages */,
 				FAFB17E97C169FEDAA7054FD /* SuperFinans */,
 				86B6108DB382B87CD69DBE93 /* SuperFinansTests */,
+				84D83ED1AFAFBC44ABD8C33C /* SuperFinansWidget */,
 				9F3645D41FD421D373AA033F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -365,6 +421,7 @@
 			children = (
 				984B5A3FDB9B1B49AD9EC410 /* SuperFinans.app */,
 				D4108C832DE771B5425A1E9E /* SuperFinansTests.xctest */,
+				2A98645638BFA68FE5A8EAC0 /* SuperFinansWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -387,6 +444,7 @@
 			isa = PBXGroup;
 			children = (
 				67AAC27A2D05D963E7CAE3A8 /* CategoryDefinition.swift */,
+				210047B960EA4FDE48AF8FC9 /* FreedomPlan.swift */,
 				88352985CC6782094E13ADAC /* FreedomProjection.swift */,
 				2B11268D697846C1FECE778F /* GoalProjection.swift */,
 				5116631E538B5655877067F7 /* Money.swift */,
@@ -494,6 +552,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8FEF3FC172D886A227C38A05 /* SuperFinansWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1A01FE8ABD6B27B5F77F85A /* Build configuration list for PBXNativeTarget "SuperFinansWidgetExtension" */;
+			buildPhases = (
+				3168A5ACB8A466C8EBF52BC6 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SuperFinansWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = SuperFinansWidgetExtension;
+			productReference = 2A98645638BFA68FE5A8EAC0 /* SuperFinansWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		9AB7154A532636F6EE94348E /* SuperFinansTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 57409638115CB6F5886DB213 /* Build configuration list for PBXNativeTarget "SuperFinansTests" */;
@@ -519,10 +594,12 @@
 				978B1FCC32B43F806462B26D /* Sources */,
 				BECB14597AA73295AE8D5D60 /* Resources */,
 				508C09CFA4FA780973702E15 /* Frameworks */,
+				207630441BD0E9B2E4A6CF8F /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2953DE1C6F1219C7C6A9AC60 /* PBXTargetDependency */,
 			);
 			name = SuperFinans;
 			packageProductDependencies = (
@@ -541,6 +618,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					8FEF3FC172D886A227C38A05 = {
+						DevelopmentTeam = 8N495BBBLM;
+						ProvisioningStyle = Automatic;
+					};
 					9AB7154A532636F6EE94348E = {
 						DevelopmentTeam = 8N495BBBLM;
 						ProvisioningStyle = Automatic;
@@ -562,14 +643,15 @@
 			mainGroup = 935847ED73979C9EF6EE85B8;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				55E3CC3AC61722FB3BB2C2D6 /* XCLocalSwiftPackageReference "/Users/alina/projects/SuperDuperAi/packages/auth-ios" */,
+				22C1DDB13C81BAE3975DD77F /* XCLocalSwiftPackageReference "/Users/rustam/startups/shared/superduperai-auth/packages/auth-ios" */,
 			);
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 54;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				C672103FE859E0BB29F22297 /* SuperFinans */,
 				9AB7154A532636F6EE94348E /* SuperFinansTests */,
+				8FEF3FC172D886A227C38A05 /* SuperFinansWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -608,6 +690,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3168A5ACB8A466C8EBF52BC6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFD08D27E3DAA462DBEAFCBB /* Decimal+Financial.swift in Sources */,
+				ADE4CF619C2712921FC8F2C9 /* FreedomPlan.swift in Sources */,
+				B1238EE891AD77C84FB71F8A /* FreedomYearWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		978B1FCC32B43F806462B26D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -635,7 +727,10 @@
 				11315E1D5CB9D5484C810F34 /* ExportService.swift in Sources */,
 				BCCDB76D0314178BE3241C1D /* FeatureDiscoveryFlags.swift in Sources */,
 				3DEC0221CD7D94732AC557FA /* FinancialCalculator.swift in Sources */,
+				DB100ACA1D36D1671C5A0C7E /* FreedomHeroView.swift in Sources */,
+				5011C4FCB7C1F8E87EBC7741 /* FreedomPlan.swift in Sources */,
 				BBE228AF623F08531BAD1C9D /* FreedomProjection.swift in Sources */,
+				9A90B38CC9FF85BC5B3F434A /* FreedomSetupView.swift in Sources */,
 				438B21652BD4997CEA70BF6F /* GoalCardView.swift in Sources */,
 				EC2460CB3952968288D59F47 /* GoalDetailView.swift in Sources */,
 				AFBCBABFB0FD34015A722032 /* GoalDetailViewModel.swift in Sources */,
@@ -680,6 +775,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2953DE1C6F1219C7C6A9AC60 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8FEF3FC172D886A227C38A05 /* SuperFinansWidgetExtension */;
+			targetProxy = E2B1588026A07DC33704B8E1 /* PBXContainerItemProxy */;
+		};
 		7E9A267B672819CBC72D115B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C672103FE859E0BB29F22297 /* SuperFinans */;
@@ -760,6 +860,46 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		5305A3E777E70D783EADBC49 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SuperFinansWidget/SuperFinansWidget.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = SuperFinansWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = co.superduperai.SuperFinans.widget;
+				PRODUCT_NAME = SuperFinansWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		885297A08E7B01FF579D981A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SuperFinansWidget/SuperFinansWidget.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = SuperFinansWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = co.superduperai.SuperFinans.widget;
+				PRODUCT_NAME = SuperFinansWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -929,12 +1069,21 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		F1A01FE8ABD6B27B5F77F85A /* Build configuration list for PBXNativeTarget "SuperFinansWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5305A3E777E70D783EADBC49 /* Debug */,
+				885297A08E7B01FF579D981A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		55E3CC3AC61722FB3BB2C2D6 /* XCLocalSwiftPackageReference "/Users/alina/projects/SuperDuperAi/packages/auth-ios" */ = {
+		22C1DDB13C81BAE3975DD77F /* XCLocalSwiftPackageReference "/Users/rustam/startups/shared/superduperai-auth/packages/auth-ios" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = "/Users/alina/projects/SuperDuperAi/packages/auth-ios";
+			relativePath = "/Users/rustam/startups/shared/superduperai-auth/packages/auth-ios";
 		};
 /* End XCLocalSwiftPackageReference section */
 

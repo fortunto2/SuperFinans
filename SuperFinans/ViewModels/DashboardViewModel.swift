@@ -29,6 +29,11 @@ final class DashboardViewModel: ObservableObject {
     @Published var milestones: [GoalEntity] = []
     @Published var recentTransactions: [TransactionEntity] = []
 
+    /// True once the person has entered anything real — a balance or a
+    /// transaction. Until then the account-derived cards are all zeros and
+    /// contradict the estimate shown above them.
+    @Published var hasLedgerData = false
+
     // Sheets
     @Published var showAddTransaction = false
     @Published var showPaywall = false
@@ -113,7 +118,12 @@ final class DashboardViewModel: ObservableObject {
         milestones = goalService.fetchGoals()
 
         // Recent transactions (last 5)
-        recentTransactions = Array(transactionService.fetchTransactions().prefix(5))
+        let allTransactions = transactionService.fetchTransactions()
+        recentTransactions = Array(allTransactions.prefix(5))
+
+        hasLedgerData = !allTransactions.isEmpty
+            || assets.contains { $0.balanceMinorUnits != 0 }
+            || cashFlowService.totalLiabilities() != 0
     }
 
     // MARK: - Observers

@@ -2,7 +2,7 @@
 //  CashFlowService.swift
 //  SuperFinans
 //
-//  Central aggregator for the Rich Dad / Cashflow model.
+//  Central aggregator for the cashflow model:
 //  Assets vs Liabilities, Income Statement, Balance Sheet, Freedom Ratio.
 //
 

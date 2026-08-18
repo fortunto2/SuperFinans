@@ -13,6 +13,7 @@ struct DashboardView: View {
 
     @StateObject private var viewModel = DashboardViewModel()
     @StateObject private var freedomStore = FreedomPlanStore.shared
+    @State private var showFreedomSetup = false
     @Binding var deepLinkGoalId: UUID?
     @State private var navigationPath = NavigationPath()
 
@@ -55,7 +56,17 @@ struct DashboardView: View {
                 .padding()
             }
             .navigationTitle("Freedom")
-            .onAppear { viewModel.loadAll() }
+            .onAppear {
+                viewModel.loadAll()
+                // Onboarding promised an answer; open the form that gives it.
+                if UserDefaults.standard.bool(forKey: OnboardingView.pendingSetupKey) {
+                    UserDefaults.standard.set(false, forKey: OnboardingView.pendingSetupKey)
+                    showFreedomSetup = true
+                }
+            }
+            .sheet(isPresented: $showFreedomSetup) {
+                FreedomSetupView(store: freedomStore) {}
+            }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {

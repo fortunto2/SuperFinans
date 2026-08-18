@@ -10,6 +10,7 @@
 		01A2994967DC051E8DB706CF /* GoalsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C75EB57921DD6AAAE30B9E4 /* GoalsListView.swift */; };
 		02CF8C32FF3BE56146F9AC3E /* SuperFinansApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF49CCCCCFB2523BACAD84FA /* SuperFinansApp.swift */; };
 		059417A73ACEA7A6A837C83A /* GoalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89E5B6F936357F3E36DA656 /* GoalService.swift */; };
+		0A5D7B8EC7E78B50DB095273 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BD7EEC44D167AEF30C4508 /* Analytics.swift */; };
 		0CA15D7242B2F1CAAA297043 /* getting_started.md in Resources */ = {isa = PBXBuildFile; fileRef = B44E6554807A38663ECE279D /* getting_started.md */; };
 		0E5BA0B5393AD4BF251D13F1 /* GuideContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4F9A20E3E1E046413DB4F /* GuideContentView.swift */; };
 		0EF3AB61F5C9E83B080F7189 /* AddTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F71417862F23E0134493D40 /* AddTransactionViewModel.swift */; };
@@ -180,6 +181,7 @@
 		8580F400F5BDDF7D9808A668 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		88352985CC6782094E13ADAC /* FreedomProjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomProjection.swift; sourceTree = "<group>"; };
 		887C20AC783941264CE861AF /* MarkdownService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownService.swift; sourceTree = "<group>"; };
+		89BD7EEC44D167AEF30C4508 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		9226DDCFB7D99C600DAC3C9A /* NumpadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumpadView.swift; sourceTree = "<group>"; };
 		957335728263886208904E07 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		96C5954F265AEBEC629EBAF0 /* AccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountService.swift; sourceTree = "<group>"; };
@@ -366,6 +368,7 @@
 			isa = PBXGroup;
 			children = (
 				96C5954F265AEBEC629EBAF0 /* AccountService.swift */,
+				89BD7EEC44D167AEF30C4508 /* Analytics.swift */,
 				96D89706A25078EE478737F6 /* CashFlowService.swift */,
 				120B20157C32CB2E86183E36 /* ExportService.swift */,
 				CB61C8B129750C9FD829EE0A /* FeatureDiscoveryFlags.swift */,
@@ -715,6 +718,7 @@
 				157F42935315BF3C6B1CAEDA /* AccountsManagementView.swift in Sources */,
 				7193BB0AC69B1C431FC12BF9 /* AddTransactionView.swift in Sources */,
 				0EF3AB61F5C9E83B080F7189 /* AddTransactionViewModel.swift in Sources */,
+				0A5D7B8EC7E78B50DB095273 /* Analytics.swift in Sources */,
 				A7CEED6ED807423F5FCD5816 /* AppDelegate.swift in Sources */,
 				90B943097D357DCFADB42DE9 /* BalanceSheetView.swift in Sources */,
 				7D1467888DFEC6BA144B55FF /* BalanceSheetViewModel.swift in Sources */,

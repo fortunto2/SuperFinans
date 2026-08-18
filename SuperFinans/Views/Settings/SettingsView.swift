@@ -10,6 +10,8 @@ import SuperDuperAiAuth
 
 struct SettingsView: View {
 
+    @AppStorage(Analytics.enabledKey) private var analyticsEnabled = true
+
     @AppStorage("superfinans.currency_code") private var currencyCode = "USD"
     @AppStorage("superfinans.appearance") private var appearance = "system"
     @State private var showPaywall = false
@@ -111,6 +113,24 @@ struct SettingsView: View {
                     } label: {
                         Label("Guide", systemImage: "book.fill")
                     }
+                }
+
+                // Stated plainly and switchable, because the onboarding screen
+                // makes a privacy promise and a silent counter would break it.
+                Section {
+                    Toggle(isOn: $analyticsEnabled) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Anonymous usage stats")
+                            Text("Which screens get opened, never what you typed. No advertising, no third party.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .onChange(of: analyticsEnabled) { enabled in
+                        if !enabled { Analytics.shared.discardPending() }
+                    }
+                } header: {
+                    Text("Privacy")
                 }
 
                 // Cross-promotion. Only apps that share this one's premise —

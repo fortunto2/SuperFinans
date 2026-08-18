@@ -2,7 +2,8 @@
 //  OnboardingView.swift
 //  SuperFinans
 //
-//  3-screen onboarding flow shown on first launch.
+//  First launch. Three screens, and the last one hands straight over to the
+//  three questions — the only thing this app asks of anyone.
 //
 
 import SwiftUI
@@ -14,20 +15,20 @@ struct OnboardingView: View {
 
     private let pages: [OnboardingPage] = [
         OnboardingPage(
-            title: "Track Your Financial Goals",
-            subtitle: "Set savings goals with target amounts and dates. Watch your progress grow with beautiful animated rings.",
-            sfSymbol: "star.fill",
+            title: "When can you stop working?",
+            subtitle: "Not a budget. Not a spending report. One number: the year your money starts covering your life instead of your salary.",
+            sfSymbol: "flag.checkered",
             color: .goalMint
         ),
         OnboardingPage(
-            title: "See Your Money Grow",
-            subtitle: "Compound interest calculator shows how your savings accelerate over time. Adjust contributions and see the impact instantly.",
-            sfSymbol: "chart.line.uptrend.xyaxis",
+            title: "Three numbers, one minute",
+            subtitle: "What life costs, what you have invested, what you add each month. No bank login, no month of collecting receipts before the app says anything.",
+            sfSymbol: "list.number",
             color: .goalBlue
         ),
         OnboardingPage(
-            title: "Private by Design",
-            subtitle: "Your data stays on your device. No accounts required, no tracking, no ads. iCloud sync keeps your devices in sync privately.",
+            title: "Nothing leaves the phone",
+            subtitle: "No account, no ads, and not one amount you type ever leaves the phone — the arithmetic runs here. An anonymous launch counter is the only thing sent, and Settings turns it off.",
             sfSymbol: "lock.shield.fill",
             color: .goalPurple
         )
@@ -80,7 +81,7 @@ struct OnboardingView: View {
                             completeOnboarding()
                         }
                     } label: {
-                        Text(currentPage < pages.count - 1 ? "Next" : "Get Started")
+                        Text(currentPage < pages.count - 1 ? "Next" : "Find my year")
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -125,10 +126,16 @@ struct OnboardingView: View {
     }
 
     private func completeOnboarding() {
+        // Hand over to the three questions rather than dropping the person on an
+        // empty dashboard — the promise on screen one is one tap from being kept.
+        UserDefaults.standard.set(true, forKey: OnboardingView.pendingSetupKey)
         withAnimation(.easeInOut(duration: 0.3)) {
             isCompleted = true
         }
     }
+
+    /// Read once by the dashboard, then cleared.
+    static let pendingSetupKey = "superfinans.pending_freedom_setup"
 }
 
 // MARK: - Page Model

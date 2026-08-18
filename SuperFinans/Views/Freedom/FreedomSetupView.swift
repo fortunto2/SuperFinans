@@ -83,6 +83,16 @@ struct FreedomSetupView: View {
                     Button("Save") {
                         let wasConfigured = store.plan.isConfigured
                         store.plan = draft
+                        // Categorical only: whether an answer exists, never its size.
+                        Analytics.shared.track(
+                            wasConfigured ? "plan_updated" : "plan_created",
+                            screen: "freedom_setup",
+                            props: [
+                                "currency": draft.currencyCode,
+                                "reachable": outcome.isReachable ? "yes" : "no",
+                                "has_birth_year": draft.birthYear != nil ? "yes" : "no",
+                            ]
+                        )
                         if !wasConfigured { armMonthlyCheckIn() }
                         onDone()
                         dismiss()

@@ -51,6 +51,7 @@ struct SuperFinansApp: App {
         // Ensure a default account exists
         Task { @MainActor in
             AccountService.shared.ensureDefaultAccount()
+            Analytics.shared.track("app_launched")
         }
     }
 

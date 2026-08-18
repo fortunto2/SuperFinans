@@ -111,6 +111,7 @@ struct FreedomSetupView: View {
 
                     if draft.isConfigured {
                         livePreview
+                        pace
                     }
                 }
                 .padding()
@@ -184,6 +185,34 @@ struct FreedomSetupView: View {
         .padding(.vertical, 24)
         .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+    }
+
+    /// The number people actually act on. The year answers "when"; this answers
+    /// "what would I have to do about it", which is the only half you control.
+    private var pace: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("What it would take")
+                .font(.headline)
+            ForEach([5, 10, 20], id: \.self) { years in
+                HStack {
+                    Text("Free in \(String(years)) years")
+                    Spacer()
+                    if let needed = FreedomEngine.requiredMonthly(for: draft, withinYears: years) {
+                        Text(Money(minorUnits: needed, currencyCode: activeCurrency).formatted + "/mo")
+                            .monospacedDigit()
+                            .foregroundStyle(needed <= draft.monthlySavingsMinor
+                                             ? Color.incomeGreen : .primary)
+                    } else {
+                        Text("out of reach")
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+                .font(.subheadline)
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     // MARK: - Helpers

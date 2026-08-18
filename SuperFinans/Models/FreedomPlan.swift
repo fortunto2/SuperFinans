@@ -204,6 +204,39 @@ enum FreedomEngine {
         return Decimal(base) * Decimal(factor) / Decimal(100)
     }
 
+    /// What monthly contribution reaches freedom in `years`, given what is
+    /// already invested. Binary search over the same loop rather than a closed
+    /// form, so it stays correct once spending varies over time.
+    static func requiredMonthly(for plan: FreedomPlan, withinYears years: Int) -> Int64? {
+        let monthlyRate = Decimal(plan.annualReturnPercent) / Decimal(100) / Decimal(12)
+        let target = years * 12
+        guard plan.monthlyExpensesMinor > 0, monthlyRate > 0, target > 0 else { return nil }
+
+        func reaches(_ contribution: Int64) -> Bool {
+            guard let months = monthsToFreedom(
+                assets: plan.currentSavingsMinor,
+                monthlyExpenses: plan.monthlyExpensesMinor,
+                monthlySurplus: contribution,
+                monthlyRate: monthlyRate,
+                shifts: plan.shifts
+            ) else { return false }
+            return months <= target
+        }
+
+        // Already there without saving another cent.
+        if reaches(0) { return 0 }
+
+        var low: Int64 = 0
+        var high: Int64 = max(plan.monthlyExpensesMinor * 20, 1_000_00)
+        guard reaches(high) else { return nil }  // not reachable at any sane rate
+
+        while high - low > 100 {  // resolve to the nearest unit of currency
+            let mid = low + (high - low) / 2
+            if reaches(mid) { high = mid } else { low = mid }
+        }
+        return high
+    }
+
     /// How many months earlier freedom arrives if you add `extraMonthlyMinor`
     /// every month. Nil when either scenario runs past the horizon.
     static func monthsSaved(for plan: FreedomPlan, extraMonthlyMinor: Int64) -> Int? {

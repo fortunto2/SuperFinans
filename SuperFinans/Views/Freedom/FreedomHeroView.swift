@@ -16,6 +16,10 @@ struct FreedomHeroView: View {
     @State private var showSetup = false
     @State private var showEvents = false
     @State private var snapshot: RateSnapshot? = RateService.cached()
+    /// Income minus spending for the current month, from real transactions.
+    /// Nil until anything has been recorded — a zero would read as "you saved
+    /// nothing", which is a different and much worse statement.
+    @State private var actualThisMonth: Int64?
     @State private var switching = false
 
     private var plan: FreedomPlan { store.plan }
@@ -38,6 +42,7 @@ struct FreedomHeroView: View {
         VStack(spacing: 20) {
             headline
             target
+            thisMonth
             coverage
             if plan.monthlySavingsMinor >= 0 { whatIf }
             if !plan.returnAssumptionIsCredible { softCurrencyNote }
@@ -61,6 +66,7 @@ struct FreedomHeroView: View {
         }
         .task {
             snapshot = await RateService.shared.refreshIfNeeded()
+            loadActuals()
         }
     }
 
@@ -100,6 +106,62 @@ struct FreedomHeroView: View {
         }
         .buttonStyle(.plain)
         .padding(.vertical, 4)
+    }
+
+    // MARK: - This month
+
+    /// The plan says a number; the ledger knows another. Showing both is the
+    /// whole point of letting accounts and transactions exist alongside the
+    /// estimate — otherwise they are two apps sharing an icon.
+    private var thisMonth: some View {
+        VStack(spacing: 6) {
+            HStack {
+                Text("Plan says")
+                Spacer()
+                Text(money(plan.monthlySavingsMinor) + "/mo")
+                    .monospacedDigit()
+            }
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+
+            if let actual = actualThisMonth {
+                HStack {
+                    Text("Set aside this month")
+                    Spacer()
+                    Text(money(actual))
+                        .monospacedDigit()
+                        .foregroundStyle(actual >= plan.monthlySavingsMinor
+                                         ? Color.incomeGreen : Color.warningAmber)
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+
+                if let drift = driftLabel(actual: actual) {
+                    Text(drift)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+        }
+    }
+
+    /// What the year becomes if this month's real pace is the pace from now on.
+    private func driftLabel(actual: Int64) -> String? {
+        guard actual != plan.monthlySavingsMinor else { return nil }
+        var asRecorded = plan
+        asRecorded.monthlySavingsMinor = actual
+        guard let year = FreedomEngine.outcome(for: asRecorded).year,
+              let planned = boosted.year, year != planned
+        else { return nil }
+        return "Keep this pace and the year becomes \(String(year))"
+    }
+
+    private func loadActuals() {
+        let now = Date()
+        let income = CashFlowService.shared.activeIncome(for: now)
+        let spent = CashFlowService.shared.totalExpenses(for: now)
+        actualThisMonth = (income == 0 && spent == 0) ? nil : income - spent
     }
 
     // MARK: - Target

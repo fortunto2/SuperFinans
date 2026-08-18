@@ -139,7 +139,7 @@ struct PortfolioView: View {
                 CreateGoalView()
             }
             .sheet(isPresented: $viewModel.showPaywall) {
-                SuperFinansPaywallView()
+                SupporterView(store: SupporterStore.shared)
             }
             .sheet(item: $viewModel.quickDepositGoal) { goal in
                 quickDepositSheet(for: goal)

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-18T22:34:01Z",
+  "generatedAt": "2026-08-18T23:54:15Z",
   "command": "metadata plan",
   "reviewDir": ".asc/metadata/review",
   "planPath": ".asc/metadata/review/plan.json",
   "approvalPath": ".asc/metadata/review/approved.json",
-  "planHash": "519d35142e684620c73cddda758f4145e55b5c7dfeae00cd93312b5bdaafbebf",
+  "planHash": "96903a2ad156dfe9f988eace2b48a6940a29a047b897219cd291648d4248f560",
   "options": {
     "appId": "6759007613",
     "appInfoId": "81a8baa7-3919-4239-83e8-45375e04f7d6",
@@ -28,31 +28,24 @@
     ],
     "adds": [
       {
-        "key": "version:1.0:en-US:description",
+        "key": "version:1.0:en-US:marketingUrl",
         "scope": "version",
         "locale": "en-US",
         "version": "1.0",
-        "field": "description",
+        "field": "marketingUrl",
         "reason": "field exists locally but not remotely",
-        "to": "Every money app tells you where last month went. This one answers the question you actually have: when can you stop working?\n\nThree numbers get you there. What life costs each month, what you already have invested, what you add each month. That is the whole setup — no bank login, no month of collecting receipts before the app says anything. Add your birth year and the answer stops being a date and becomes an age.\n\nWHAT YOU GET\n• The year your investments start covering your life instead of your salary\n• A what-if slider: see what saving another $100 a month does to that year\n• The capital you are walking towards, and how much of it your passive income already covers\n• A home screen widget with the year on it, so the goal is not buried in an app you forget to open\n• One notification a month, not a daily nag to log a coffee\n\nHONEST ABOUT THE MATH\nA 7% return is a dollar-market figure. If your money sits in a currency that runs high inflation, the app says so instead of quietly producing a wrong year, and offers to restate your plan in dollars at the current rate. 156 currencies, rates cached so the app works on a plane.\n\nWHEN YOU WANT MORE DETAIL\nAccounts, transactions, assets and liabilities are all there. They refine the estimate rather than gate it — the difference between this and every budgeting app you have abandoned.\n\nPRIVATE BY CONSTRUCTION\nNot one amount you type leaves your phone. No account required, no ads, no third parties, no data sold. The arithmetic runs on the device. An anonymous launch count is the only thing sent, and Settings turns it off.\n\nNO SUBSCRIPTION\nPay once. The year you are working towards is a decade out; a monthly fee to look at it is absurd."
-      },
+        "to": "https://fortunto2.github.io/SuperFinans/"
+      }
+    ],
+    "updates": [
       {
-        "key": "version:1.0:en-US:keywords",
-        "scope": "version",
+        "key": "app-info:en-US:privacyPolicyUrl",
+        "scope": "app-info",
         "locale": "en-US",
-        "version": "1.0",
-        "field": "keywords",
-        "reason": "field exists locally but not remotely",
-        "to": "financial independence,early retirement,compound interest,net worth,passive income,savings,4% rule"
-      },
-      {
-        "key": "version:1.0:en-US:promotionalText",
-        "scope": "version",
-        "locale": "en-US",
-        "version": "1.0",
-        "field": "promotionalText",
-        "reason": "field exists locally but not remotely",
-        "to": "Three numbers, one minute, and you know the year you can stop working. No bank login, no subscription."
+        "field": "privacyPolicyUrl",
+        "reason": "field value differs",
+        "from": "https://superfinans.app/privacy",
+        "to": "https://fortunto2.github.io/SuperFinans/privacy/"
       },
       {
         "key": "version:1.0:en-US:supportUrl",
@@ -60,13 +53,18 @@
         "locale": "en-US",
         "version": "1.0",
         "field": "supportUrl",
-        "reason": "field exists locally but not remotely",
-        "to": "https://superfinans.app/support"
+        "reason": "field value differs",
+        "from": "https://superfinans.app/support",
+        "to": "https://fortunto2.github.io/SuperFinans/support/"
       }
     ],
-    "updates": [],
     "deletes": [],
     "apiCalls": [
+      {
+        "operation": "update_localization",
+        "scope": "app-info",
+        "count": 1
+      },
       {
         "operation": "update_localization",
         "scope": "version",

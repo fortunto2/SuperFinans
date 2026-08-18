@@ -2,51 +2,32 @@
 //  PremiumManager.swift
 //  SuperFinans
 //
-//  Centralized premium status check via SuperDuperAiAuth.
-//  All features unlocked in DEBUG builds.
+//  There is no premium tier. The one purchase is a supporter payment, and it
+//  unlocks nothing that answers the question — see SupporterStore.
+//
+//  This type survives only because several view models ask `isPremium` to
+//  decide whether to show a nudge. It now reports the supporter purchase, and
+//  `canAccess` always says yes: every limit it once described was unreachable
+//  in the UI, and adding one in order to sell its removal is not the deal.
 //
 
 import Foundation
-import SuperDuperAiAuth
 
 @MainActor
 final class PremiumManager: ObservableObject {
 
     static let shared = PremiumManager()
 
-    @Published var isPremium: Bool = false
+    private init() {}
 
-    private init() {
-        refreshStatus()
-    }
+    var isPremium: Bool { SupporterStore.shared.isSupporter }
+
+    /// Nothing is gated. Kept so call sites read honestly instead of being
+    /// deleted one by one across view models that will be rewritten anyway.
+    func canAccess(_ feature: PremiumFeature) -> Bool { true }
 
     func refreshStatus() {
-        #if DEBUG
-        isPremium = true
-        #else
-        isPremium = SuperDuperAiAuth.shared.subscription.tier == .lifetime
-        #endif
-    }
-
-    /// Check if a feature requiring Premium is accessible
-    func canAccess(_ feature: PremiumFeature) -> Bool {
-        #if DEBUG
-        return true
-        #else
-        if isPremium { return true }
-        switch feature {
-        case .unlimitedGoals:
-            return GoalService.shared.activeGoalCount() < 1
-        case .unlimitedAccounts:
-            return AccountService.shared.accountCount() < 3
-        case .csvImport, .multiCurrency, .familySync, .aiInsights:
-            return false
-        case .customCategories:
-            return false
-        case .extendedReports:
-            return false
-        }
-        #endif
+        Task { await SupporterStore.shared.refresh() }
     }
 }
 

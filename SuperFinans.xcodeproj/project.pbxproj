@@ -58,7 +58,7 @@
 		83C9699DEC0A8F762ED64C21 /* MarkdownService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887C20AC783941264CE861AF /* MarkdownService.swift */; };
 		85ED3E05B8E4571EE8BB9C66 /* ru_insights_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = B6DB0A9F694CCBCF99A67914 /* ru_insights_guide.md */; };
 		88DCA70BEC152083410B0AA1 /* SuperFinansLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35655B3677C79D1A2B6BCAA1 /* SuperFinansLogicTests.swift */; };
-		8AC696C879B6F765997A8870 /* SuperDuperAiAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C5B097B7B0CBB003F99C0664 /* SuperDuperAiAuth */; };
+		8AC696C879B6F765997A8870 /* SuperDuperAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5960DE34198EF788E79C34A2 /* SuperDuperAnalytics */; };
 		8B9E2AF13E5A924FF4C101CA /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4906592AB6E09E2260C3C /* View+Extensions.swift */; };
 		8BD5E6B88B098F447FD0DB5C /* ru_about.md in Resources */ = {isa = PBXBuildFile; fileRef = AF49A5B34B006CAF759A3BA3 /* ru_about.md */; };
 		8DD5416577800BB964647BAC /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFF3741D9DF365B3D2A9C7 /* InsightsViewModel.swift */; };
@@ -69,7 +69,6 @@
 		9A90B38CC9FF85BC5B3F434A /* FreedomSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */; };
 		9E29505B99F8870494C4CB28 /* privacy_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 3B1BC1AE6CA8085CB0C0AB1E /* privacy_guide.md */; };
 		A1E9722EDC176BF2BD215204 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8580F400F5BDDF7D9808A668 /* MainTabView.swift */; };
-		A449ED58CF3ABF0DB9EA6BC6 /* SuperDuperAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5960DE34198EF788E79C34A2 /* SuperDuperAnalytics */; };
 		A53EDBC397D98845D3DCB5C0 /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF71E08A00ADF8B0DF11536 /* CategoryPickerView.swift */; };
 		A7CEED6ED807423F5FCD5816 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74258EE15931AED3718FF7EE /* AppDelegate.swift */; };
 		A803ABAFED4361AC89CCBD88 /* PortfolioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7109317764CE39D954291E62 /* PortfolioViewModel.swift */; };
@@ -101,7 +100,6 @@
 		F2FAFF10B01C3570B0257D1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45885512ECB4BCB8547A4096 /* Assets.xcassets */; };
 		F300EA878D7BBD73F5D00890 /* RecurringRulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173571B634E3E8EA287D8DB3 /* RecurringRulesView.swift */; };
 		F376BD0D13E979728C6988B1 /* premium_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 58A119F8701603FC39721063 /* premium_guide.md */; };
-		F97A9CA3FE613BD205F7B411 /* SuperFinansPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E386B5F16D483A6BDB605BFE /* SuperFinansPaywallView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -166,7 +164,6 @@
 		503656BA9EC084B0ED63C212 /* insights_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = insights_guide.md; sourceTree = "<group>"; };
 		5116631E538B5655877067F7 /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
 		565A44CCDDEBA64009AF0041 /* GoalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCardView.swift; sourceTree = "<group>"; };
-		57452061EA252A61A95C88C6 /* auth-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "auth-ios"; path = "../../shared/superduperai-auth/packages/auth-ios"; sourceTree = SOURCE_ROOT; };
 		578891C304B041CD068D4059 /* BalanceSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSheetView.swift; sourceTree = "<group>"; };
 		58A119F8701603FC39721063 /* premium_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = premium_guide.md; sourceTree = "<group>"; };
 		65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomSetupView.swift; sourceTree = "<group>"; };
@@ -224,7 +221,6 @@
 		DE4C0AD787DCF56A31B10F3E /* TransactionEntity+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionEntity+CoreData.swift"; sourceTree = "<group>"; };
 		DF49CCCCCFB2523BACAD84FA /* SuperFinansApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperFinansApp.swift; sourceTree = "<group>"; };
 		E2CB386033A1D253C47380E5 /* transactions_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = transactions_guide.md; sourceTree = "<group>"; };
-		E386B5F16D483A6BDB605BFE /* SuperFinansPaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperFinansPaywallView.swift; sourceTree = "<group>"; };
 		E5AFF3741D9DF365B3D2A9C7 /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
 		E8BD9B60D350A79BFACD49FC /* MoneyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyTextField.swift; sourceTree = "<group>"; };
 		ED3D06217219AB2EBDEFFD4E /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -241,8 +237,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8AC696C879B6F765997A8870 /* SuperDuperAiAuth in Frameworks */,
-				A449ED58CF3ABF0DB9EA6BC6 /* SuperDuperAnalytics in Frameworks */,
+				8AC696C879B6F765997A8870 /* SuperDuperAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,7 +301,6 @@
 		291E35078C5D5C1CC7C6593B /* Paywall */ = {
 			isa = PBXGroup;
 			children = (
-				E386B5F16D483A6BDB605BFE /* SuperFinansPaywallView.swift */,
 				962DCEC3ECA4F23CFB4C2F6D /* SupporterView.swift */,
 			);
 			path = Paywall;
@@ -536,7 +530,6 @@
 		DD19615A204BEA0F74930475 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				57452061EA252A61A95C88C6 /* auth-ios */,
 				88B085A0F81F2FC272491C1A /* superduperai-analytics */,
 			);
 			name = Packages;
@@ -633,7 +626,6 @@
 			);
 			name = SuperFinans;
 			packageProductDependencies = (
-				C5B097B7B0CBB003F99C0664 /* SuperDuperAiAuth */,
 				5960DE34198EF788E79C34A2 /* SuperDuperAnalytics */,
 			);
 			productName = SuperFinans;
@@ -684,7 +676,6 @@
 			mainGroup = 935847ED73979C9EF6EE85B8;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				6C0767E26B1BACADE564BF69 /* XCLocalSwiftPackageReference "../../shared/superduperai-auth/packages/auth-ios" */,
 				2B0B0F4066EB59F7F34B3189 /* XCLocalSwiftPackageReference "../../shared/superduperai-analytics" */,
 			);
 			preferredProjectObjectVersion = 54;
@@ -811,7 +802,6 @@
 				F300EA878D7BBD73F5D00890 /* RecurringRulesView.swift in Sources */,
 				73DBEE7826ED5F6B5E6EBCD9 /* SettingsView.swift in Sources */,
 				02CF8C32FF3BE56146F9AC3E /* SuperFinansApp.swift in Sources */,
-				F97A9CA3FE613BD205F7B411 /* SuperFinansPaywallView.swift in Sources */,
 				4AE074D1BC9A2D5480C6410A /* SupporterStore.swift in Sources */,
 				438A6F13281B93FFF4B656EA /* SupporterView.swift in Sources */,
 				598B1DC04C2EB09CE846CEF0 /* TransactionEntity+CoreData.swift in Sources */,
@@ -1137,20 +1127,12 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../shared/superduperai-analytics";
 		};
-		6C0767E26B1BACADE564BF69 /* XCLocalSwiftPackageReference "../../shared/superduperai-auth/packages/auth-ios" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../shared/superduperai-auth/packages/auth-ios";
-		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		5960DE34198EF788E79C34A2 /* SuperDuperAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SuperDuperAnalytics;
-		};
-		C5B097B7B0CBB003F99C0664 /* SuperDuperAiAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SuperDuperAiAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

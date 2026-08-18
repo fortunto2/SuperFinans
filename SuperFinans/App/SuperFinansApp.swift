@@ -2,12 +2,11 @@
 //  SuperFinansApp.swift
 //  SuperFinans
 //
-//  Main entry point. Configures SuperDuperAiAuth, manages onboarding gate,
+//  Main entry point. Manages the onboarding gate,
 //  handles deep links, and scene phase lifecycle.
 //
 
 import SwiftUI
-import SuperDuperAiAuth
 import SuperDuperAnalytics
 
 @main
@@ -32,12 +31,6 @@ struct SuperFinansApp: App {
     // MARK: - Init
 
     init() {
-        SuperDuperAiAuth.configure(
-            appId: "superfinans",
-            iosClientId: "YOUR_IOS_CLIENT_ID.apps.googleusercontent.com",
-            products: [ProductConfig(id: "superfinans.premium.lifetime", tier: .lifetime)]
-        )
-
         // Pin the base currency on first launch. Without this the freedom plan
         // reads the locale while everything else falls back to USD, and the same
         // screen shows two currencies.
@@ -103,7 +96,6 @@ struct SuperFinansApp: App {
     private func handleScenePhase(_ phase: ScenePhase) {
         switch phase {
         case .active:
-            PremiumManager.shared.refreshStatus()
             // Generate any due recurring transactions
             Task { @MainActor in
                 RecurringRuleService.shared.generateDueTransactions()

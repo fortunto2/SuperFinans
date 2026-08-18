@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SuperDuperAnalytics
-import SuperDuperAiAuth
 
 struct SettingsView: View {
 
@@ -16,43 +15,31 @@ struct SettingsView: View {
 
     @AppStorage("superfinans.currency_code") private var currencyCode = "USD"
     @AppStorage("superfinans.appearance") private var appearance = "system"
-    @State private var showPaywall = false
     @State private var showExportSheet = false
     @State private var exportURL: URL?
 
     var body: some View {
         NavigationStack {
             List {
-                // Account (SuperDuperAiAuth)
-                Section("Account") {
-                    if SuperDuperAiAuth.shared.authState.isAuthenticated {
-                        AuthSettingsSection(
-                            subscriptionTier: SuperDuperAiAuth.shared.subscription.tier,
-                            onManageSubscription: { showPaywall = true },
-                            onSignOut: {
-                                Task { await SuperDuperAiAuth.shared.signOut() }
-                            },
-                            onDeleteAccount: {
-                                Task { try? await SuperDuperAiAuth.shared.deleteAccount() }
-                            }
-                        )
-                    } else {
-                        Button {
-                            Task { try? await SuperDuperAiAuth.shared.signInWithApple() }
-                        } label: {
-                            Label("Sign In with Apple", systemImage: "apple.logo")
+                // No sign-in. Nothing here needs an account: the data is local,
+                // iCloud syncs it under the person's own Apple ID, and the
+                // purchase rides their App Store account. An account we do not
+                // need is a login screen to maintain, a deletion flow to honour
+                // and a row of personal data to declare.
+                Section {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Synced through your iCloud")
+                            Text("No account, no password. Your data follows your Apple ID and stays yours.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
-
-                        Button {
-                            Task { try? await SuperDuperAiAuth.shared.signInWithGoogle() }
-                        } label: {
-                            Label("Sign In with Google", systemImage: "globe")
-                        }
-
-                        Text("Sign in is optional. Your data is stored on-device and syncs via iCloud.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                    } icon: {
+                        Image(systemName: "icloud")
+                            .foregroundStyle(Color.goalMintDark)
                     }
+                } header: {
+                    Text("Your data")
                 }
 
                 // Purchase
@@ -172,14 +159,11 @@ struct SettingsView: View {
                         Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
                             .foregroundStyle(.secondary)
                     }
-                    Link("Privacy Policy", destination: URL(string: "https://superfinans.app/privacy")!)
-                    Link("Terms of Service", destination: URL(string: "https://superfinans.app/terms")!)
+                    Link("Privacy Policy", destination: URL(string: "https://fortunto2.github.io/SuperFinans/privacy/")!)
+                    Link("Support", destination: URL(string: "https://fortunto2.github.io/SuperFinans/support/")!)
                 }
             }
             .navigationTitle("Settings")
-            .sheet(isPresented: $showPaywall) {
-                SuperFinansPaywallView()
-            }
             .sheet(isPresented: $showExportSheet) {
                 if let url = exportURL {
                     ShareSheet(activityItems: [url])

@@ -206,24 +206,15 @@ final class FinancialCalculator {
         monthlySurplus: Int64,
         averageAnnualReturn: Decimal
     ) -> Int? {
-        // Zero expenses is missing data, not freedom — refuse to answer.
-        guard monthlyExpenses > 0 else { return nil }
-        guard monthlySurplus > 0 || currentInvestedAssets > 0 else { return nil }
-
-        let monthlyRate = averageAnnualReturn / Decimal(12)
-        var assets = Decimal(currentInvestedAssets)
-        let expenses = Decimal(monthlyExpenses)
-        let surplus = Decimal(monthlySurplus)
-
-        for month in 1...600 {
-            assets = assets * (Decimal(1) + monthlyRate) + surplus
-            let passiveIncome = assets * monthlyRate
-            if passiveIncome >= expenses {
-                return month
-            }
-        }
-
-        return nil
+        // Delegates to FreedomEngine so there is one compounding loop in the
+        // app, not two that have to be fixed in parallel. Kept as a method
+        // because CashFlowService and DashboardViewModel call it by this name.
+        FreedomEngine.monthsToFreedom(
+            assets: currentInvestedAssets,
+            monthlyExpenses: monthlyExpenses,
+            monthlySurplus: monthlySurplus,
+            monthlyRate: averageAnnualReturn / Decimal(12)
+        )
     }
 
     /// Generate projection points for freedom chart

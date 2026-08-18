@@ -67,11 +67,7 @@ struct SettingsView: View {
                 Section("Currency") {
                     NavigationLink {
                         CurrencyPickerView(selection: $currencyCode) { code in
-                            var plan = FreedomPlanStore.shared.plan
-                            plan.currencyCode = code
-                            plan.displayCurrencyCode = CurrencyClass.isHard(code) ? nil : "USD"
-                            FreedomPlanStore.shared.plan = plan
-                            FreedomPlanStorage.defaults.set(code, forKey: FreedomPlanStorage.currencyKey)
+                            FreedomPlanStore.shared.setCurrency(code)
                         }
                         .navigationTitle("Currency")
                         .navigationBarTitleDisplayMode(.inline)

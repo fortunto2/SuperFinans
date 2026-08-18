@@ -24,14 +24,13 @@ struct LifeEventsView: View {
     private var plan: FreedomPlan { store.plan }
     private var thisYear: Int { Calendar.current.component(.year, from: Date()) }
 
-    private var baseline: FreedomOutcome {
-        var bare = plan
-        bare.shifts = []
-        return FreedomEngine.outcome(for: bare)
-    }
-
     var body: some View {
-        NavigationStack {
+        // One engine run per render. Each row used to trigger its own, plus one
+        // for the footer and one for the baseline — (2N + 3) runs of a 600-step
+        // Decimal loop to draw a list of three items.
+        let currentMonths = FreedomEngine.outcome(for: plan).months
+
+        return NavigationStack {
             List {
                 Section {
                     if plan.shifts.isEmpty {
@@ -40,14 +39,14 @@ struct LifeEventsView: View {
                             .foregroundStyle(.secondary)
                     } else {
                         ForEach(plan.shifts.sorted { $0.year < $1.year }) { shift in
-                            row(shift)
+                            row(shift, currentMonths: currentMonths)
                         }
                         .onDelete(perform: delete)
                     }
                 } header: {
                     Text("Your timeline")
                 } footer: {
-                    if let effect = totalEffect {
+                    if let effect = totalEffect(currentMonths: currentMonths) {
                         Text(effect).foregroundStyle(Color.incomeGreen)
                     }
                 }
@@ -98,14 +97,14 @@ struct LifeEventsView: View {
 
     // MARK: - Rows
 
-    private func row(_ shift: ExpenseShift) -> some View {
+    private func row(_ shift: ExpenseShift, currentMonths: Int?) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(shift.label)
             HStack(spacing: 6) {
                 Text(String(shift.year))
                 Text("·")
                 Text("\(signed(shift.percent))% spending")
-                if let saved = effect(of: shift) {
+                if let saved = effect(of: shift, currentMonths: currentMonths) {
                     Text("·")
                     Text(saved).foregroundStyle(Color.incomeGreen)
                 }
@@ -117,25 +116,19 @@ struct LifeEventsView: View {
 
     // MARK: - Effect
 
-    /// What this one event is worth, measured by removing it from the plan.
-    private func effect(of shift: ExpenseShift) -> String? {
-        var without = plan
-        without.shifts.removeAll { $0.id == shift.id }
-        guard let with = FreedomEngine.outcome(for: plan).months,
-              let withoutMonths = FreedomEngine.outcome(for: without).months
-        else { return nil }
-        let saved = withoutMonths - with
-        guard saved > 0 else { return nil }
+    /// What this one event is worth. The engine owns the arithmetic; this only
+    /// phrases it.
+    private func effect(of shift: ExpenseShift, currentMonths: Int?) -> String? {
+        guard let saved = FreedomEngine.monthsSaved(
+            for: plan, removingShiftWithID: shift.id, currentMonths: currentMonths
+        ), saved > 0 else { return nil }
         return saved >= 12 ? "\(saved / 12)y earlier" : "\(saved)m earlier"
     }
 
-    private var totalEffect: String? {
-        guard !plan.shifts.isEmpty,
-              let base = baseline.months,
-              let now = FreedomEngine.outcome(for: plan).months,
-              base > now
-        else { return nil }
-        let saved = base - now
+    private func totalEffect(currentMonths: Int?) -> String? {
+        guard let saved = FreedomEngine.monthsSavedByAllShifts(
+            for: plan, currentMonths: currentMonths
+        ) else { return nil }
         let years = saved / 12, months = saved % 12
         let span = years > 0 ? "\(years) year\(years == 1 ? "" : "s")" : "\(months) months"
         return "Together these bring freedom \(span) forward."
@@ -144,14 +137,12 @@ struct LifeEventsView: View {
     // MARK: - Mutation
 
     private func add(_ preset: ExpenseShift) {
-        guard !plan.shifts.contains(where: { $0.label == preset.label }) else { return }
-        store.plan.shifts.append(preset)
+        store.addShift(preset)
     }
 
     private func delete(at offsets: IndexSet) {
         let sorted = plan.shifts.sorted { $0.year < $1.year }
-        let ids = offsets.map { sorted[$0].id }
-        store.plan.shifts.removeAll { ids.contains($0.id) }
+        store.removeShifts(withIDs: Set(offsets.map { sorted[$0].id }))
     }
 
     private func signed(_ percent: Int) -> String {

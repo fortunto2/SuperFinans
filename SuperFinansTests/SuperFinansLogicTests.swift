@@ -1339,6 +1339,64 @@ final class FreedomEngineTests: XCTestCase {
         XCTAssertEqual(value ?? 0, 1286, accuracy: 2)
     }
 
+    // MARK: - Shift effects (moved out of the view, so now testable)
+
+    func testRemovingAShiftCostsMonths() throws {
+        let shift = ExpenseShift(year: thisYear + 5, percent: -30, label: "Children move out")
+        let p = plan(shifts: [shift])
+        let current = try XCTUnwrap(FreedomEngine.outcome(for: p).months)
+
+        let saved = try XCTUnwrap(FreedomEngine.monthsSaved(
+            for: p, removingShiftWithID: shift.id, currentMonths: current
+        ))
+        XCTAssertGreaterThan(saved, 0, "dropping a spending cut must push freedom later")
+    }
+
+    func testAllShiftsTogetherAreWorthAtLeastAnyOne() throws {
+        let a = ExpenseShift(year: thisYear + 5, percent: -20, label: "A")
+        let b = ExpenseShift(year: thisYear + 8, percent: -20, label: "B")
+        let p = plan(shifts: [a, b])
+        let current = try XCTUnwrap(FreedomEngine.outcome(for: p).months)
+
+        let total = try XCTUnwrap(FreedomEngine.monthsSavedByAllShifts(for: p, currentMonths: current))
+        let justA = try XCTUnwrap(FreedomEngine.monthsSaved(
+            for: p, removingShiftWithID: a.id, currentMonths: current))
+        XCTAssertGreaterThanOrEqual(total, justA)
+    }
+
+    func testNoShiftsMeansNothingSaved() {
+        XCTAssertNil(FreedomEngine.monthsSavedByAllShifts(for: plan(), currentMonths: 120))
+    }
+
+    // MARK: - User input
+
+    /// People type what their keyboard gives them, and a European keyboard gives
+    /// a comma. Both parse; junk does not.
+    func testAmountParsingAcceptsBothSeparators() {
+        XCTAssertEqual(Decimal(userInput: "1234.50"), Decimal(string: "1234.50"))
+        XCTAssertEqual(Decimal(userInput: "1 234,50"), Decimal(string: "1234.50"))
+        XCTAssertEqual(Decimal(userInput: "$1,200"), Decimal(string: "1.200"))
+        XCTAssertNil(Decimal(userInput: "abc"))
+    }
+
+    /// The ledger path and the plan path must be the same arithmetic.
+    @MainActor
+    func testLedgerCalculatorDelegatesToTheEngine() {
+        let viaCalculator = FinancialCalculator.shared.monthsToFreedom(
+            currentInvestedAssets: 30_000_00,
+            monthlyExpenses: 1200_00,
+            monthlySurplus: 800_00,
+            averageAnnualReturn: Decimal(0.07)
+        )
+        let viaEngine = FreedomEngine.monthsToFreedom(
+            assets: 30_000_00,
+            monthlyExpenses: 1200_00,
+            monthlySurplus: 800_00,
+            monthlyRate: Decimal(0.07) / Decimal(12)
+        )
+        XCTAssertEqual(viaCalculator, viaEngine)
+    }
+
     func testUnconfiguredPlanIsNotServedToTheWidget() {
         let empty = FreedomPlan.empty(currencyCode: "USD")
         XCTAssertFalse(empty.isConfigured)

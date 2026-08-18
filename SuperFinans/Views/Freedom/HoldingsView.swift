@@ -14,10 +14,10 @@ struct HoldingsView: View {
     @ObservedObject var store: FreedomPlanStore
     @Environment(\.dismiss) private var dismiss
 
-    @State private var snapshot: RateSnapshot? = RateService.cached()
     @State private var showAdd = false
 
     private var plan: FreedomPlan { store.plan }
+    private var snapshot: RateSnapshot? { store.rateSnapshot }
 
     var body: some View {
         NavigationStack {
@@ -32,9 +32,7 @@ struct HoldingsView: View {
                             row(holding)
                         }
                         .onDelete { offsets in
-                            let ids = offsets.map { plan.holdings[$0].id }
-                            store.plan.holdings.removeAll { ids.contains($0.id) }
-                            revalue()
+                            store.removeHoldings(withIDs: Set(offsets.map { plan.holdings[$0].id }))
                         }
                     }
                 } header: {
@@ -60,12 +58,9 @@ struct HoldingsView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .task {
-                snapshot = await RateService.shared.refreshIfNeeded()
-                revalue()
-            }
+            .task { await store.refreshRates() }
             .sheet(isPresented: $showAdd) {
-                AddHoldingView(store: store, onAdd: revalue)
+                AddHoldingView(store: store)
             }
         }
     }
@@ -114,7 +109,6 @@ struct HoldingsView: View {
 struct AddHoldingView: View {
 
     @ObservedObject var store: FreedomPlanStore
-    var onAdd: () -> Void
 
     @Environment(\.dismiss) private var dismiss
     @State private var unit = "XAU"
@@ -122,7 +116,7 @@ struct AddHoldingView: View {
     @State private var label = ""
 
     private var amount: Double {
-        Double(amountText.replacingOccurrences(of: ",", with: ".")) ?? 0
+        NSDecimalNumber(decimal: Decimal(userInput: amountText) ?? 0).doubleValue
     }
 
     var body: some View {
@@ -174,10 +168,7 @@ struct AddHoldingView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add") {
-                        store.plan.holdings.append(
-                            Holding(unit: unit, amount: amount, label: label)
-                        )
-                        onAdd()
+                        store.addHolding(Holding(unit: unit, amount: amount, label: label))
                         dismiss()
                     }
                     .disabled(amount <= 0)

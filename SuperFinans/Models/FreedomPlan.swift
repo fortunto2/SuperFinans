@@ -281,6 +281,30 @@ enum FreedomEngine {
         else { return nil }
         return base - boosted
     }
+
+    /// Months this shift is worth, measured by removing it from the plan.
+    /// `currentMonths` is passed in because the caller already knows it — every
+    /// row on the life-events screen would otherwise recompute the same answer.
+    static func monthsSaved(
+        for plan: FreedomPlan,
+        removingShiftWithID id: UUID,
+        currentMonths: Int?
+    ) -> Int? {
+        guard let currentMonths else { return nil }
+        var without = plan
+        without.shifts.removeAll { $0.id == id }
+        guard let withoutMonths = outcome(for: without).months else { return nil }
+        return withoutMonths - currentMonths
+    }
+
+    /// Months all shifts together are worth.
+    static func monthsSavedByAllShifts(for plan: FreedomPlan, currentMonths: Int?) -> Int? {
+        guard let currentMonths, !plan.shifts.isEmpty else { return nil }
+        var bare = plan
+        bare.shifts = []
+        guard let baseline = outcome(for: bare).months, baseline > currentMonths else { return nil }
+        return baseline - currentMonths
+    }
 }
 
 // MARK: - Shared storage
@@ -295,6 +319,21 @@ enum FreedomPlanStorage {
 
     static var defaults: UserDefaults {
         UserDefaults(suiteName: appGroup) ?? .standard
+    }
+
+    /// The ledger screens read `.standard`; the plan and the widget read the App
+    /// Group suite. Those are different plists, so the currency is written to
+    /// both from one place rather than remembered at each call site.
+    static func setCurrency(_ code: String, defaults: UserDefaults = FreedomPlanStorage.defaults) {
+        defaults.set(code, forKey: currencyKey)
+        UserDefaults.standard.set(code, forKey: currencyKey)
+    }
+
+    static func currency(defaults: UserDefaults = FreedomPlanStorage.defaults) -> String {
+        defaults.string(forKey: currencyKey)
+            ?? UserDefaults.standard.string(forKey: currencyKey)
+            ?? Locale.current.currency?.identifier
+            ?? "USD"
     }
 
     /// Decode without any UI dependency — this is what the widget calls.

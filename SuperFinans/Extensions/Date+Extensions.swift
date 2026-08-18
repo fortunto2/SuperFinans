@@ -61,17 +61,13 @@ extension Date {
     }
 
     /// Group key for transactions list (e.g., "2025-01-15")
-    /// yyyy-MM-dd, fixed locale — a CSV that sorts and parses anywhere.
-    var iso8601Day: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter.string(from: self)
-    }
-
+    /// yyyy-MM-dd with a fixed locale: used for grouping, filenames and the CSV
+    /// date column, all of which must sort and parse the same anywhere. Without
+    /// the POSIX locale the pattern letters shift under non-Gregorian calendars.
     var dateGroupKey: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         return formatter.string(from: self)
     }
 

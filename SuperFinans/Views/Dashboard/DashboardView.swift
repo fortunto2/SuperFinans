@@ -94,51 +94,6 @@ struct DashboardView: View {
         }
     }
 
-    // MARK: - Freedom Ratio
-
-    private var freedomRatioCard: some View {
-        VStack(spacing: 12) {
-            Text("Freedom Ratio")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            ProgressRingView(
-                progress: min(viewModel.freedomRatio.doubleValue, 1.0),
-                lineWidth: 14,
-                size: 140,
-                color: freedomColor
-            )
-
-            Text(freedomLabel)
-                .font(.caption)
-                .foregroundColor(freedomColor)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(.secondarySystemGroupedBackground))
-        )
-    }
-
-    private var freedomColor: Color {
-        let ratio = viewModel.freedomRatio.doubleValue
-        if ratio >= 1.0 { return Color(hex: 0xFFD700) } // gold
-        if ratio >= 0.75 { return .incomeGreen }
-        if ratio >= 0.5 { return .yellow }
-        if ratio >= 0.25 { return .orange }
-        return .expenseRed
-    }
-
-    private var freedomLabel: String {
-        let ratio = viewModel.freedomRatio.doubleValue
-        if ratio >= 1.0 { return "Financially Free!" }
-        if ratio >= 0.75 { return "Almost there!" }
-        if ratio >= 0.5 { return "Halfway to freedom" }
-        if ratio >= 0.25 { return "Building momentum" }
-        return "Starting the journey"
-    }
-
     // MARK: - Net Worth
 
     private var netWorthCard: some View {

@@ -23,6 +23,10 @@ struct FreedomSetupView: View {
     @State private var birthYear = ""
     @State private var currency = ""
     @State private var showHoldings = false
+    /// Required-contribution rows, recomputed after typing settles rather than
+    /// on every character: each row bisects the 600-step engine ~18 times, so
+    /// the three of them cost tens of thousands of Decimal operations.
+    @State private var paceRows: [(years: Int, needed: Int64?)] = []
 
     /// The currency the fields are being typed in.
     private var activeCurrency: String {
@@ -52,12 +56,7 @@ struct FreedomSetupView: View {
                     // Asked first: "1200" means nothing until we know what it is.
                     NavigationLink {
                         CurrencyPickerView(selection: $currency) { code in
-                            var plan = store.plan
-                            plan.currencyCode = code
-                            plan.displayCurrencyCode = CurrencyClass.isHard(code) ? nil : "USD"
-                            store.plan = plan
-                            UserDefaults.standard.set(code, forKey: FreedomPlanStorage.currencyKey)
-                            FreedomPlanStorage.defaults.set(code, forKey: FreedomPlanStorage.currencyKey)
+                            store.setCurrency(code)
                         }
                         .navigationTitle("Your currency")
                         .navigationBarTitleDisplayMode(.inline)
@@ -164,6 +163,15 @@ struct FreedomSetupView: View {
                 }
             }
             .onAppear(perform: seedFromStore)
+            .task(id: draft) {
+                // Let typing settle before spending the arithmetic on it.
+                try? await Task.sleep(for: .milliseconds(350))
+                guard !Task.isCancelled else { return }
+                let plan = draft
+                paceRows = [5, 10, 20].map {
+                    (years: $0, needed: FreedomEngine.requiredMonthly(for: plan, withinYears: $0))
+                }
+            }
             .sheet(isPresented: $showHoldings) {
                 HoldingsView(store: store)
             }
@@ -225,11 +233,11 @@ struct FreedomSetupView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("What it would take")
                 .font(.headline)
-            ForEach([5, 10, 20], id: \.self) { years in
+            ForEach(paceRows, id: \.years) { row in
                 HStack {
-                    Text("Free in \(String(years)) years")
+                    Text("Free in \(String(row.years)) years")
                     Spacer()
-                    if let needed = FreedomEngine.requiredMonthly(for: draft, withinYears: years) {
+                    if let needed = row.needed {
                         Text(Money(minorUnits: needed, currencyCode: activeCurrency).formatted + "/mo")
                             .monospacedDigit()
                             .foregroundStyle(needed <= draft.monthlySavingsMinor
@@ -266,12 +274,8 @@ struct FreedomSetupView: View {
         if let y = p.birthYear { birthYear = String(y) }
     }
 
-    /// Accepts both "1 234,50" and "1234.50" — people type what their keyboard gives them.
     private func minorUnits(_ text: String) -> Int64 {
-        let cleaned = text
-            .replacingOccurrences(of: ",", with: ".")
-            .filter { $0.isNumber || $0 == "." }
-        guard let value = Decimal(string: cleaned) else { return 0 }
+        guard let value = Decimal(userInput: text) else { return 0 }
         return Money(amount: value, currencyCode: activeCurrency).minorUnits
     }
 

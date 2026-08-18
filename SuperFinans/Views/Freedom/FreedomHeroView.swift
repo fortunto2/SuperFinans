@@ -5,6 +5,10 @@
 //  The answer, and the one lever that moves it. Everything else in the app
 //  exists to make this number more accurate.
 //
+//  FreedomEngine.outcome walks up to 600 months of Decimal arithmetic, so it is
+//  computed exactly once per render and handed down. As a computed property it
+//  was re-read at nine call sites, and again on every tick of the what-if slider.
+//
 
 import SwiftUI
 import SuperDuperAnalytics
@@ -15,18 +19,12 @@ struct FreedomHeroView: View {
     @State private var extraMonthly: Double = 0
     @State private var showSetup = false
     @State private var showEvents = false
-    @State private var snapshot: RateSnapshot? = RateService.cached()
     /// Income minus spending for the current month, from real transactions.
     /// Nil until anything has been recorded — a zero would read as "you saved
     /// nothing", which is a different and much worse statement.
     @State private var actualThisMonth: Int64?
-    @State private var switching = false
 
     private var plan: FreedomPlan { store.plan }
-
-    private var boosted: FreedomOutcome {
-        FreedomEngine.outcome(for: plan, extraMonthlyMinor: extraMinor)
-    }
 
     private var extraMinor: Int64 {
         Money(amount: Decimal(extraMonthly), currencyCode: plan.currencyCode).minorUnits
@@ -39,12 +37,14 @@ struct FreedomHeroView: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
-            headline
-            target
-            thisMonth
-            coverage
-            if plan.monthlySavingsMinor >= 0 { whatIf }
+        let outcome = FreedomEngine.outcome(for: plan, extraMonthlyMinor: extraMinor)
+
+        return VStack(spacing: 20) {
+            headline(outcome)
+            target(outcome)
+            thisMonth(outcome)
+            coverage(outcome)
+            whatIf(outcome)
             if !plan.returnAssumptionIsCredible { softCurrencyNote }
             lifeEvents
             Button {
@@ -65,12 +65,9 @@ struct FreedomHeroView: View {
             LifeEventsView(store: store)
         }
         .task {
-            snapshot = await RateService.shared.refreshIfNeeded()
             // Gold and foreign savings move with the market, so the plan is
             // revalued whenever fresh rates land — not only when edited.
-            if let snapshot, !plan.holdings.isEmpty {
-                store.plan = plan.revaluingHoldings(using: snapshot)
-            }
+            await store.refreshRates()
             loadActuals()
         }
     }
@@ -118,7 +115,7 @@ struct FreedomHeroView: View {
     /// The plan says a number; the ledger knows another. Showing both is the
     /// whole point of letting accounts and transactions exist alongside the
     /// estimate — otherwise they are two apps sharing an icon.
-    private var thisMonth: some View {
+    private func thisMonth(_ outcome: FreedomOutcome) -> some View {
         VStack(spacing: 6) {
             HStack {
                 Text("Plan says")
@@ -141,7 +138,7 @@ struct FreedomHeroView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
-                if let drift = driftLabel(actual: actual) {
+                if let drift = driftLabel(actual: actual, plannedYear: outcome.year) {
                     Text(drift)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
@@ -152,12 +149,11 @@ struct FreedomHeroView: View {
     }
 
     /// What the year becomes if this month's real pace is the pace from now on.
-    private func driftLabel(actual: Int64) -> String? {
-        guard actual != plan.monthlySavingsMinor else { return nil }
+    private func driftLabel(actual: Int64, plannedYear: Int?) -> String? {
+        guard actual != plan.monthlySavingsMinor, let plannedYear else { return nil }
         var asRecorded = plan
         asRecorded.monthlySavingsMinor = actual
-        guard let year = FreedomEngine.outcome(for: asRecorded).year,
-              let planned = boosted.year, year != planned
+        guard let year = FreedomEngine.outcome(for: asRecorded).year, year != plannedYear
         else { return nil }
         return "Keep this pace and the year becomes \(String(year))"
     }
@@ -173,15 +169,15 @@ struct FreedomHeroView: View {
 
     /// The number the whole plan is walking towards. Shown in a second currency
     /// when the first one is not what the person actually thinks in.
-    private var target: some View {
+    private func target(_ outcome: FreedomOutcome) -> some View {
         VStack(spacing: 2) {
             Text("You need")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Text(money(boosted.targetAssetsMinor))
+            Text(money(outcome.targetAssetsMinor))
                 .font(.title3.bold())
                 .monospacedDigit()
-            if let secondary = secondaryAmount(boosted.targetAssetsMinor) {
+            if let secondary = secondaryAmount(outcome.targetAssetsMinor) {
                 Text("≈ \(secondary)")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
@@ -201,28 +197,22 @@ struct FreedomHeroView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            if snapshot != nil {
+            if store.rateSnapshot != nil {
                 Button {
-                    switchToDollars()
+                    let from = plan.currencyCode
+                    if store.restate(to: "USD") {
+                        Analytics.track("plan_restated_usd", props: ["from": from])
+                    }
                 } label: {
-                    Text(switching ? "Converting…" : "Restate the plan in USD")
+                    Text("Restate the plan in USD")
                         .font(.caption.bold())
                 }
-                .disabled(switching)
             }
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.warningAmber.opacity(0.15))
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-    }
-
-    private func switchToDollars() {
-        guard let snapshot, let converted = plan.converted(to: "USD", using: snapshot) else { return }
-        switching = true
-        Analytics.track("plan_restated_usd", props: ["from": plan.currencyCode])
-        store.plan = converted
-        switching = false
     }
 
     // MARK: - Money formatting
@@ -234,7 +224,7 @@ struct FreedomHeroView: View {
     /// The same amount in the person's second currency, if they kept one.
     private func secondaryAmount(_ minor: Int64) -> String? {
         guard let code = plan.displayCurrencyCode, code != plan.currencyCode,
-              let snapshot,
+              let snapshot = store.rateSnapshot,
               let value = snapshot.convert(Double(minor) / 100, from: plan.currencyCode, to: code)
         else { return nil }
         return Money(amount: Decimal(value), currencyCode: code).formatted
@@ -242,13 +232,13 @@ struct FreedomHeroView: View {
 
     // MARK: - Headline
 
-    private var headline: some View {
+    private func headline(_ outcome: FreedomOutcome) -> some View {
         VStack(spacing: 4) {
             Text("Financially free in")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
-            if let year = boosted.year {
+            if let year = outcome.year {
                 Text(String(year))
                     .font(.system(size: 64, weight: .bold, design: .rounded))
                     .foregroundStyle(Color.goalMintDark)
@@ -256,14 +246,14 @@ struct FreedomHeroView: View {
                     .animation(.snappy, value: year)
 
                 HStack(spacing: 6) {
-                    if let age = boosted.age {
+                    if let age = outcome.age {
                         Text("you'll be \(String(age))")
                     }
                     // The dot only earns its place between two things.
-                    if boosted.age != nil, let years = boosted.years, years > 0 {
+                    if outcome.age != nil, let years = outcome.years, years > 0 {
                         Text("·").foregroundStyle(.tertiary)
                     }
-                    if let years = boosted.years, years > 0 {
+                    if let years = outcome.years, years > 0 {
                         Text("\(String(years)) years away")
                     }
                 }
@@ -282,25 +272,27 @@ struct FreedomHeroView: View {
 
     // MARK: - Coverage
 
-    private var coverage: some View {
+    private func coverage(_ outcome: FreedomOutcome) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text("Passive income covers")
                 Spacer()
-                Text(boosted.currentRatio.formatted(.percent.precision(.fractionLength(0))))
+                Text(outcome.currentRatio.formatted(.percent.precision(.fractionLength(0))))
                     .monospacedDigit()
             }
             .font(.footnote)
             .foregroundStyle(.secondary)
 
-            ProgressView(value: boosted.currentRatio)
+            ProgressView(value: outcome.currentRatio)
                 .tint(Color.goalMint)
         }
     }
 
     // MARK: - What-if
 
-    private var whatIf: some View {
+    /// The saving is derived from the outcome already computed for this render
+    /// rather than by running the engine a second time.
+    private func whatIf(_ outcome: FreedomOutcome) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Save extra per month")
@@ -314,9 +306,11 @@ struct FreedomHeroView: View {
             Slider(value: $extraMonthly, in: 0...sliderMax, step: max(10, (sliderMax / 20).rounded()))
                 .tint(Color.goalMintDark)
 
-            if let saved = FreedomEngine.monthsSaved(for: plan, extraMonthlyMinor: extraMinor),
-               saved > 0 {
-                Text(savedLabel(months: saved))
+            if extraMinor > 0,
+               let base = FreedomEngine.outcome(for: plan).months,
+               let boostedMonths = outcome.months,
+               base > boostedMonths {
+                Text(savedLabel(months: base - boostedMonths))
                     .font(.footnote.bold())
                     .foregroundStyle(Color.incomeGreen)
             }

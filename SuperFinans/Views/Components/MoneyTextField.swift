@@ -30,11 +30,17 @@ struct MoneyTextField: View {
     }
 
     private var currencySymbol: String {
-        let locale = Locale.current
+        String.currencySymbol(for: currencyCode)
+    }
+}
+
+extension String {
+    /// The glyph a storefront uses for a currency, or the code when it has none.
+    static func currencySymbol(for code: String) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = currencyCode
-        return formatter.currencySymbol ?? "$"
+        formatter.currencyCode = code
+        return formatter.currencySymbol ?? code
     }
 }
 

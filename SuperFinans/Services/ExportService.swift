@@ -112,7 +112,7 @@ final class ExportService {
             let money = Money(minorUnits: tx.amountMinorUnits,
                               currencyCode: tx.account?.currency ?? "USD")
             rows.append([
-                Self.csvField(tx.date?.iso8601Day ?? ""),
+                Self.csvField(tx.date?.dateGroupKey ?? ""),
                 Self.csvField(tx.account?.displayName ?? ""),
                 Self.csvField(tx.categoryId ?? ""),
                 Self.csvField(tx.note ?? ""),

@@ -32,11 +32,21 @@ struct CurrencyPickerView: View {
         Locale.commonISOCurrencyCodes.filter { !Self.unquoted.contains($0) }
     }
 
+    /// Localised names, resolved once. Filtering used to call into ICU for
+    /// every one of ~150 codes on every character typed.
+    private static let names: [String: String] = {
+        var map: [String: String] = [:]
+        for code in Locale.commonISOCurrencyCodes {
+            map[code] = Locale.current.localizedString(forCurrencyCode: code) ?? code
+        }
+        return map
+    }()
+
     private var filtered: [String] {
         guard !query.isEmpty else { return all }
         let q = query.lowercased()
         return all.filter {
-            $0.lowercased().contains(q) || Self.name(for: $0).lowercased().contains(q)
+            $0.lowercased().contains(q) || (Self.names[$0] ?? $0).lowercased().contains(q)
         }
     }
 
@@ -86,15 +96,12 @@ struct CurrencyPickerView: View {
     // MARK: - Naming
 
     static func name(for code: String) -> String {
-        Locale.current.localizedString(forCurrencyCode: code) ?? code
+        names[code] ?? Locale.current.localizedString(forCurrencyCode: code) ?? code
     }
 
     /// Falls back to the code — plenty of currencies have no distinct glyph.
     static func symbol(for code: String) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = code
-        let symbol = formatter.currencySymbol ?? code
+        let symbol = String.currencySymbol(for: code)
         return symbol.count <= 3 ? symbol : code
     }
 }
@@ -113,13 +120,7 @@ struct CurrencyStepView: View {
     var body: some View {
         NavigationStack {
             CurrencyPickerView(selection: $picked) { code in
-                var plan = store.plan
-                plan.currencyCode = code
-                plan.displayCurrencyCode = CurrencyClass.isHard(code) ? nil : "USD"
-                store.plan = plan
-                // Keep the rest of the app on the same currency.
-                UserDefaults.standard.set(code, forKey: FreedomPlanStorage.currencyKey)
-                FreedomPlanStorage.defaults.set(code, forKey: FreedomPlanStorage.currencyKey)
+                store.setCurrency(code)
                 onDone()
             }
             .navigationTitle("Your currency")

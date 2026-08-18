@@ -28,6 +28,8 @@ struct FreedomProvider: TimelineProvider {
         let plan = FreedomPlan(
             monthlyExpensesMinor: 120_000,
             currentSavingsMinor: 3_000_000,
+            holdings: [],
+            holdingsValueMinor: 0,
             monthlySavingsMinor: 80_000,
             birthYear: 1990,
             annualReturnPercent: FreedomPlan.defaultReturnPercent,

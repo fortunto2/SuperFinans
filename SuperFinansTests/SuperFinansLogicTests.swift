@@ -1193,6 +1193,8 @@ final class FreedomEngineTests: XCTestCase {
         FreedomPlan(
             monthlyExpensesMinor: expenses,
             currentSavingsMinor: savings,
+            holdings: [],
+            holdingsValueMinor: 0,
             monthlySavingsMinor: monthly,
             birthYear: birthYear,
             annualReturnPercent: 7,
@@ -1291,6 +1293,50 @@ final class FreedomEngineTests: XCTestCase {
             startYear: thisYear
         )
         XCTAssertEqual(NSDecimalNumber(decimal: need).doubleValue, 500_00, accuracy: 1)
+    }
+
+    // MARK: - Holdings
+
+    /// Gold in a drawer is savings. Counting it must move the year.
+    func testHoldingsCountTowardsFreedom() throws {
+        let plain = try XCTUnwrap(FreedomEngine.outcome(for: plan()).months)
+
+        var withGold = plan()
+        withGold.holdings = [Holding(unit: "XAU", amount: 200, label: "Wedding gold")]
+        withGold.holdingsValueMinor = 27_000_00   // ~200 g at spot
+        let withGoldMonths = try XCTUnwrap(FreedomEngine.outcome(for: withGold).months)
+
+        XCTAssertLessThan(withGoldMonths, plain)
+    }
+
+    func testTotalSavingsAddsHoldings() {
+        var p = plan(savings: 10_000_00)
+        p.holdingsValueMinor = 5_000_00
+        XCTAssertEqual(p.totalSavingsMinor, 15_000_00)
+    }
+
+    /// A unit with no quote must be skipped, never counted as zero — the plan
+    /// should not quietly shrink because one feed was down.
+    func testUnquotedHoldingIsSkippedNotZeroed() {
+        var p = plan()
+        p.holdings = [
+            Holding(unit: "EUR", amount: 1000),
+            Holding(unit: "ZZZ", amount: 500),
+        ]
+        let snapshot = RateSnapshot(rates: ["USD": 1, "EUR": 0.9], fetchedAt: Date())
+        let valued = p.revaluingHoldings(using: snapshot)
+
+        // 1000 EUR at 0.9 EUR per USD ≈ 1111 USD; the ZZZ line contributes nothing.
+        XCTAssertEqual(Double(valued.holdingsValueMinor) / 100, 1111, accuracy: 2)
+        XCTAssertEqual(p.unvaluedHoldings(using: snapshot).map(\.unit), ["ZZZ"])
+    }
+
+    func testGoldConvertsPerGram() {
+        // 31.1034768 g per troy ounce; at $4000 an ounce a gram is ~$128.6.
+        let perGram = Metal.gramsPerTroyOunce / 4000.0
+        let snapshot = RateSnapshot(rates: ["USD": 1, "XAU": perGram], fetchedAt: Date())
+        let value = try? XCTUnwrap(snapshot.convert(10, from: "XAU", to: "USD"))
+        XCTAssertEqual(value ?? 0, 1286, accuracy: 2)
     }
 
     func testUnconfiguredPlanIsNotServedToTheWidget() {

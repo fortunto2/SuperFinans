@@ -16,8 +16,15 @@ struct FreedomPlan: Codable, Equatable, Sendable {
 
     /// What life costs per month, in minor units.
     var monthlyExpensesMinor: Int64
-    /// What is already invested, in minor units.
+    /// What is already invested in the plan's own currency, in minor units.
     var currentSavingsMinor: Int64
+    /// Savings held in something else: another currency, or grams of gold.
+    /// Kept as typed rather than converted once, so a moving rate moves the plan.
+    var holdings: [Holding]
+    /// Those holdings valued in the plan's currency at the last known rates.
+    /// Cached because the maths runs offline and inside the widget, neither of
+    /// which can call a rate service.
+    var holdingsValueMinor: Int64
     /// What gets added every month, in minor units.
     var monthlySavingsMinor: Int64
     /// Year of birth. Optional — without it we show a year, not an age.
@@ -40,6 +47,8 @@ struct FreedomPlan: Codable, Equatable, Sendable {
         FreedomPlan(
             monthlyExpensesMinor: 0,
             currentSavingsMinor: 0,
+            holdings: [],
+            holdingsValueMinor: 0,
             monthlySavingsMinor: 0,
             birthYear: nil,
             annualReturnPercent: defaultReturnPercent,
@@ -52,6 +61,32 @@ struct FreedomPlan: Codable, Equatable, Sendable {
     /// A plan is usable the moment we know what life costs.
     var isConfigured: Bool { monthlyExpensesMinor > 0 }
 
+    /// Everything invested, whatever it is held in.
+    var totalSavingsMinor: Int64 { currentSavingsMinor + holdingsValueMinor }
+
+}
+
+// MARK: - Holdings
+
+/// An amount kept in a unit that is not the plan's currency: euros in a foreign
+/// account, or grams of gold in a drawer — which is how a large part of the
+/// world actually saves, and which no FIRE calculator asks about.
+struct Holding: Codable, Equatable, Identifiable, Sendable {
+
+    var id: UUID
+    /// ISO 4217 code, or "XAU" for grams of gold.
+    var unit: String
+    /// Major units: 1200.50 euros, or 12.5 grams. Not minor units — gold has no
+    /// cents, and forcing it into them invites the rounding bugs.
+    var amount: Double
+    var label: String
+
+    init(id: UUID = UUID(), unit: String, amount: Double, label: String = "") {
+        self.id = id
+        self.unit = unit
+        self.amount = amount
+        self.label = label
+    }
 }
 
 // MARK: - Expense shifts
@@ -131,12 +166,12 @@ enum FreedomEngine {
             : 0
 
         let passiveNow = NSDecimalNumber(
-            decimal: Decimal(plan.currentSavingsMinor) * monthlyRate
+            decimal: Decimal(plan.totalSavingsMinor) * monthlyRate
         ).doubleValue
         let ratio = expenses > 0 ? min(passiveNow / Double(expenses), 1.0) : 0
 
         let months = monthsToFreedom(
-            assets: plan.currentSavingsMinor,
+            assets: plan.totalSavingsMinor,
             monthlyExpenses: expenses,
             monthlySurplus: surplus,
             monthlyRate: monthlyRate,
@@ -214,7 +249,7 @@ enum FreedomEngine {
 
         func reaches(_ contribution: Int64) -> Bool {
             guard let months = monthsToFreedom(
-                assets: plan.currentSavingsMinor,
+                assets: plan.totalSavingsMinor,
                 monthlyExpenses: plan.monthlyExpensesMinor,
                 monthlySurplus: contribution,
                 monthlyRate: monthlyRate,

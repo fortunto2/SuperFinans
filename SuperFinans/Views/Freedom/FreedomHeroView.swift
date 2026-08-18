@@ -66,6 +66,11 @@ struct FreedomHeroView: View {
         }
         .task {
             snapshot = await RateService.shared.refreshIfNeeded()
+            // Gold and foreign savings move with the market, so the plan is
+            // revalued whenever fresh rates land — not only when edited.
+            if let snapshot, !plan.holdings.isEmpty {
+                store.plan = plan.revaluingHoldings(using: snapshot)
+            }
             loadActuals()
         }
     }

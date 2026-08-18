@@ -40,6 +40,7 @@
 		5349EFA83CA655750436111E /* NumpadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9226DDCFB7D99C600DAC3C9A /* NumpadView.swift */; };
 		57165A646E2D154B400626A4 /* Color+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF151E703880E7A28CF8BFE /* Color+Theme.swift */; };
 		598B1DC04C2EB09CE846CEF0 /* TransactionEntity+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4C0AD787DCF56A31B10F3E /* TransactionEntity+CoreData.swift */; };
+		5B3C18EADF0C4760AA937CBA /* HoldingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BF7373231CDA1C80BD9E06 /* HoldingsView.swift */; };
 		5BF7E8F8FD153B3AB6ACFF2D /* transactions_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = E2CB386033A1D253C47380E5 /* transactions_guide.md */; };
 		600CC2F61F37F849868635DC /* insights_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 503656BA9EC084B0ED63C212 /* insights_guide.md */; };
 		61B32E44328A05CB61C9D906 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349BADA0658A6B9F9FC0D2E0 /* DashboardViewModel.swift */; };
@@ -200,6 +201,7 @@
 		9AC891A401DB3A210347E3BD /* goals_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = goals_guide.md; sourceTree = "<group>"; };
 		9AF151E703880E7A28CF8BFE /* Color+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Theme.swift"; sourceTree = "<group>"; };
 		A0DB6298A29B8E2204C3DE0C /* TransactionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionService.swift; sourceTree = "<group>"; };
+		A7BF7373231CDA1C80BD9E06 /* HoldingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldingsView.swift; sourceTree = "<group>"; };
 		AF49A5B34B006CAF759A3BA3 /* ru_about.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ru_about.md; sourceTree = "<group>"; };
 		B1B8804C41053A34A96366E3 /* RecurringRuleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringRuleService.swift; sourceTree = "<group>"; };
 		B6DB0A9F694CCBCF99A67914 /* ru_insights_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ru_insights_guide.md; sourceTree = "<group>"; };
@@ -356,6 +358,7 @@
 				4461559B561B7A8D64A48B05 /* CurrencyPickerView.swift */,
 				C6D2CAB725021737A072ACF2 /* FreedomHeroView.swift */,
 				65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */,
+				A7BF7373231CDA1C80BD9E06 /* HoldingsView.swift */,
 				C8A43EFE8571D810A35801CF /* LifeEventsView.swift */,
 			);
 			path = Freedom;
@@ -785,6 +788,7 @@
 				0E5BA0B5393AD4BF251D13F1 /* GuideContentView.swift in Sources */,
 				4595A5E2D6D2700C92FBEDCB /* GuideView.swift in Sources */,
 				E3BF78863A69A5B9087F2250 /* HintBannerView.swift in Sources */,
+				5B3C18EADF0C4760AA937CBA /* HoldingsView.swift in Sources */,
 				0F147B2BAD1C655D5BF386B3 /* InsightsDashboardView.swift in Sources */,
 				8DD5416577800BB964647BAC /* InsightsViewModel.swift in Sources */,
 				14A42B2A9723EC8A446B85B9 /* LifeEventsView.swift in Sources */,

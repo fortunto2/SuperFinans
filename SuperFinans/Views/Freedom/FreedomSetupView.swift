@@ -22,6 +22,7 @@ struct FreedomSetupView: View {
     @State private var monthly = ""
     @State private var birthYear = ""
     @State private var currency = ""
+    @State private var showHoldings = false
 
     /// The currency the fields are being typed in.
     private var activeCurrency: String {
@@ -89,6 +90,26 @@ struct FreedomSetupView: View {
                         hint: "Savings, index funds, anything that earns.",
                         text: $savings
                     )
+                    Button {
+                        showHoldings = true
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Also in gold or another currency")
+                                    .font(.subheadline)
+                                Text(holdingsSummary)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+
                     field(
                         title: "What you add each month",
                         hint: "Zero is a valid answer.",
@@ -143,7 +164,18 @@ struct FreedomSetupView: View {
                 }
             }
             .onAppear(perform: seedFromStore)
+            .sheet(isPresented: $showHoldings) {
+                HoldingsView(store: store)
+            }
         }
+    }
+
+    private var holdingsSummary: String {
+        let plan = store.plan
+        if plan.holdings.isEmpty { return "Gold by the gram, or savings held abroad" }
+        let units = Set(plan.holdings.map(\.unit)).sorted().joined(separator: ", ")
+        let worth = Money(minorUnits: plan.holdingsValueMinor, currencyCode: plan.currencyCode)
+        return "\(plan.holdings.count) · \(units) · \(worth.formatted)"
     }
 
     // MARK: - Pieces

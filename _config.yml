@@ -3,6 +3,7 @@
 title: "Freedom Year"
 description: "The year your investments start covering your life. iOS, offline-first, no subscription."
 theme: jekyll-theme-minimal
+# index.md is the About page GitHub Pages serves at the root.
 exclude:
   - SuperFinans
   - SuperFinansTests

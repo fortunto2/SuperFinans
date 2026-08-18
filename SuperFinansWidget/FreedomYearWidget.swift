@@ -10,6 +10,12 @@
 import SwiftUI
 import WidgetKit
 
+/// Mirrors Color.goalMintDark from the app. Duplicated rather than shared: the
+/// widget target links the model, not the app's asset catalogue.
+private extension Color {
+    static let freedomMint = Color(red: 0x26 / 255, green: 0xA6 / 255, blue: 0x9A / 255)
+}
+
 struct FreedomEntry: TimelineEntry {
     let date: Date
     let plan: FreedomPlan?
@@ -72,7 +78,7 @@ struct FreedomWidgetView: View {
                 .font(.system(size: family == .systemSmall ? 40 : 52,
                               weight: .bold, design: .rounded))
                 .minimumScaleFactor(0.6)
-                .foregroundStyle(.tint)
+                .foregroundStyle(Color.freedomMint)
 
             if let age = outcome.age {
                 Text("you'll be \(age)")
@@ -87,8 +93,8 @@ struct FreedomWidgetView: View {
             Spacer(minLength: 4)
 
             ProgressView(value: outcome.currentRatio)
-                .tint(.teal)
-            Text("\(Int(outcome.currentRatio * 100))% covered")
+                .tint(Color.freedomMint)
+            Text("\(outcome.currentRatio.formatted(.percent.precision(.fractionLength(0)))) covered")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
@@ -99,7 +105,7 @@ struct FreedomWidgetView: View {
         VStack(alignment: .leading, spacing: 6) {
             Image(systemName: "flag.checkered")
                 .font(.title2)
-                .foregroundStyle(.tint)
+                .foregroundStyle(Color.freedomMint)
             Text("When can you stop working?")
                 .font(.footnote.bold())
             Text("Three numbers, one minute.")

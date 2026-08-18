@@ -14,6 +14,7 @@ struct FreedomHeroView: View {
     @ObservedObject var store: FreedomPlanStore
     @State private var extraMonthly: Double = 0
     @State private var showSetup = false
+    @State private var showEvents = false
     @State private var snapshot: RateSnapshot? = RateService.cached()
     @State private var switching = false
 
@@ -40,6 +41,7 @@ struct FreedomHeroView: View {
             coverage
             if plan.monthlySavingsMinor >= 0 { whatIf }
             if !plan.returnAssumptionIsCredible { softCurrencyNote }
+            lifeEvents
             Button {
                 showSetup = true
             } label: {
@@ -54,9 +56,50 @@ struct FreedomHeroView: View {
         .sheet(isPresented: $showSetup) {
             FreedomSetupView(store: store) { extraMonthly = 0 }
         }
+        .sheet(isPresented: $showEvents) {
+            LifeEventsView(store: store)
+        }
         .task {
             snapshot = await RateService.shared.refreshIfNeeded()
         }
+    }
+
+    // MARK: - Life events
+
+    /// The plan currently assumes today's spending forever. Saying that out loud
+    /// is what makes the feature obvious instead of hidden behind a menu.
+    private var lifeEvents: some View {
+        Button {
+            showEvents = true
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "timeline.selection")
+                VStack(alignment: .leading, spacing: 1) {
+                    if plan.shifts.isEmpty {
+                        Text("Life won't cost this forever")
+                            .font(.subheadline)
+                        Text("Children leaving or a mortgage ending moves the year")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("\(plan.shifts.count) life event\(plan.shifts.count == 1 ? "" : "s")")
+                            .font(.subheadline)
+                        Text(plan.shifts.sorted { $0.year < $1.year }
+                            .map { "\($0.label) \(String($0.year))" }
+                            .joined(separator: " · "))
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .buttonStyle(.plain)
+        .padding(.vertical, 4)
     }
 
     // MARK: - Target
@@ -147,11 +190,14 @@ struct FreedomHeroView: View {
 
                 HStack(spacing: 6) {
                     if let age = boosted.age {
-                        Text("you'll be \(age)")
+                        Text("you'll be \(String(age))")
+                    }
+                    // The dot only earns its place between two things.
+                    if boosted.age != nil, let years = boosted.years, years > 0 {
+                        Text("·").foregroundStyle(.tertiary)
                     }
                     if let years = boosted.years, years > 0 {
-                        Text("·").foregroundStyle(.tertiary)
-                        Text("\(years) years away")
+                        Text("\(String(years)) years away")
                     }
                 }
                 .font(.subheadline)

@@ -16,6 +16,10 @@ struct LifeEventsView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var showCustom = false
+    /// Held in state on purpose: ExpenseShift is Identifiable by a fresh UUID, so
+    /// regenerating the presets on every redraw changes each row's identity under
+    /// the finger and SwiftUI cancels the tap.
+    @State private var presets: [ExpenseShift] = []
 
     private var plan: FreedomPlan { store.plan }
     private var thisYear: Int { Calendar.current.component(.year, from: Date()) }
@@ -49,14 +53,15 @@ struct LifeEventsView: View {
                 }
 
                 Section("Add") {
-                    ForEach(ExpenseShift.presets(currentYear: thisYear)) { preset in
+                    ForEach(presets) { preset in
                         Button {
                             add(preset)
                         } label: {
                             HStack {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(preset.label)
-                                    Text("\(preset.year) · \(signed(preset.percent))% spending")
+                                        .foregroundStyle(.primary)
+                                    Text("\(String(preset.year)) · \(signed(preset.percent))% spending")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -64,8 +69,8 @@ struct LifeEventsView: View {
                                 Image(systemName: "plus.circle.fill")
                                     .foregroundStyle(Color.goalMintDark)
                             }
+                            .contentShape(Rectangle())
                         }
-                        .buttonStyle(.plain)
                     }
 
                     Button {
@@ -74,6 +79,9 @@ struct LifeEventsView: View {
                         Label("Something else", systemImage: "square.and.pencil")
                     }
                 }
+            }
+            .onAppear {
+                if presets.isEmpty { presets = ExpenseShift.presets(currentYear: thisYear) }
             }
             .navigationTitle("Life events")
             .navigationBarTitleDisplayMode(.inline)
@@ -174,7 +182,7 @@ struct CustomShiftView: View {
                     TextField("Youngest finishes university", text: $label)
                 }
                 Section("When") {
-                    Stepper("\(resolvedYear)", value: Binding(
+                    Stepper(String(resolvedYear), value: Binding(
                         get: { Double(resolvedYear) },
                         set: { year = $0 }
                     ), in: Double(defaultYear - 5)...Double(defaultYear + 40), step: 1)

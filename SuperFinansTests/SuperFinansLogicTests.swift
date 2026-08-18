@@ -1187,7 +1187,8 @@ final class FreedomEngineTests: XCTestCase {
         expenses: Int64 = 1200_00,
         savings: Int64 = 30_000_00,
         monthly: Int64 = 800_00,
-        birthYear: Int? = 1990
+        birthYear: Int? = 1990,
+        shifts: [ExpenseShift] = []
     ) -> FreedomPlan {
         FreedomPlan(
             monthlyExpensesMinor: expenses,
@@ -1195,9 +1196,13 @@ final class FreedomEngineTests: XCTestCase {
             monthlySavingsMinor: monthly,
             birthYear: birthYear,
             annualReturnPercent: 7,
-            currencyCode: "USD"
+            currencyCode: "USD",
+            shifts: shifts,
+            displayCurrencyCode: nil
         )
     }
+
+    private var thisYear: Int { Calendar.current.component(.year, from: Date()) }
 
     func testReachesFreedomInAboutTenYears() throws {
         let outcome = FreedomEngine.outcome(for: plan())
@@ -1228,6 +1233,64 @@ final class FreedomEngineTests: XCTestCase {
         let outcome = FreedomEngine.outcome(for: plan())
         // 1200 / (0.07/12) ≈ 205,714
         XCTAssertEqual(Double(outcome.targetAssetsMinor) / 100, 205_714, accuracy: 50)
+    }
+
+    // MARK: - Life events
+
+    /// The feature's whole claim: spending that falls later brings the year forward.
+    func testSpendingDropBringsFreedomForward() throws {
+        let flat = try XCTUnwrap(FreedomEngine.outcome(for: plan()).months)
+        let withDrop = try XCTUnwrap(
+            FreedomEngine.outcome(
+                for: plan(shifts: [ExpenseShift(year: thisYear + 5, percent: -30,
+                                                label: "Children move out")])
+            ).months
+        )
+        XCTAssertLessThan(withDrop, flat, "a 30% spending drop must not delay freedom")
+    }
+
+    func testSpendingRisePushesFreedomBack() throws {
+        let flat = try XCTUnwrap(FreedomEngine.outcome(for: plan()).months)
+        let withRise = FreedomEngine.outcome(
+            for: plan(shifts: [ExpenseShift(year: thisYear + 2, percent: 40, label: "Second child")])
+        ).months
+        // Either later, or out of reach entirely — both are "not sooner".
+        XCTAssertTrue(withRise == nil || withRise! > flat)
+    }
+
+    /// A shift dated after freedom already arrived must not change the answer.
+    func testShiftAfterFreedomIsIrrelevant() throws {
+        let flat = try XCTUnwrap(FreedomEngine.outcome(for: plan()).months)
+        let late = try XCTUnwrap(
+            FreedomEngine.outcome(
+                for: plan(shifts: [ExpenseShift(year: thisYear + 45, percent: -50, label: "Late")])
+            ).months
+        )
+        XCTAssertEqual(flat, late)
+    }
+
+    func testExpensesNeverFallBelowTheFloor() {
+        let need = FreedomEngine.expenses(
+            base: 1000_00,
+            shifts: [ExpenseShift(year: thisYear, percent: -95, label: "Implausible")],
+            monthsFromNow: 1,
+            startYear: thisYear
+        )
+        // Floor is 10% of the original, not zero — otherwise freedom arrives instantly.
+        XCTAssertEqual(NSDecimalNumber(decimal: need).doubleValue, 100_00, accuracy: 1)
+    }
+
+    func testShiftsCompound() {
+        let need = FreedomEngine.expenses(
+            base: 1000_00,
+            shifts: [
+                ExpenseShift(year: thisYear, percent: -20, label: "A"),
+                ExpenseShift(year: thisYear, percent: -30, label: "B"),
+            ],
+            monthsFromNow: 1,
+            startYear: thisYear
+        )
+        XCTAssertEqual(NSDecimalNumber(decimal: need).doubleValue, 500_00, accuracy: 1)
     }
 
     func testUnconfiguredPlanIsNotServedToTheWidget() {

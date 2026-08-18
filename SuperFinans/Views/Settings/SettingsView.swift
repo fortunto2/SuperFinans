@@ -141,16 +141,20 @@ struct SettingsView: View {
                 // apps that are actually live on the Store.
                 Section("More from us") {
                     Link(destination: URL(string: "https://apps.apple.com/app/id6759005730")!) {
-                        Label {
+                        HStack {
+                            Image(systemName: "arrow.left.arrow.right.circle.fill")
+                                .foregroundStyle(Color.goalMintDark)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("CurrencyPals")
                                 Text("Offline currency converter — the rates behind this app")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                        } icon: {
-                            Image(systemName: "arrow.left.arrow.right.circle.fill")
-                                .foregroundStyle(Color.goalMintDark)
+                            Spacer()
+                            // Without this the row reads as a label, not a link out.
+                            Image(systemName: "arrow.up.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
                         }
                     }
                 }

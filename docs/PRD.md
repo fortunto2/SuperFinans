@@ -4,7 +4,7 @@
 
 Исследование в корне проекта выявило незанятую нишу на рынке iOS-финансов: **ни один конкурент не совмещает семейный трекинг целей, offline-first архитектуру, on-device AI и разовую покупку**. YNAB — $109/год, Monarch — $100/год, Copilot — $95/год. 41% пользователей устали от подписок, 60% бюджетных приложений передают данные третьим сторонам. Apple Foundation Models (iOS 26) позволяет давать AI-инсайты без передачи данных с устройства.
 
-Для авторизации и покупок используется готовый модуль **SuperDuperAiAuth** (`/Users/alina/projects/SuperDuperAi/packages/auth-ios/`). Архитектура строится по паттернам **FaceAlarm** (`/Users/alina/projects/FaceAlarm/ios-app/FaceAlarm/`).
+Для авторизации и покупок используется готовый модуль **SuperDuperAiAuth** (локальный SPM-пакет `shared/superduperai-auth/packages/auth-ios`). Архитектура строится по паттернам приложения FaceAlarm.
 
 ---
 
@@ -233,7 +233,7 @@ SuperFinans/
 
 ## 7. Интеграция SuperDuperAiAuth
 
-**Подключение:** Local SPM package → `/Users/alina/projects/SuperDuperAi/packages/auth-ios/`
+**Подключение:** Local SPM package → `shared/superduperai-auth/packages/auth-ios`
 
 **Конфигурация в `SuperFinansApp.init()`:**
 ```swift

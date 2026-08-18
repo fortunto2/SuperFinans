@@ -16,6 +16,7 @@
 		0F147B2BAD1C655D5BF386B3 /* InsightsDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B977E8B288C76E7F300B58CB /* InsightsDashboardView.swift */; };
 		11315E1D5CB9D5484C810F34 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120B20157C32CB2E86183E36 /* ExportService.swift */; };
 		1353FA2BAA215B42CFB779D1 /* CreateGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53665CB12B2C7887B7101D /* CreateGoalView.swift */; };
+		14A42B2A9723EC8A446B85B9 /* LifeEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A43EFE8571D810A35801CF /* LifeEventsView.swift */; };
 		154AE5063EB8CBB60306C578 /* RateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A1AD0EFB2E224B53D95B4A /* RateService.swift */; };
 		157F42935315BF3C6B1CAEDA /* AccountsManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7BBA7637FC4EEB861D22B0 /* AccountsManagementView.swift */; };
 		1AB8F75629A25BCF25F5A801 /* MoneyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BD9B60D350A79BFACD49FC /* MoneyTextField.swift */; };
@@ -206,6 +207,7 @@
 		BE4421F3DE314723DEEB07F3 /* FreedomYearWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomYearWidget.swift; sourceTree = "<group>"; };
 		C6A1AD0EFB2E224B53D95B4A /* RateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateService.swift; sourceTree = "<group>"; };
 		C6D2CAB725021737A072ACF2 /* FreedomHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomHeroView.swift; sourceTree = "<group>"; };
+		C8A43EFE8571D810A35801CF /* LifeEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeEventsView.swift; sourceTree = "<group>"; };
 		CA841985F718EAFA24FEAD64 /* GoalDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailViewModel.swift; sourceTree = "<group>"; };
 		CB61C8B129750C9FD829EE0A /* FeatureDiscoveryFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureDiscoveryFlags.swift; sourceTree = "<group>"; };
 		CEF903AFFAAD95EB975C07A5 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 				4461559B561B7A8D64A48B05 /* CurrencyPickerView.swift */,
 				C6D2CAB725021737A072ACF2 /* FreedomHeroView.swift */,
 				65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */,
+				C8A43EFE8571D810A35801CF /* LifeEventsView.swift */,
 			);
 			path = Freedom;
 			sourceTree = "<group>";
@@ -657,7 +660,7 @@
 			mainGroup = 935847ED73979C9EF6EE85B8;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				22C1DDB13C81BAE3975DD77F /* XCLocalSwiftPackageReference "/Users/rustam/startups/shared/superduperai-auth/packages/auth-ios" */,
+				6C0767E26B1BACADE564BF69 /* XCLocalSwiftPackageReference "../../shared/superduperai-auth/packages/auth-ios" */,
 				2B0B0F4066EB59F7F34B3189 /* XCLocalSwiftPackageReference "../../shared/superduperai-analytics" */,
 			);
 			preferredProjectObjectVersion = 54;
@@ -762,6 +765,7 @@
 				E3BF78863A69A5B9087F2250 /* HintBannerView.swift in Sources */,
 				0F147B2BAD1C655D5BF386B3 /* InsightsDashboardView.swift in Sources */,
 				8DD5416577800BB964647BAC /* InsightsViewModel.swift in Sources */,
+				14A42B2A9723EC8A446B85B9 /* LifeEventsView.swift in Sources */,
 				A1E9722EDC176BF2BD215204 /* MainTabView.swift in Sources */,
 				83C9699DEC0A8F762ED64C21 /* MarkdownService.swift in Sources */,
 				AA41A6BC23DD19241E83FD63 /* Money.swift in Sources */,
@@ -1099,13 +1103,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		22C1DDB13C81BAE3975DD77F /* XCLocalSwiftPackageReference "/Users/rustam/startups/shared/superduperai-auth/packages/auth-ios" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "/Users/rustam/startups/shared/superduperai-auth/packages/auth-ios";
-		};
 		2B0B0F4066EB59F7F34B3189 /* XCLocalSwiftPackageReference "../../shared/superduperai-analytics" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../shared/superduperai-analytics";
+		};
+		6C0767E26B1BACADE564BF69 /* XCLocalSwiftPackageReference "../../shared/superduperai-auth/packages/auth-ios" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../shared/superduperai-auth/packages/auth-ios";
 		};
 /* End XCLocalSwiftPackageReference section */
 

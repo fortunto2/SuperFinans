@@ -31,7 +31,8 @@ struct FreedomProvider: TimelineProvider {
             monthlySavingsMinor: 80_000,
             birthYear: 1990,
             annualReturnPercent: FreedomPlan.defaultReturnPercent,
-            currencyCode: "USD"
+            currencyCode: "USD",
+            shifts: []
         )
         return FreedomEntry(date: Date(), plan: plan, outcome: FreedomEngine.outcome(for: plan))
     }

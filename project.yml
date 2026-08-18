@@ -21,7 +21,7 @@ packages:
   SuperDuperAnalytics:
     path: ../../shared/superduperai-analytics
   SuperDuperAiAuth:
-    path: /Users/rustam/startups/shared/superduperai-auth/packages/auth-ios
+    path: ../../shared/superduperai-auth/packages/auth-ios
 
 targets:
   SuperFinans:

@@ -1,0 +1,12 @@
+# GitHub Pages serves the privacy policy and the support page — App Store review needs both
+# as real URLs, and a public repo hosts them for free with their revision history visible.
+title: "Freedom Year"
+description: "The year your investments start covering your life. iOS, offline-first, no subscription."
+theme: jekyll-theme-minimal
+exclude:
+  - SuperFinans
+  - SuperFinansTests
+  - SuperFinansWidget
+  - SuperFinans.xcodeproj
+  - project.yml
+  - .asc

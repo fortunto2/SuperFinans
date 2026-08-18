@@ -23,8 +23,13 @@ struct CurrencyPickerView: View {
     /// The handful worth putting above the fold. The rest is one search away.
     private static let popular = ["USD", "EUR", "GBP", "TRY", "RUB", "CHF", "AED", "KZT"]
 
+    /// Codes Foundation still lists but no rate feed quotes: CUC was abolished in
+    /// 2021, VEF was redenominated into VES, KPW is not traded. Offering them
+    /// would mean a plan whose second currency silently never resolves.
+    private static let unquoted: Set<String> = ["CUC", "KPW", "VEF"]
+
     private var all: [String] {
-        Locale.commonISOCurrencyCodes
+        Locale.commonISOCurrencyCodes.filter { !Self.unquoted.contains($0) }
     }
 
     private var filtered: [String] {

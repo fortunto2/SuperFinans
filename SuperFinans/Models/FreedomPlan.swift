@@ -26,6 +26,9 @@ struct FreedomPlan: Codable, Equatable, Sendable {
     var annualReturnPercent: Double
     /// ISO 4217 code the three numbers are expressed in.
     var currencyCode: String
+    /// Known changes to what life will cost. Every other calculator treats
+    /// monthly spending as a constant for thirty years, which nobody's life is.
+    var shifts: [ExpenseShift]
     /// Optional second currency shown alongside every amount. People who earn
     /// in a soft currency still think in dollars, and the horizon here is long
     /// enough that they are right to.
@@ -41,6 +44,7 @@ struct FreedomPlan: Codable, Equatable, Sendable {
             birthYear: nil,
             annualReturnPercent: defaultReturnPercent,
             currencyCode: currencyCode,
+            shifts: [],
             displayCurrencyCode: nil
         )
     }
@@ -48,6 +52,38 @@ struct FreedomPlan: Codable, Equatable, Sendable {
     /// A plan is usable the moment we know what life costs.
     var isConfigured: Bool { monthlyExpensesMinor > 0 }
 
+}
+
+// MARK: - Expense shifts
+
+/// A dated step change in monthly spending: children leave, a mortgage ends, a
+/// state pension starts. Expressed as a percentage because that is how people
+/// know it ("the kids are about a third of what we spend").
+struct ExpenseShift: Codable, Equatable, Identifiable, Sendable {
+
+    var id: UUID
+    /// Calendar year the change takes effect.
+    var year: Int
+    /// Signed percentage applied to the ORIGINAL monthly figure. -30 means
+    /// spending drops by thirty percent of what it is today.
+    var percent: Int
+    var label: String
+
+    init(id: UUID = UUID(), year: Int, percent: Int, label: String) {
+        self.id = id
+        self.year = year
+        self.percent = percent
+        self.label = label
+    }
+
+    /// The presets that cover most of what people actually know about.
+    static func presets(currentYear: Int) -> [ExpenseShift] {
+        [
+            ExpenseShift(year: currentYear + 10, percent: -25, label: "Children move out"),
+            ExpenseShift(year: currentYear + 15, percent: -30, label: "Mortgage paid off"),
+            ExpenseShift(year: currentYear + 20, percent: -15, label: "State pension starts"),
+        ]
+    }
 }
 
 // MARK: - Outcome
@@ -103,7 +139,8 @@ enum FreedomEngine {
             assets: plan.currentSavingsMinor,
             monthlyExpenses: expenses,
             monthlySurplus: surplus,
-            monthlyRate: monthlyRate
+            monthlyRate: monthlyRate,
+            shifts: plan.shifts
         )
 
         var year: Int?
@@ -131,21 +168,40 @@ enum FreedomEngine {
         assets: Int64,
         monthlyExpenses: Int64,
         monthlySurplus: Int64,
-        monthlyRate: Decimal
+        monthlyRate: Decimal,
+        shifts: [ExpenseShift] = []
     ) -> Int? {
         // Zero expenses is missing data, not freedom.
         guard monthlyExpenses > 0, monthlyRate > 0 else { return nil }
         guard monthlySurplus > 0 || assets > 0 else { return nil }
 
         var pot = Decimal(assets)
-        let expenses = Decimal(monthlyExpenses)
         let surplus = Decimal(monthlySurplus)
+        let thisYear = Calendar.current.component(.year, from: Date())
 
         for month in 1...maxMonths {
             pot = pot * (Decimal(1) + monthlyRate) + surplus
-            if pot * monthlyRate >= expenses { return month }
+            let need = expenses(base: monthlyExpenses, shifts: shifts,
+                                monthsFromNow: month, startYear: thisYear)
+            if pot * monthlyRate >= need { return month }
         }
         return nil
+    }
+
+    /// Monthly spending `monthsFromNow` months out, with every shift that has
+    /// taken effect by then applied to the original figure.
+    static func expenses(
+        base: Int64,
+        shifts: [ExpenseShift],
+        monthsFromNow: Int,
+        startYear: Int
+    ) -> Decimal {
+        guard !shifts.isEmpty else { return Decimal(base) }
+        let year = startYear + monthsFromNow / 12
+        let applied = shifts.filter { $0.year <= year }.reduce(0) { $0 + $1.percent }
+        // A floor of 10%: no sequence of life events reduces living costs to zero.
+        let factor = max(10, 100 + applied)
+        return Decimal(base) * Decimal(factor) / Decimal(100)
     }
 
     /// How many months earlier freedom arrives if you add `extraMonthlyMinor`

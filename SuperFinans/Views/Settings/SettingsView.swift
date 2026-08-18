@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import SuperDuperAnalytics
 import SuperDuperAiAuth
 
 struct SettingsView: View {
 
-    @AppStorage(Analytics.enabledKey) private var analyticsEnabled = true
+    @AppStorage("com.superduperai.analytics.enabled") private var analyticsEnabled = true
 
     @AppStorage("superfinans.currency_code") private var currencyCode = "USD"
     @AppStorage("superfinans.appearance") private var appearance = "system"
@@ -121,16 +122,18 @@ struct SettingsView: View {
                     Toggle(isOn: $analyticsEnabled) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Anonymous usage stats")
-                            Text("Which screens get opened, never what you typed. No advertising, no third party.")
+                            Text("How often the app is opened, and which features get used. No profile, no advertising, no third party — and never an amount.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     .onChange(of: analyticsEnabled) { enabled in
-                        if !enabled { Analytics.shared.discardPending() }
+                        Analytics.isEnabled = enabled
                     }
                 } header: {
                     Text("Privacy")
+                } footer: {
+                    Text("A count, not a trail: there is no cookie, no device fingerprint and nothing that ties one launch to another person.")
                 }
 
                 // Cross-promotion. Only apps that share this one's premise —

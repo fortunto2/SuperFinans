@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SuperDuperAnalytics
 
 struct FreedomHeroView: View {
 
@@ -109,8 +110,7 @@ struct FreedomHeroView: View {
     private func switchToDollars() {
         guard let snapshot, let converted = plan.converted(to: "USD", using: snapshot) else { return }
         switching = true
-        Analytics.shared.track("plan_restated_usd", screen: "freedom",
-                              props: ["from": plan.currencyCode])
+        Analytics.track("plan_restated_usd", props: ["from": plan.currencyCode])
         store.plan = converted
         switching = false
     }

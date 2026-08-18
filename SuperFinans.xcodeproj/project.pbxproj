@@ -10,7 +10,6 @@
 		01A2994967DC051E8DB706CF /* GoalsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C75EB57921DD6AAAE30B9E4 /* GoalsListView.swift */; };
 		02CF8C32FF3BE56146F9AC3E /* SuperFinansApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF49CCCCCFB2523BACAD84FA /* SuperFinansApp.swift */; };
 		059417A73ACEA7A6A837C83A /* GoalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89E5B6F936357F3E36DA656 /* GoalService.swift */; };
-		0A5D7B8EC7E78B50DB095273 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BD7EEC44D167AEF30C4508 /* Analytics.swift */; };
 		0CA15D7242B2F1CAAA297043 /* getting_started.md in Resources */ = {isa = PBXBuildFile; fileRef = B44E6554807A38663ECE279D /* getting_started.md */; };
 		0E5BA0B5393AD4BF251D13F1 /* GuideContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4F9A20E3E1E046413DB4F /* GuideContentView.swift */; };
 		0EF3AB61F5C9E83B080F7189 /* AddTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F71417862F23E0134493D40 /* AddTransactionViewModel.swift */; };
@@ -54,6 +53,7 @@
 		7D1467888DFEC6BA144B55FF /* BalanceSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CA74725D2689A41C1EC2B /* BalanceSheetViewModel.swift */; };
 		7F9728649B13129132260F64 /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4D24105D48BB4935894ADD /* TransactionsListView.swift */; };
 		81B5CB1F47224D0B3791FC6E /* insights_guide.md in Resources */ = {isa = PBXBuildFile; fileRef = 02A8C21C81659381F672FA77 /* insights_guide.md */; };
+		81F519C8AB1F777E70BF7AD8 /* CurrencyPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4461559B561B7A8D64A48B05 /* CurrencyPickerView.swift */; };
 		839D1B90656C265D635A8922 /* AccountEntity+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A997430CBEEB159D3429E30 /* AccountEntity+CoreData.swift */; };
 		83C9699DEC0A8F762ED64C21 /* MarkdownService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887C20AC783941264CE861AF /* MarkdownService.swift */; };
 		88DCA70BEC152083410B0AA1 /* SuperFinansLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35655B3677C79D1A2B6BCAA1 /* SuperFinansLogicTests.swift */; };
@@ -65,6 +65,7 @@
 		96F4432C83FF6899F9FD47F6 /* CreateRecurringRuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FD25894C255EB65C1BF41F /* CreateRecurringRuleView.swift */; };
 		9A90B38CC9FF85BC5B3F434A /* FreedomSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */; };
 		A1E9722EDC176BF2BD215204 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8580F400F5BDDF7D9808A668 /* MainTabView.swift */; };
+		A449ED58CF3ABF0DB9EA6BC6 /* SuperDuperAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5960DE34198EF788E79C34A2 /* SuperDuperAnalytics */; };
 		A53EDBC397D98845D3DCB5C0 /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF71E08A00ADF8B0DF11536 /* CategoryPickerView.swift */; };
 		A7CEED6ED807423F5FCD5816 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74258EE15931AED3718FF7EE /* AppDelegate.swift */; };
 		A803ABAFED4361AC89CCBD88 /* PortfolioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7109317764CE39D954291E62 /* PortfolioViewModel.swift */; };
@@ -154,6 +155,7 @@
 		355E5DAE5B3E2CB3F5482301 /* PremiumBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumBadgeView.swift; sourceTree = "<group>"; };
 		35655B3677C79D1A2B6BCAA1 /* SuperFinansLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperFinansLogicTests.swift; sourceTree = "<group>"; };
 		37D6DE702C511EA1A3C67DA7 /* HintBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintBannerView.swift; sourceTree = "<group>"; };
+		4461559B561B7A8D64A48B05 /* CurrencyPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPickerView.swift; sourceTree = "<group>"; };
 		45885512ECB4BCB8547A4096 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45F025412972F19AFF3CA811 /* premium_guide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = premium_guide.md; sourceTree = "<group>"; };
 		4653BD9D91F495011E99DE00 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
@@ -181,7 +183,7 @@
 		8580F400F5BDDF7D9808A668 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		88352985CC6782094E13ADAC /* FreedomProjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomProjection.swift; sourceTree = "<group>"; };
 		887C20AC783941264CE861AF /* MarkdownService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownService.swift; sourceTree = "<group>"; };
-		89BD7EEC44D167AEF30C4508 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		88B085A0F81F2FC272491C1A /* superduperai-analytics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "superduperai-analytics"; path = "../../shared/superduperai-analytics"; sourceTree = SOURCE_ROOT; };
 		9226DDCFB7D99C600DAC3C9A /* NumpadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumpadView.swift; sourceTree = "<group>"; };
 		957335728263886208904E07 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		96C5954F265AEBEC629EBAF0 /* AccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountService.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AC696C879B6F765997A8870 /* SuperDuperAiAuth in Frameworks */,
+				A449ED58CF3ABF0DB9EA6BC6 /* SuperDuperAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +335,7 @@
 		4BA9283977E86E7711912794 /* Freedom */ = {
 			isa = PBXGroup;
 			children = (
+				4461559B561B7A8D64A48B05 /* CurrencyPickerView.swift */,
 				C6D2CAB725021737A072ACF2 /* FreedomHeroView.swift */,
 				65914B5E52341B90E6AFD4AC /* FreedomSetupView.swift */,
 			);
@@ -368,7 +372,6 @@
 			isa = PBXGroup;
 			children = (
 				96C5954F265AEBEC629EBAF0 /* AccountService.swift */,
-				89BD7EEC44D167AEF30C4508 /* Analytics.swift */,
 				96D89706A25078EE478737F6 /* CashFlowService.swift */,
 				120B20157C32CB2E86183E36 /* ExportService.swift */,
 				CB61C8B129750C9FD829EE0A /* FeatureDiscoveryFlags.swift */,
@@ -517,6 +520,7 @@
 			isa = PBXGroup;
 			children = (
 				57452061EA252A61A95C88C6 /* auth-ios */,
+				88B085A0F81F2FC272491C1A /* superduperai-analytics */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -613,6 +617,7 @@
 			name = SuperFinans;
 			packageProductDependencies = (
 				C5B097B7B0CBB003F99C0664 /* SuperDuperAiAuth */,
+				5960DE34198EF788E79C34A2 /* SuperDuperAnalytics */,
 			);
 			productName = SuperFinans;
 			productReference = 984B5A3FDB9B1B49AD9EC410 /* SuperFinans.app */;
@@ -653,6 +658,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				22C1DDB13C81BAE3975DD77F /* XCLocalSwiftPackageReference "/Users/rustam/startups/shared/superduperai-auth/packages/auth-ios" */,
+				2B0B0F4066EB59F7F34B3189 /* XCLocalSwiftPackageReference "../../shared/superduperai-analytics" */,
 			);
 			preferredProjectObjectVersion = 54;
 			projectDirPath = "";
@@ -718,7 +724,6 @@
 				157F42935315BF3C6B1CAEDA /* AccountsManagementView.swift in Sources */,
 				7193BB0AC69B1C431FC12BF9 /* AddTransactionView.swift in Sources */,
 				0EF3AB61F5C9E83B080F7189 /* AddTransactionViewModel.swift in Sources */,
-				0A5D7B8EC7E78B50DB095273 /* Analytics.swift in Sources */,
 				A7CEED6ED807423F5FCD5816 /* AppDelegate.swift in Sources */,
 				90B943097D357DCFADB42DE9 /* BalanceSheetView.swift in Sources */,
 				7D1467888DFEC6BA144B55FF /* BalanceSheetViewModel.swift in Sources */,
@@ -728,6 +733,7 @@
 				57165A646E2D154B400626A4 /* Color+Theme.swift in Sources */,
 				1353FA2BAA215B42CFB779D1 /* CreateGoalView.swift in Sources */,
 				96F4432C83FF6899F9FD47F6 /* CreateRecurringRuleView.swift in Sources */,
+				81F519C8AB1F777E70BF7AD8 /* CurrencyPickerView.swift in Sources */,
 				3D9B5C5BACE6BD3DBCCB3925 /* DashboardView.swift in Sources */,
 				61B32E44328A05CB61C9D906 /* DashboardViewModel.swift in Sources */,
 				D326A53587BF2439997CDA5D /* Date+Extensions.swift in Sources */,
@@ -1097,9 +1103,17 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "/Users/rustam/startups/shared/superduperai-auth/packages/auth-ios";
 		};
+		2B0B0F4066EB59F7F34B3189 /* XCLocalSwiftPackageReference "../../shared/superduperai-analytics" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../shared/superduperai-analytics";
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5960DE34198EF788E79C34A2 /* SuperDuperAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SuperDuperAnalytics;
+		};
 		C5B097B7B0CBB003F99C0664 /* SuperDuperAiAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SuperDuperAiAuth;

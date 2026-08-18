@@ -18,6 +18,8 @@ settings:
       SWIFT_OPTIMIZATION_LEVEL: "-O"
 
 packages:
+  SuperDuperAnalytics:
+    path: ../../shared/superduperai-analytics
   SuperDuperAiAuth:
     path: /Users/rustam/startups/shared/superduperai-auth/packages/auth-ios
 
@@ -48,6 +50,7 @@ targets:
         INFOPLIST_KEY_UIBackgroundModes: "remote-notification"
     dependencies:
       - package: SuperDuperAiAuth
+      - package: SuperDuperAnalytics
       - target: SuperFinansWidgetExtension
     entitlements:
       path: SuperFinans/SuperFinans.entitlements

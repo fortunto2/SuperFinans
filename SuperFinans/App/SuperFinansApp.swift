@@ -8,6 +8,7 @@
 
 import SwiftUI
 import SuperDuperAiAuth
+import SuperDuperAnalytics
 
 @main
 struct SuperFinansApp: App {
@@ -49,9 +50,11 @@ struct SuperFinansApp: App {
         }
 
         // Ensure a default account exists
+        Analytics.configure(source: "superfinans")
+        Analytics.track("app_launched")
+
         Task { @MainActor in
             AccountService.shared.ensureDefaultAccount()
-            Analytics.shared.track("app_launched")
         }
     }
 
@@ -107,6 +110,7 @@ struct SuperFinansApp: App {
             }
         case .background:
             PersistenceController.shared.save()
+            Analytics.flush()
         case .inactive:
             break
         @unknown default:

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SuperDuperAnalytics
 
 struct FreedomSetupView: View {
 
@@ -20,9 +21,16 @@ struct FreedomSetupView: View {
     @State private var savings = ""
     @State private var monthly = ""
     @State private var birthYear = ""
+    @State private var currency = ""
+
+    /// The currency the fields are being typed in.
+    private var activeCurrency: String {
+        currency.isEmpty ? store.plan.currencyCode : currency
+    }
 
     private var draft: FreedomPlan {
         var p = store.plan
+        p.currencyCode = activeCurrency
         p.monthlyExpensesMinor = minorUnits(expenses)
         p.currentSavingsMinor = minorUnits(savings)
         p.monthlySavingsMinor = minorUnits(monthly)
@@ -39,6 +47,37 @@ struct FreedomSetupView: View {
                     Text("Three numbers and you have your answer. No bank login, no month of receipts.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+
+                    // Asked first: "1200" means nothing until we know what it is.
+                    NavigationLink {
+                        CurrencyPickerView(selection: $currency) { code in
+                            var plan = store.plan
+                            plan.currencyCode = code
+                            plan.displayCurrencyCode = CurrencyClass.isHard(code) ? nil : "USD"
+                            store.plan = plan
+                            UserDefaults.standard.set(code, forKey: FreedomPlanStorage.currencyKey)
+                            FreedomPlanStorage.defaults.set(code, forKey: FreedomPlanStorage.currencyKey)
+                        }
+                        .navigationTitle("Your currency")
+                        .navigationBarTitleDisplayMode(.inline)
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Currency").font(.headline)
+                                Text(CurrencyPickerView.name(for: activeCurrency))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Text(activeCurrency)
+                                .font(.title3.bold())
+                                .foregroundStyle(Color.goalMintDark)
+                        }
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
 
                     field(
                         title: "What life costs each month",
@@ -84,9 +123,8 @@ struct FreedomSetupView: View {
                         let wasConfigured = store.plan.isConfigured
                         store.plan = draft
                         // Categorical only: whether an answer exists, never its size.
-                        Analytics.shared.track(
+                        Analytics.track(
                             wasConfigured ? "plan_updated" : "plan_created",
-                            screen: "freedom_setup",
                             props: [
                                 "currency": draft.currencyCode,
                                 "reachable": outcome.isReachable ? "yes" : "no",
@@ -113,7 +151,7 @@ struct FreedomSetupView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title).font(.headline)
             Text(hint).font(.caption).foregroundStyle(.secondary)
-            MoneyTextField(label: "0", value: text, currencyCode: store.plan.currencyCode)
+            MoneyTextField(label: "0", value: text, currencyCode: activeCurrency)
         }
     }
 
@@ -160,6 +198,7 @@ struct FreedomSetupView: View {
 
     private func seedFromStore() {
         let p = store.plan
+        currency = p.currencyCode
         if p.monthlyExpensesMinor > 0 { expenses = majorString(p.monthlyExpensesMinor) }
         if p.currentSavingsMinor > 0 { savings = majorString(p.currentSavingsMinor) }
         if p.monthlySavingsMinor > 0 { monthly = majorString(p.monthlySavingsMinor) }
@@ -172,11 +211,11 @@ struct FreedomSetupView: View {
             .replacingOccurrences(of: ",", with: ".")
             .filter { $0.isNumber || $0 == "." }
         guard let value = Decimal(string: cleaned) else { return 0 }
-        return Money(amount: value, currencyCode: store.plan.currencyCode).minorUnits
+        return Money(amount: value, currencyCode: activeCurrency).minorUnits
     }
 
     private func majorString(_ minor: Int64) -> String {
-        let money = Money(minorUnits: minor, currencyCode: store.plan.currencyCode)
+        let money = Money(minorUnits: minor, currencyCode: activeCurrency)
         return NSDecimalNumber(decimal: money.decimalAmount).stringValue
     }
 }

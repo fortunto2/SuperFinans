@@ -28,7 +28,7 @@ struct OnboardingView: View {
         ),
         OnboardingPage(
             title: "Nothing leaves the phone",
-            subtitle: "No account, no ads, and not one amount you type ever leaves the phone — the arithmetic runs here. An anonymous launch counter is the only thing sent, and Settings turns it off.",
+            subtitle: "No account, no ads, no third parties. Not one amount you type is ever sent — the arithmetic runs here. The app counts how often it is opened, which is a count, not a trail.",
             sfSymbol: "lock.shield.fill",
             color: .goalPurple
         )

@@ -1397,6 +1397,22 @@ final class FreedomEngineTests: XCTestCase {
         XCTAssertEqual(viaCalculator, viaEngine)
     }
 
+    /// Regression: adding a holding writes the plan before the form is saved.
+    /// The form must still carry the typed numbers, not be reset to that write.
+    func testHoldingWriteDoesNotEraseTypedNumbers() {
+        var typed = plan(expenses: 3200_00, savings: 85_000_00, monthly: 1800_00)
+        // What addHolding does: mutate holdings on the stored plan and revalue.
+        typed.holdings = [Holding(unit: "XAU", amount: 200, label: "Wedding gold")]
+        let snapshot = RateSnapshot(rates: ["USD": 1, "XAU": 1 / 139.32], fetchedAt: Date())
+        let saved = typed.revaluingHoldings(using: snapshot)
+
+        XCTAssertEqual(saved.monthlyExpensesMinor, 3200_00)
+        XCTAssertEqual(saved.currentSavingsMinor, 85_000_00)
+        XCTAssertEqual(saved.monthlySavingsMinor, 1800_00)
+        XCTAssertEqual(Double(saved.holdingsValueMinor) / 100, 27_864, accuracy: 10)
+        XCTAssertTrue(saved.isConfigured)
+    }
+
     func testUnconfiguredPlanIsNotServedToTheWidget() {
         let empty = FreedomPlan.empty(currencyCode: "USD")
         XCTAssertFalse(empty.isConfigured)

@@ -27,6 +27,9 @@ struct FreedomSetupView: View {
     /// on every character: each row bisects the 600-step engine ~18 times, so
     /// the three of them cost tens of thousands of Decimal operations.
     @State private var paceRows: [(years: Int, needed: Int64?)] = []
+    /// onAppear fires again every time a sheet over this form is dismissed, and
+    /// re-seeding then wipes what has been typed with the not-yet-saved plan.
+    @State private var didSeed = false
 
     /// The currency the fields are being typed in.
     private var activeCurrency: String {
@@ -266,6 +269,8 @@ struct FreedomSetupView: View {
     }
 
     private func seedFromStore() {
+        guard !didSeed else { return }
+        didSeed = true
         let p = store.plan
         currency = p.currencyCode
         if p.monthlyExpensesMinor > 0 { expenses = majorString(p.monthlyExpensesMinor) }

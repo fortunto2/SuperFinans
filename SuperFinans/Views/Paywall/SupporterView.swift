@@ -21,8 +21,6 @@ struct SupporterView: View {
                     header
 
                     VStack(alignment: .leading, spacing: 14) {
-                        perk("building.columns", "As many accounts as you have",
-                             "The free app tracks three, which is enough for most people and not for everyone")
                         perk("tablecells", "CSV export",
                              "Your accounts and transactions as a spreadsheet, not just JSON")
                         perk("heart.text.square", "A line in Settings that says you paid for this",

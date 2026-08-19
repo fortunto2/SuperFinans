@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>teamID</key>
+	<string>8N495BBBLM</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<!-- Named by SHA-1: the profiles carry the older iPhone Distribution cert,
+	     and by name Xcode picks Apple Distribution and fails to export. -->
+	<key>signingCertificate</key>
+	<string>8167B3F8652E51FF78636AE13E6BD5D097AB9B54</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>co.superduperai.SuperFinans</key>
+		<string>FreedomYear-App</string>
+		<key>co.superduperai.SuperFinans.widget</key>
+		<string>FreedomYear-Widget</string>
+	</dict>
+	<!-- Both off: with them on the export ends in "Copy failed" and the log
+	     does not say why. Costs symbolicated crash reports; revisit next release. -->
+	<key>uploadSymbols</key>
+	<false/>
+	<key>stripSwiftSymbols</key>
+	<false/>
+	<key>destination</key>
+	<string>export</string>
+</dict>
+</plist>

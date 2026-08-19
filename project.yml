@@ -57,6 +57,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_NSFaceIDUsageDescription: "SuperFinans uses Face ID for secure access"
         INFOPLIST_KEY_UIBackgroundModes: "remote-notification"
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
     dependencies:
       - package: SuperDuperAnalytics
       - target: SuperFinansWidgetExtension

@@ -184,7 +184,6 @@
 		8580F400F5BDDF7D9808A668 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		88352985CC6782094E13ADAC /* FreedomProjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreedomProjection.swift; sourceTree = "<group>"; };
 		887C20AC783941264CE861AF /* MarkdownService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownService.swift; sourceTree = "<group>"; };
-		88B085A0F81F2FC272491C1A /* superduperai-analytics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "superduperai-analytics"; path = "../../shared/superduperai-analytics"; sourceTree = SOURCE_ROOT; };
 		9226DDCFB7D99C600DAC3C9A /* NumpadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumpadView.swift; sourceTree = "<group>"; };
 		957335728263886208904E07 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		962DCEC3ECA4F23CFB4C2F6D /* SupporterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupporterView.swift; sourceTree = "<group>"; };
@@ -530,7 +529,6 @@
 		DD19615A204BEA0F74930475 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				88B085A0F81F2FC272491C1A /* superduperai-analytics */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -676,7 +674,7 @@
 			mainGroup = 935847ED73979C9EF6EE85B8;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				2B0B0F4066EB59F7F34B3189 /* XCLocalSwiftPackageReference "../../shared/superduperai-analytics" */,
+				2B0B0F4066EB59F7F34B3189 /* XCRemoteSwiftPackageReference "superduperai-analytics-swift" */,
 			);
 			preferredProjectObjectVersion = 54;
 			projectDirPath = "";
@@ -1134,16 +1132,21 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		2B0B0F4066EB59F7F34B3189 /* XCLocalSwiftPackageReference "../../shared/superduperai-analytics" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../shared/superduperai-analytics";
+/* Begin XCRemoteSwiftPackageReference section */
+		2B0B0F4066EB59F7F34B3189 /* XCRemoteSwiftPackageReference "superduperai-analytics-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fortunto2/superduperai-analytics-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		5960DE34198EF788E79C34A2 /* SuperDuperAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 2B0B0F4066EB59F7F34B3189 /* XCRemoteSwiftPackageReference "superduperai-analytics-swift" */;
 			productName = SuperDuperAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
